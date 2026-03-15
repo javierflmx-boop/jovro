@@ -1,0 +1,2019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="JOVRO Field"/>
+<meta name="theme-color" content="#111"/>
+<title>JOVRO Field</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --bg:#0a0a0a;
+    --card:#161616;
+    --card2:#1e1e1e;
+    --border:#2a2a2a;
+    --faint:#222;
+    --mid:#666;
+    --sub:#444;
+    --ink:#f0f0f0;
+    --header:#0a0a0a;
+    --accent:#F0A500;
+    --accent2:#c98800;
+    --green:#4caf7d;
+    --red:#e05c5c;
+    --blue:#5b8dd9;
+  }
+  body{
+    font-family:-apple-system,"SF Pro Display","Helvetica Neue",sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    min-height:100vh;
+    font-weight:300;
+    letter-spacing:0.01em;
+  }
+  #app{padding-bottom:80px;}
+
+  /* CARDS */
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:16px;
+    margin-bottom:10px;
+  }
+
+  /* NAV BAR */
+  .nav-bar{
+    position:fixed;bottom:0;left:0;right:0;
+    background:#0a0a0a;
+    border-top:1px solid var(--border);
+    display:flex;
+    padding-bottom:env(safe-area-inset-bottom);
+    z-index:100;
+  }
+  .nav-item{
+    flex:1;background:none;border:none;
+    padding:10px 4px 8px;
+    display:flex;flex-direction:column;align-items:center;gap:3px;
+    color:var(--mid);font-size:10px;font-weight:400;letter-spacing:1.5px;
+    text-transform:uppercase;cursor:pointer;
+  }
+  .nav-item.active{color:var(--accent);}
+  .nav-icon{font-size:20px;line-height:1;}
+
+  /* TOP BAR */
+  .top-bar{
+    position:sticky;top:0;z-index:50;
+    background:var(--header);
+    border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:12px;
+    padding:16px;
+    min-height:56px;
+  }
+  .top-bar div{font-size:17px;font-weight:300;letter-spacing:2px;text-transform:uppercase;}
+
+  /* BUTTONS */
+  .btn-primary{
+    background:var(--accent);
+    color:#000;border:none;
+    border-radius:100px;
+    padding:14px 24px;
+    font-size:13px;font-weight:600;
+    letter-spacing:1px;text-transform:uppercase;
+    cursor:pointer;width:100%;
+  }
+  .btn-ghost{
+    background:var(--card2);
+    color:var(--ink);
+    border:1px solid var(--border);
+    border-radius:100px;
+    padding:12px 18px;
+    font-size:13px;font-weight:300;
+    cursor:pointer;
+  }
+
+  /* TABS */
+  .tab-btn{
+    flex:1;background:none;border:none;
+    padding:12px 8px;
+    font-size:10px;font-weight:400;
+    letter-spacing:2px;text-transform:uppercase;
+    color:var(--mid);cursor:pointer;
+    border-bottom:2px solid transparent;
+  }
+  .tab-btn.active{color:var(--accent);border-bottom:2px solid var(--accent);}
+
+  /* BADGE */
+  .badge{
+    font-size:10px;font-weight:500;
+    letter-spacing:1px;text-transform:uppercase;
+    padding:3px 8px;border-radius:100px;
+  }
+
+  /* FORM INPUTS */
+  input,textarea,select{
+    width:100%;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:14px;
+    color:var(--ink);
+    font-size:15px;
+    font-weight:300;
+    font-family:inherit;
+    outline:none;
+    display:block;
+  }
+  input:focus,textarea:focus,select:focus{border-color:var(--accent);}
+  select option{background:var(--card);}
+  textarea{min-height:90px;resize:none;}
+  .field-label{
+    font-size:10px;font-weight:400;
+    letter-spacing:2px;text-transform:uppercase;
+    color:var(--mid);margin-bottom:8px;display:block;
+  }
+
+  /* SHEET */
+  .sheet-overlay{
+    position:fixed;inset:0;z-index:200;
+    display:flex;flex-direction:column;justify-content:flex-end;
+  }
+  .sheet-bg{
+    position:absolute;inset:0;
+    background:rgba(0,0,0,0.7);
+    backdrop-filter:blur(4px);
+  }
+  .sheet-body{
+    position:relative;
+    background:var(--card);
+    border-radius:24px 24px 0 0;
+    border-top:1px solid var(--border);
+    padding:20px 20px calc(env(safe-area-inset-bottom)+24px);
+    max-height:90vh;overflow-y:auto;
+    z-index:1;
+  }
+  .sheet-handle{
+    width:36px;height:4px;
+    background:var(--border);
+    border-radius:2px;
+    margin:0 auto 20px;
+  }
+
+  /* MISC */
+  .empty{color:var(--mid);font-size:14px;font-weight:300;text-align:center;padding:48px 20px;letter-spacing:0.5px;}
+  .pulse{animation:pulse 1.5s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.5;}}
+  canvas{touch-action:none;}
+
+  /* CLOCK RING */
+  .ring-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;}
+</style>
+</head>
+<body>
+<div id="splash" style="
+  position:fixed;inset:0;
+  background:#0a0a0a;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  z-index:9999;
+  transition:opacity 0.8s ease;
+">
+  <!-- Glow -->
+  <div style="position:absolute;width:260px;height:260px;background:radial-gradient(circle,rgba(240,165,0,0.15) 0%,transparent 70%);border-radius:50%;"></div>
+  <!-- Icon -->
+  <div style="
+    width:100px;height:100px;
+    background:var(--accent, #F0A500);
+    border-radius:24px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:48px;
+    margin-bottom:28px;
+    position:relative;
+    box-shadow:0 0 40px rgba(240,165,0,0.3);
+  ">🏗️</div>
+  <!-- Name -->
+  <div style="display:flex;align-items:baseline;gap:0;margin-bottom:12px;">
+    <span style="font-size:38px;font-weight:200;color:#f0f0f0;letter-spacing:6px;font-family:-apple-system,sans-serif;">JOVRO</span>
+  </div>
+  <div style="font-size:11px;font-weight:300;color:#555;letter-spacing:5px;text-transform:uppercase;">FIELD · BY CONTRACTORS</div>
+  <!-- Loading bar -->
+  <div style="position:absolute;bottom:60px;width:80px;height:1px;background:var(--border,#222);border-radius:1px;">
+    <div id="splash-bar" style="height:1px;background:var(--accent,#F0A500);border-radius:1px;width:0%;transition:width 1.8s ease;"></div>
+  </div>
+</div>
+
+<script>
+  window.addEventListener("load", function(){
+    setTimeout(function(){ var b=document.getElementById("splash-bar"); if(b) b.style.width="100%"; }, 50);
+    setTimeout(function(){
+      var s=document.getElementById("splash");
+      if(s){ s.style.opacity="0"; setTimeout(function(){ s.style.display="none"; },800); }
+    },2200);
+  });
+</script>
+
+<div id="app"></div>
+<script>
+// ─── COLORS & DARK ───────────────────────────────────────────
+const COLORS=["#E07B54","#5B8DD9","#57A773","#9B6EC8","#D4A843","#D96B8A"];
+let dark=localStorage.getItem("fm-dark")==="1";
+if(dark)document.body.classList.add("dark");
+
+// ─── STATE ───────────────────────────────────────────────────
+let state={
+  nav:"field",
+  detailId:null, detailType:null, detailTab:"notes",
+  sheet:null, sheetPid:null, form:{},
+  projects:JSON.parse(localStorage.getItem("fm-projects")||"[]"),
+  clients:JSON.parse(localStorage.getItem("fm-clients")||"[]"),
+  portfolio:JSON.parse(localStorage.getItem("fm-portfolio")||"[]"),
+  clocks:{},
+  docs:JSON.parse(localStorage.getItem("fm-docs")||"[]"),
+  expenses:JSON.parse(localStorage.getItem("fm-expenses")||"[]"),
+  services:JSON.parse(localStorage.getItem("fm-services")||"[]")
+};
+
+// ─── HELPERS ─────────────────────────────────────────────────
+const uid=()=>Math.random().toString(36).slice(2);
+const pad=n=>String(n).padStart(2,"0");
+const fmtTimer=s=>`${pad(Math.floor(s/3600))}:${pad(Math.floor((s%3600)/60))}:${pad(s%60)}`;
+const fmtHours=s=>{const h=Math.floor(s/3600),m=Math.floor((s%3600)/60);return m>0?`${h}h ${m}m`:`${h}h`;};
+const nowTime=()=>new Date().toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit",hour12:false});
+const nowDate=()=>new Date().toLocaleDateString("en-US",{month:"short",day:"numeric"});
+const liveSec=pid=>state.clocks[pid]?Math.floor((Date.now()-state.clocks[pid])/1000):0;
+const proj=pid=>state.projects.find(p=>p.id===pid);
+const client=cid=>state.clients.find(c=>c.id===cid);
+const money=n=>"$"+Number(n||0).toLocaleString("en-US",{minimumFractionDigits:0,maximumFractionDigits:0});
+const val=id=>document.getElementById(id)?.value||"";
+const esc=s=>String(s||"").replace(/'/g,"&#39;").replace(/"/g,"&quot;");
+
+function setProj(pid,fn){state.projects=state.projects.map(p=>p.id===pid?fn(p):p);save();}
+function addLog(pid,text){setProj(pid,p=>({...p,log:[{id:uid(),ts:`${nowDate()} · ${nowTime()}`,text},...p.log]}));}
+function save(){
+  localStorage.setItem("fm-projects",JSON.stringify(state.projects));
+  localStorage.setItem("fm-clients",JSON.stringify(state.clients));
+  localStorage.setItem("fm-portfolio",JSON.stringify(state.portfolio));
+localStorage.setItem("fm-recurring",JSON.stringify(state.recurring));
+  localStorage.setItem("fm-docs",JSON.stringify(state.docs));
+  localStorage.setItem("fm-expenses",JSON.stringify(state.expenses));
+  localStorage.setItem("fm-services",JSON.stringify(state.services));
+}
+
+// ─── PROJECT ACTIONS ─────────────────────────────────────────
+function clockIn(pid){state.clocks[pid]=Date.now();addLog(pid,`Clocked in · ${nowTime()}`);render();}
+function clockOut(pid,note=""){
+  const secs=liveSec(pid),startEpoch=state.clocks[pid];
+  const session={id:uid(),date:new Date().toISOString().slice(0,10),
+    start:new Date(startEpoch).toLocaleTimeString("en-US",{hour:"2-digit",minute:"2-digit",hour12:false}),
+    end:nowTime(),seconds:secs,note:note||"—"};
+  setProj(pid,p=>({...p,totalSeconds:p.totalSeconds+secs,sessions:[...p.sessions,session]}));
+  delete state.clocks[pid];
+  addLog(pid,`Clocked out · ${nowTime()} · ${fmtHours(secs)}${note?" · "+note:""}`);
+  closeSheet();
+}
+function addNote(pid,text){if(!text.trim())return;setProj(pid,p=>({...p,notes:[{id:uid(),text,done:false,ts:nowDate()},...p.notes]}));addLog(pid,`Note: "${text}"`);}
+function toggleNote(pid,nid){setProj(pid,p=>({...p,notes:p.notes.map(n=>n.id===nid?{...n,done:!n.done}:n)}));render();}
+function delNote(pid,nid){setProj(pid,p=>({...p,notes:p.notes.filter(n=>n.id!==nid)}));render();}
+function addShop(pid,text){if(!text.trim())return;setProj(pid,p=>({...p,shopping:[{id:uid(),text,done:false},...p.shopping]}));addLog(pid,`To buy: "${text}"`);}
+function toggleShop(pid,sid){setProj(pid,p=>({...p,shopping:p.shopping.map(s=>s.id===sid?{...s,done:!s.done}:s)}));render();}
+function delShop(pid,sid){setProj(pid,p=>({...p,shopping:p.shopping.filter(s=>s.id!==sid)}));render();}
+function addPhoto(pid){
+  const input=document.createElement("input");input.type="file";input.accept="image/*";input.capture="environment";
+  input.onchange=e=>{
+    const file=e.target.files[0];if(!file)return;
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      const note=val("photo-caption");
+      setProj(pid,p=>({...p,photos:[{id:uid(),src:ev.target.result,note,ts:nowDate()+" · "+nowTime()},...(p.photos||[])]}));
+      addLog(pid,`Photo added${note?" · "+note:""}`);
+function buildDetailTabs(active){
+  const tabs=["notes","shopping","sessions","photos","docs"];
+  return tabs.map(function(tab){
+    const cls="tab-btn"+(active===tab?" active":"");
+    var labels={notes:"Notes",shopping:"Shopping",sessions:"Sessions",photos:"Photos",docs:"Docs"};
+    return '<button data-tab="'+tab+'" onclick="setDetailTab(this.dataset.tab)" class="'+cls+'">'+labels[tab]+'</button>';
+  }).join("");
+}
+
+
+
+function editDoc(id){ openSheet('newdoc', null, {editDocId:id}); }
+function dDoc(id){ delDoc(id); }
+
+
+function sigBtn(id){
+  return '<button data-id="'+id+'" onclick="openSignature(this.dataset.id)" style="background:#4caf7d;color:#fff;border:none;border-radius:100px;padding:13px;font-size:13px;font-weight:600;cursor:pointer;grid-column:1/-1;">✍️ Get Signature</button>';
+}
+
+
+function goToNewDoc(){state.nav="docs";openSheet("newdoc",null);}
+function closeDocView(){state.viewDocId=null;state.nav="docs";state.sheet=null;render();}
+function viewDoc(id){
+  state.viewDocId=id;
+  state.nav="viewdoc";
+  state.sheet=null;
+  state.detailId=null;
+  render();
+}
+    };reader.readAsDataURL(file);
+  };input.click();
+}
+
+// ─── CLIENT ACTIONS ──────────────────────────────────────────
+function saveClient(){
+  const id=state.form.editId||uid();
+  const c={id,name:val("cl-name"),phone:val("cl-phone"),address:val("cl-address"),notes:val("cl-notes"),projects:state.form.editId?(client(state.form.editId)?.projects||[]):[]};
+  if(!c.name.trim())return;
+  if(state.form.editId) state.clients=state.clients.map(x=>x.id===id?c:x);
+  else state.clients=[...state.clients,c];
+  save();closeSheet();
+}
+function delClient(cid){if(confirm("Delete this client?"))state.clients=state.clients.filter(c=>c.id!==cid);save();render();}
+
+// ─── PORTFOLIO ACTIONS ───────────────────────────────────────
+function addPortfolioPhoto(pfId){
+  const input=document.createElement("input");input.type="file";input.accept="image/*";
+  input.onchange=e=>{
+    const file=e.target.files[0];if(!file)return;
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      state.portfolio=state.portfolio.map(pf=>pf.id===pfId?{...pf,photo:ev.target.result}:pf);
+      save();
+    };reader.readAsDataURL(file);
+  };input.click();
+}
+
+function buildDetailTabs(active){
+  const tabs=["notes","shopping","sessions","photos","docs"];
+  return tabs.map(function(tab){
+    const cls="tab-btn"+(active===tab?" active":"");
+    var labels={notes:"Notes",shopping:"Shopping",sessions:"Sessions",photos:"Photos",docs:"Docs"};
+    return '<button data-tab="'+tab+'" onclick="setDetailTab(this.dataset.tab)" class="'+cls+'">'+labels[tab]+'</button>';
+  }).join("");
+}
+function savePortfolio(){
+  const id=state.form.editPfId||uid();
+  const pf={id,title:val("pf-title"),type:val("pf-type"),description:val("pf-desc"),hours:val("pf-hours"),price:val("pf-price"),date:val("pf-date"),photo:state.form.editPfId?(state.portfolio.find(x=>x.id===id)?.photo||""):""};
+  if(!pf.title.trim())return;
+  if(state.form.editPfId) state.portfolio=state.portfolio.map(x=>x.id===id?pf:x);
+  else state.portfolio=[pf,...state.portfolio];
+  save();closeSheet();
+}
+function delPortfolio(pfId){if(confirm("Remove from portfolio?"))state.portfolio=state.portfolio.filter(p=>p.id!==pfId);save();render();}
+
+// ─── PROJECT CREATE ──────────────────────────────────────────
+function createProject(){
+  const name=val("fp-name"),cid=val("fp-client"),addr=val("fp-address"),rate=val("fp-rate");
+  if(!name.trim())return;
+  const color=state.form.color||COLORS[state.projects.length%COLORS.length];
+  const newP={id:uid(),name,clientId:cid||null,color,address:addr,hourlyRate:Number(rate)||0,
+    totalSeconds:0,sessions:[],notes:[],shopping:[],photos:[],invoices:[],log:[]};
+  state.projects=[...state.projects,newP];
+  if(cid){state.clients=state.clients.map(c=>c.id===cid?{...c,projects:[...(c.projects||[]),newP.id]}:c);}
+  save();closeSheet();
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────────
+function setNav(n){state.nav=n;state.detailId=null;state.detailType=null;render();}
+function openDetail(id,type){state.detailId=id;state.detailType=type;state.detailTab="notes";render();}
+function goBack(){state.detailId=null;state.detailType=null;render();}
+function setDetailTab(t){state.detailTab=t;render();}
+function openSheet(name,pid,extra={}){state.sheet=name;state.sheetPid=pid;state.form=extra;render();}
+function closeSheet(){state.sheet=null;state.sheetPid=null;state.form={};render();}
+
+function toggleDark(){dark=!dark;document.body.classList.toggle("dark",dark);localStorage.setItem("fm-dark",dark?"1":"0");render();}
+function callPhone(phone){window.location.href=`tel:${phone}`;}
+
+// ─── RING SVG ────────────────────────────────────────────────
+function ring(seconds,color,size=68){
+  const r=(size-8)/2,circ=2*Math.PI*r,pct=Math.min((seconds%3600)/3600,1),offset=circ*(1-pct);
+  return `<svg width="${size}" height="${size}" style="transform:rotate(-90deg);display:block;flex-shrink:0;">
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--faint)" stroke-width="5"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="5"
+      stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${offset.toFixed(1)}" stroke-linecap="round"
+      style="transition:stroke-dashoffset 1s linear;"/>
+  </svg>`;
+}
+
+// ─── SHEET HTML ──────────────────────────────────────────────
+function sheetHTML(){
+  const s=state.sheet,pid=state.sheetPid;
+  if(!s||s==="viewdoc")return "";
+  const p=pid?proj(pid):null;
+  let title="",body="";
+
+  if(s==="clockout"){
+    title="Clock Out";
+    body=`<div style="background:var(--faint);border-radius:14px;padding:18px 20px;margin-bottom:20px;">
+      <div style="font-size:13px;color:var(--mid);margin-bottom:4px;">${p?.name||""}</div>
+      <div id="sheet-timer" style="font-size:42px;font-weight:700;font-variant-numeric:tabular-nums;">${fmtTimer(liveSec(pid))}</div>
+      ${p?.hourlyRate?`<div style="font-size:13px;color:#4caf7d;margin-top:4px;font-weight:600;">${money(liveSec(pid)/3600*(p.hourlyRate))} earned</div>`:""}
+    </div>
+    <label class="field-label">What did you work on?</label>
+    <textarea id="co-note" rows="3" placeholder="Tiling west wall, cabinet doors..." style="margin-bottom:18px;"></textarea>
+    <button class="btn-primary" onclick="clockOut('${pid}',val('co-note'))">Confirm Clock Out</button>`;
+  }
+  else if(s==="note"){
+    title="Add Note";
+    body=`<textarea id="note-text" rows="4" placeholder="Problem found, client instruction, reminder..." style="margin-bottom:18px;"></textarea>
+    <button class="btn-primary" onclick="addNote('${pid}',val('note-text'));closeSheet();">Save Note</button>`;
+  }
+  else if(s==="shop"){
+    title="Need to Buy";
+    body=`<input id="shop-text" placeholder="Tile adhesive × 4 bags, screws..." style="margin-bottom:18px;" onkeydown="if(event.key==='Enter'){addShop('${pid}',val('shop-text'));closeSheet();}"/>
+    <button class="btn-primary" onclick="addShop('${pid}',val('shop-text'));closeSheet();">Add to List</button>`;
+  }
+  else if(s==="photo"){
+    title="Add Photo";
+    body=`<input id="photo-caption" placeholder="Caption — what does this show?" style="margin-bottom:18px;"/>
+    <button class="btn-primary" onclick="addPhoto('${pid}')">📷 Open Camera / Gallery</button>`;
+  }
+  else if(s==="newproject"){
+    title="New Project";
+    const clientOpts=state.clients.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("");
+    const dots=COLORS.map(c=>`<div onclick="state.form.color='${c}';document.querySelectorAll('.cdot').forEach(d=>d.style.outline='none');this.style.outline='3px solid var(--ink)';" class="cdot" style="width:36px;height:36px;border-radius:50%;background:${c};cursor:pointer;flex-shrink:0;outline:${(state.form.color||COLORS[0])===c?'3px solid var(--ink)':'none'};outline-offset:3px;"></div>`).join("");
+    body=`<input id="fp-name" placeholder="Bathroom A, Kitchen Blue..." style="margin-bottom:12px;"/>
+    <select id="fp-client" style="margin-bottom:12px;"><option value="">Select client (optional)</option>${clientOpts}</select>
+    <input id="fp-address" placeholder="Job site address" style="margin-bottom:12px;"/>
+    <input id="fp-rate" type="number" placeholder="Your hourly rate $" style="margin-bottom:20px;"/>
+    <label class="field-label">Color</label>
+    <div style="display:flex;gap:10px;margin-bottom:28px;">${dots}</div>
+    <button class="btn-primary" onclick="createProject()">Create Project</button>`;
+  }
+  else if(s==="progress"){
+    const p2=proj(pid);
+    const estH=p2?.estimatedHours||"";
+    const manPct=p2?.progressManual!=null?p2.progressManual:"";
+    title="Set Progress";
+    body=`<div style="margin-bottom:20px;">
+      <label class="field-label">Set % manually (0–100)</label>
+      <input id="prog-manual" type="number" min="0" max="100" placeholder="e.g. 65" value="${manPct}" style="margin-bottom:6px;"/>
+      <div style="font-size:12px;color:var(--mid);">You know best — just type the % of work done</div>
+    </div>
+    <div style="border-top:1px solid var(--faint);padding-top:20px;margin-bottom:20px;">
+      <label class="field-label">OR — set estimated total hours</label>
+      <input id="prog-hours" type="number" placeholder="e.g. 40" value="${estH}" style="margin-bottom:6px;"/>
+      <div style="font-size:12px;color:var(--mid);">App will auto-calculate % from hours clocked</div>
+    </div>
+    <button class="btn-primary" onclick="saveProgress('${pid}')">Save Progress</button>`;
+  }
+  else if(s==="newclient"){
+    const ec=state.form.editId?client(state.form.editId):null;
+    title=ec?"Edit Client":"New Client";
+    body=`<input id="cl-name" placeholder="Full name" value="${esc(ec?.name||"")}" style="margin-bottom:12px;"/>
+    <input id="cl-phone" placeholder="Phone number" value="${esc(ec?.phone||"")}" type="tel" style="margin-bottom:12px;"/>
+    <input id="cl-address" placeholder="Address (for navigation)" value="${esc(ec?.address||"")}" style="margin-bottom:12px;"/>
+    <textarea id="cl-notes" rows="3" placeholder="Notes about this client..." style="margin-bottom:18px;">${esc(ec?.notes||"")}</textarea>
+    <button class="btn-primary" onclick="saveClient()">Save Client</button>`;
+  }
+  else if(s==="newdoc"){
+    const ed=state.form.editDocId?state.docs.find(x=>x.id===state.form.editDocId):null;
+    title=ed?"Edit Document":"New Estimate / Contract";
+    if(ed&&!state.form.docItems) state.form.docItems=ed.items||[];
+    const clientOpts=state.clients.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("");
+    const projOpts=state.projects.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("");
+    const DEFAULT_CANCEL="If client cancels after work has begun, client is responsible for all materials purchased and labor completed to date. A 20% cancellation fee applies to the remaining balance.";
+    const DEFAULT_CHANGE="Any changes to the agreed scope of work must be approved in writing by both parties before work begins. Additional costs will be estimated and agreed upon before proceeding.";
+    body=`<label class="field-label">Type</label>
+    <select id="doc-type" style="margin-bottom:12px;"><option>Estimate</option><option>Contract</option></select>
+    <label class="field-label">Project</label>
+    <select id="doc-pid" style="margin-bottom:12px;"><option value="">Select project...</option>${projOpts}</select>
+    <label class="field-label">Client Name (if not linked)</label>
+    <input id="doc-client-name" placeholder="Client full name" style="margin-bottom:12px;"/>
+    <label class="field-label">Scope of Work</label>
+    <textarea id="doc-scope" rows="3" placeholder="Describe exactly what work will be done..." style="margin-bottom:12px;">${ed?.scope||""}</textarea>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+      <div><label class="field-label">Start Date</label><input id="doc-start" type="date" value="${ed?.startDate||""}"/></div>
+      <div><label class="field-label">End Date</label><input id="doc-end" type="date" value="${ed?.endDate||""}"/></div>
+    </div>
+    <label class="field-label">Materials</label>
+    <div id="doc-items-list" style="margin-bottom:8px;"><div style="color:var(--mid);font-size:13px;padding:8px 0;">No materials added yet</div></div>
+    ${serviceQuickButtons()}
+    <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;margin-bottom:16px;">
+      <input id="di-name" placeholder="Material name"/>
+      <input id="di-cost" type="number" placeholder="$" style="width:80px;"/>
+      <button onclick="addDocItem()" style="background:var(--accent);color:#000;border:none;border-radius:100px;padding:0 16px;font-size:20px;cursor:pointer;">+</button>
+    </div>
+    <label class="field-label">Labor Cost ($)</label>
+    <input id="doc-labor" type="number" placeholder="0" value="${ed?.laborCost||""}" style="margin-bottom:12px;" oninput="rerenderDocItems()"/>
+    <label class="field-label">Deposit % Required</label>
+    <select id="doc-deposit-pct" style="margin-bottom:12px;"><option value="50">50% deposit</option><option value="30">30% deposit</option><option value="100">100% upfront</option><option value="0">No deposit</option></select>
+    <label class="field-label">Total <span id="doc-total-preview" style="color:#4caf7d;">$0</span></label>
+    <label class="field-label" style="margin-top:16px;">Cancellation Policy</label>
+    <textarea id="doc-cancel" rows="3" style="margin-bottom:12px;">${ed?.cancelPolicy||DEFAULT_CANCEL}</textarea>
+    <label class="field-label">Change Orders Policy</label>
+    <textarea id="doc-change" rows="3" style="margin-bottom:18px;">${ed?.changePolicy||DEFAULT_CHANGE}</textarea>
+    <button class="btn-primary" onclick="saveDoc()">Create Document</button>`;
+  }
+  else if(s==="newportfolio"){
+    const ep=state.form.editPfId?state.portfolio.find(x=>x.id===state.form.editPfId):null;
+    title=ep?"Edit Job":"Add to Portfolio";
+    body=`<input id="pf-title" placeholder="Job title — Master Bath Remodel" value="${esc(ep?.title||"")}" style="margin-bottom:12px;"/>
+    <input id="pf-type" placeholder="Type of work — Tile, Cabinets, Deck..." value="${esc(ep?.type||"")}" style="margin-bottom:12px;"/>
+    <textarea id="pf-desc" rows="3" placeholder="Short description of the job..." style="margin-bottom:12px;">${esc(ep?.description||"")}</textarea>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+      <input id="pf-hours" type="number" placeholder="Hours" value="${esc(ep?.hours||"")}"/>
+      <input id="pf-price" type="number" placeholder="Price $" value="${esc(ep?.price||"")}"/>
+    </div>
+    <input id="pf-date" placeholder="Month — e.g. 2025-11" value="${esc(ep?.date||"")}" style="margin-bottom:18px;"/>
+    <button class="btn-primary" onclick="savePortfolio()">Save to Portfolio</button>`;
+  }
+
+  else if(s==="newexpense"){
+    title="Add Expense";
+    const projOpts=state.projects.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("");
+    const typeOpts=EXPENSE_TYPES.map(t=>`<option>${t}</option>`).join("");
+    const today=new Date().toISOString().slice(0,10);
+    body=`<label class="field-label" style="margin-top:0;">Project</label>
+    <select id="exp-pid" style="margin-bottom:0;"><option value="">No project (general)</option>${projOpts}</select>
+    <label class="field-label">Type</label>
+    <select id="exp-type" style="margin-bottom:0;">${typeOpts}</select>
+    <label class="field-label">Description</label>
+    <input id="exp-desc" placeholder="What did you buy?" style="margin-bottom:0;"/>
+    <label class="field-label">Amount</label>
+    <input id="exp-amount" type="number" placeholder="$0" style="margin-bottom:0;"/>
+    <label class="field-label">Date</label>
+    <input id="exp-date" type="date" value="${today}" style="margin-bottom:16px;"/>
+    <button onclick="addReceiptPhoto()" class="btn-ghost" style="width:100%;margin-bottom:10px;">📷 Add Receipt Photo</button>
+    ${state.form.receiptPhoto?`<img src="${state.form.receiptPhoto}" style="width:100%;border-radius:10px;margin-bottom:16px;max-height:150px;object-fit:cover;"/>`:""}
+    <button class="btn-primary" onclick="saveExpense()">Save Expense</button>`;
+  }
+  else if(s==="newservice"){
+    const sv=state.form.editSvcId?state.services.find(x=>x.id===state.form.editSvcId):null;
+    title=sv?"Edit Service":"New Service";
+    body=`<label class="field-label" style="margin-top:0;">Service Name</label>
+    <input id="svc-name" placeholder="e.g. Tile Installation, Cabinet Install..." value="${esc(sv?.name||"")}" style="margin-bottom:0;"/>
+    <label class="field-label">Description (optional)</label>
+    <input id="svc-desc" placeholder="Short description" value="${esc(sv?.description||"")}" style="margin-bottom:0;"/>
+    <label class="field-label">Your Price</label>
+    <input id="svc-price" type="number" placeholder="$0" value="${esc(sv?.price||"")}" style="margin-bottom:0;"/>
+    <label class="field-label">Price Type</label>
+    <select id="svc-unit" style="margin-bottom:18px;">
+      <option value="flat" ${sv?.unit==="flat"?"selected":""}>Flat rate</option>
+      <option value="hour" ${sv?.unit==="hour"?"selected":""}>Per hour</option>
+      <option value="sqft" ${sv?.unit==="sqft"?"selected":""}>Per sq ft</option>
+    </select>
+    <button class="btn-primary" onclick="saveService()">Save Service</button>`;
+  }
+  else if(s==="signature"){
+    title="Client Signature";
+    body=`<p style="font-size:14px;color:var(--mid);margin-bottom:16px;">Ask your client to sign with their finger in the box below.</p>
+    <canvas id="sig-canvas" style="width:100%;height:180px;border:2px solid var(--border);border-radius:14px;background:#fff;touch-action:none;display:block;"></canvas>
+    <div style="display:flex;gap:10px;margin:16px 0;">
+      <button onclick="clearSignature()" class="btn-ghost" style="flex:1;">Clear</button>
+      <button onclick="saveSignature()" style="flex:2;background:#4caf7d;color:#fff;border:none;border-radius:100px;padding:13px;font-size:14px;font-weight:600;cursor:pointer;">Save Signature ✓</button>
+    </div>`;
+  }
+    else if(s==="newrecurring"||s==="editrecurring"){
+    var existing=state.form.rid?state.recurring.find(function(x){return x.id===state.form.rid;}):null;
+    title=existing?"Edit Recurring Service":"New Recurring Service";
+    body='<label class="field-label">Client Name</label>';
+    body+='<input id="rec-client" placeholder="e.g. Johnson Family" value="'+(existing?esc(existing.clientName||""):"")+'" style="margin-bottom:12px;"/>';
+    body+='<label class="field-label">Service</label>';
+    body+='<input id="rec-service" placeholder="e.g. Lawn mowing" value="'+(existing?esc(existing.service||""):"")+'" style="margin-bottom:12px;"/>';
+    body+='<label class="field-label">Price Per Visit</label>';
+    body+='<input id="rec-price" type="number" placeholder="150" value="'+(existing?existing.price||"":"")+'" style="margin-bottom:12px;"/>';
+    body+='<label class="field-label">Schedule</label>';
+    body+='<select id="rec-schedule" style="margin-bottom:12px;">';
+    var schedules=["Weekly","Biweekly","Monthly","Bimonthly","Quarterly"];
+    schedules.forEach(function(sc){
+      body+='<option value="'+sc+'"'+(existing&&existing.schedule===sc?" selected":"")+'>'+sc+'</option>';
+    });
+    body+='</select>';
+    body+='<label class="field-label">Next Visit Date</label>';
+    body+='<input id="rec-nextdate" type="date" value="'+(existing?existing.nextDate||"":"")+'" style="margin-bottom:12px;"/>';
+    body+='<label class="field-label">Notes</label>';
+    body+='<textarea id="rec-notes" placeholder="Gate code, parking, preferences..." style="margin-bottom:20px;">'+(existing?esc(existing.notes||""):"")+'</textarea>';
+    body+='<button onclick="saveRecurring()" class="btn-primary" style="width:100%;">'+(existing?"Save Changes":"Add Service")+'</button>';
+  }
+  
+    return `<div class="sheet-overlay" onclick="if(event.target.classList.contains('sheet-overlay')||event.target.classList.contains('sheet-bg'))closeSheet();">
+    <div class="sheet-bg" onclick="closeSheet()"></div>
+    <div class="sheet-body">
+      <div class="sheet-handle"></div>
+      ${title?`<h3 style="font-size:20px;font-weight:700;margin-bottom:20px;">${title}</h3>`:""}
+      ${body}
+    </div>
+  </div>`;
+}
+
+
+// ─── RECURRING SERVICES ──────────────────────────────────────
+
+function recurringHTML(){
+  try{ if(!state.recurring||!Array.isArray(state.recurring)) try{ state.recurring=JSON.parse(localStorage.getItem("fm-recurring")||"[]"); }catch(e){ state.recurring=[]; } if(!Array.isArray(state.recurring)) state.recurring=[]; }catch(e){ state.recurring=[]; }
+  if(!Array.isArray(state.recurring)) state.recurring=[];
+  var now=new Date();
+  var monthNames=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+  // Sort: overdue first, then by next date
+  var sorted=[].concat(state.recurring).sort(function(a,b){
+    var da=new Date(a.nextDate||"9999"), db=new Date(b.nextDate||"9999");
+    return da-db;
+  });
+
+  // Stats
+  var totalMonth=0, totalYear=0;
+  var thisMonth=now.getMonth(), thisYear=now.getFullYear();
+  state.recurring.forEach(function(r){
+    (r.visits||[]).forEach(function(v){
+      var d=new Date(v.date);
+      if(d.getFullYear()===thisYear){
+        totalYear+=Number(v.amount||0);
+        if(d.getMonth()===thisMonth) totalMonth+=Number(v.amount||0);
+      }
+    });
+  });
+
+  // Cards
+  var cards="";
+  sorted.forEach(function(r){
+    var next=r.nextDate?new Date(r.nextDate):null;
+    var isOverdue=next&&next<now;
+    var isDueToday=next&&next.toDateString()===now.toDateString();
+    var statusColor=isOverdue?"#E07B54":isDueToday?"#57A773":"#5B8DD9";
+    var statusLabel=isOverdue?"Overdue":isDueToday?"Due Today":next?("Next: "+monthNames[next.getMonth()]+" "+next.getDate()):"No date set";
+    var visitCount=(r.visits||[]).length;
+    var totalCollected=(r.visits||[]).reduce(function(s,v){return s+Number(v.amount||0);},0);
+
+    cards+='<div class="card" style="margin-bottom:10px;">';
+    cards+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">';
+    cards+='<div>';
+    cards+='<div style="font-size:16px;font-weight:700;">'+esc(r.clientName)+'</div>';
+    cards+='<div style="font-size:13px;color:var(--mid);margin-top:2px;">'+esc(r.service)+'</div>';
+    cards+='<div style="font-size:12px;margin-top:4px;"><span style="background:'+statusColor+'22;color:'+statusColor+';padding:2px 8px;border-radius:100px;font-weight:600;">'+statusLabel+'</span></div>';
+    cards+='</div>';
+    cards+='<div style="text-align:right;">';
+    cards+='<div style="font-size:20px;font-weight:700;color:#4caf7d;">$'+Number(r.price||0).toLocaleString()+'</div>';
+    cards+='<div style="font-size:11px;color:var(--mid);">'+esc(r.schedule)+'</div>';
+    cards+='</div></div>';
+    cards+='<div style="display:flex;gap:8px;border-top:1px solid var(--faint);padding-top:10px;">';
+    cards+='<button data-id="'+r.id+'" onclick="markVisitDone(this.dataset.id)" style="flex:1;background:#4caf7d;color:#fff;border:none;border-radius:100px;padding:10px;font-size:13px;font-weight:600;cursor:pointer;">✓ Mark Visit Done</button>';
+    cards+='<button data-id="'+r.id+'" onclick="editRecurring(this.dataset.id)" style="background:var(--faint);border:none;border-radius:100px;padding:10px 14px;font-size:13px;cursor:pointer;">✏️</button>';
+    cards+='<button data-id="'+r.id+'" onclick="delRecurring(this.dataset.id)" style="background:var(--faint);border:none;border-radius:100px;padding:10px 14px;font-size:13px;cursor:pointer;">🗑️</button>';
+    cards+='</div>';
+    if(visitCount>0){
+      cards+='<div style="font-size:11px;color:var(--mid);margin-top:8px;">'+visitCount+' visits · $'+totalCollected.toLocaleString()+' collected total</div>';
+    }
+    cards+='</div>';
+  });
+
+  if(!cards) cards='<div class="empty" style="text-align:center;padding:40px 20px;">No recurring services yet.<br><br>Perfect for landscaping, housekeeping,<br>pool cleaning, and any repeat work.</div>';
+
+  var newBtn='<button onclick="addRecurring()" style="background:var(--accent);color:#000;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ Add</button>';
+
+  var statsBar='';
+  if(state.recurring.length>0){
+    statsBar='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">';
+    statsBar+='<div class="card" style="text-align:center;"><div style="font-size:10px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">This Month</div><div style="font-size:22px;font-weight:700;color:#4caf7d;">$'+totalMonth.toLocaleString()+'</div></div>';
+    statsBar+='<div class="card" style="text-align:center;"><div style="font-size:10px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">This Year</div><div style="font-size:22px;font-weight:700;color:#4caf7d;">$'+totalYear.toLocaleString()+'</div></div>';
+    statsBar+='</div>';
+  }
+
+  return topBar("Recurring","",newBtn)+'<div style="padding:14px 16px 130px;">'+statsBar+cards+'</div>';
+}
+
+function addRecurring(){openSheet("newrecurring",null);}
+function editRecurring(id){openSheet("editrecurring",null,{rid:id});}
+function markVisitDone(id){
+  var r=state.recurring.find(function(x){return x.id===id;});
+  if(!r) return;
+  // Log the visit
+  if(!r.visits) r.visits=[];
+  var today=new Date();
+  r.visits.push({date:today.toISOString().slice(0,10),amount:r.price});
+  // Calculate next date based on schedule
+  var next=new Date(today);
+  if(r.schedule==="Weekly") next.setDate(next.getDate()+7);
+  else if(r.schedule==="Biweekly") next.setDate(next.getDate()+14);
+  else if(r.schedule==="Monthly") next.setMonth(next.getMonth()+1);
+  else if(r.schedule==="Bimonthly") next.setDate(next.getDate()+60);
+  else if(r.schedule==="Quarterly") next.setMonth(next.getMonth()+3);
+  else next.setMonth(next.getMonth()+1);
+  r.nextDate=next.toISOString().slice(0,10);
+  state.recurring=state.recurring.map(function(x){return x.id===id?r:x;});
+  save();render();
+}
+
+function delRecurring(id){
+  if(!confirm("Delete this recurring service?")) return;
+  state.recurring=state.recurring.filter(function(x){return x.id!==id;});
+  save();render();
+}
+
+function saveRecurring(){
+  var isEdit=state.form.rid;
+  var existing=isEdit?state.recurring.find(function(x){return x.id===state.form.rid;}):null;
+  var r={
+    id:existing?existing.id:uid(),
+    clientName:val("rec-client"),
+    service:val("rec-service"),
+    price:Number(val("rec-price"))||0,
+    schedule:val("rec-schedule"),
+    nextDate:val("rec-nextdate"),
+    visits:existing?existing.visits||[]:[],
+    notes:val("rec-notes")
+  };
+  if(!r.clientName.trim()||!r.service.trim()) return;
+  if(isEdit){
+    state.recurring=state.recurring.map(function(x){return x.id===r.id?r:x;});
+  } else {
+    state.recurring=[r,...state.recurring];
+  }
+  save();closeSheet();
+}
+
+// ─── NAV BAR ─────────────────────────────────────────────────
+function navBarHTML(){
+  const n=state.nav;
+  const dot=Object.keys(state.clocks).length?`<span style="width:7px;height:7px;border-radius:50%;background:#E07B54;display:inline-block;margin-left:2px;vertical-align:middle;"></span>`:"";
+  const items=[
+    {id:"field",icon:"🏗️",label:"Field"},
+    {id:"clients",icon:"👥",label:"Clients"},
+    {id:"recurring",icon:"🔄",label:"Recurring"},
+    {id:"docs",icon:"📄",label:"Docs"},
+    {id:"summary",icon:"📊",label:"Summary"},
+  ];
+  return `<div class="nav-bar">${items.map(i=>`
+    <button onclick="setNav('${i.id}')" class="nav-item ${n===i.id?'active':''}">
+      <span class="nav-icon">${i.icon}</span>${i.label}${i.id==="field"?dot:""}
+    </button>`).join("")}</div>`;
+}
+
+// ─── TOP BAR ─────────────────────────────────────────────────
+function topBar(title,backFn=null,rightHTML=""){
+  return `<div class="top-bar">
+    ${backFn?`<button onclick="${backFn}" style="background:none;border:none;font-size:24px;cursor:pointer;color:var(--mid);padding:0;line-height:1;flex-shrink:0;">←</button>`:""}
+    <div style="flex:1;font-size:18px;font-weight:700;">${title}</div>
+    ${rightHTML}
+  </div>`;
+}
+
+// ─── FIELD VIEW ──────────────────────────────────────────────
+function fieldHTML(){
+  const activeIds=Object.keys(state.clocks);
+  const totalLive=activeIds.reduce((s,pid)=>s+liveSec(pid),0);
+  const fieldTab=state.form.fieldTab||"projects";
+
+  // Tab bar - pure string concat, no nested template literals
+  const aStyle="flex:1;background:none;border:none;padding:13px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-bottom:2px solid var(--ink);color:var(--ink);";
+  const iStyle="flex:1;background:none;border:none;padding:13px;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border-bottom:2px solid transparent;color:var(--mid);";
+  const tabBar='<div style="display:flex;background:var(--header);border-bottom:1px solid var(--faint);">'
+    +'<button onclick="setFieldTab(0)" style="'+(fieldTab==="projects"?aStyle:iStyle)+'">Projects</button>'
+    +'<button onclick="setFieldTab(1)" style="'+(fieldTab==="services"?aStyle:iStyle)+'">My Services</button>'
+    +'</div>';
+
+  // Services view
+  if(fieldTab==="services"){
+    let svcList="";
+    if(state.services.length){
+      state.services.forEach(function(s){
+        const unitLabel=s.unit==="hour"?"/ hr":s.unit==="sqft"?"/ sqft":"flat";
+        svcList+='<div class="card" style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;" data-id="'+s.id+'" onclick="editSvc(this.dataset.id)">'
+          +'<div style="flex:1;">'
+          +'<div style="font-size:16px;font-weight:600;">'+esc(s.name)+'</div>'
+          +(s.description?'<div style="font-size:12px;color:var(--mid);margin-top:2px;">'+esc(s.description)+'</div>':"")
+          +'</div>'
+          +'<div style="text-align:right;flex-shrink:0;margin-left:12px;">'
+          +'<div style="font-size:18px;font-weight:700;color:#4caf7d;">'+money(s.price)+'</div>'
+          +'<div style="font-size:11px;color:var(--mid);">'+unitLabel+'</div>'
+          +'</div></div>';
+      });
+    } else {
+      svcList='<div class="empty">No services yet.<br/>Tap <strong>+ Add</strong> to save your standard prices.</div>';
+    }
+    return topBar("My Services","","<button onclick=\"addNewService()\" style=\"background:var(--accent);color:#000;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;\">+ Add</button>")
+      +tabBar
+      +'<div style="padding:14px 16px 130px;">'+svcList+'</div>';
+  }
+
+  // Recurring view
+  if(fieldTab==="recurring"){
+    try{ if(!state.recurring||!Array.isArray(state.recurring)) try{ state.recurring=JSON.parse(localStorage.getItem("fm-recurring")||"[]"); }catch(e){ state.recurring=[]; } if(!Array.isArray(state.recurring)) state.recurring=[]; }catch(e){ state.recurring=[]; }
+    if(!Array.isArray(state.recurring)) state.recurring=[];
+    var now=new Date();
+    var sorted=[].concat(state.recurring).sort(function(a,b){
+      return new Date(a.nextDate||"9999")-new Date(b.nextDate||"9999");
+    });
+    var thisMonth=now.getMonth(), thisYear=now.getFullYear();
+    var totalMonth=0, totalYear=0;
+    state.recurring.forEach(function(r){
+      (r.visits||[]).forEach(function(v){
+        var d=new Date(v.date);
+        if(d.getFullYear()===thisYear){ totalYear+=Number(v.amount||0); if(d.getMonth()===thisMonth) totalMonth+=Number(v.amount||0); }
+      });
+    });
+    var rcards="";
+    if(state.recurring.length>0){
+      rcards+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">';
+      rcards+='<div class="card" style="text-align:center;"><div style="font-size:10px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">This Month</div><div style="font-size:20px;font-weight:700;color:#4caf7d;">$'+totalMonth.toLocaleString()+'</div></div>';
+      rcards+='<div class="card" style="text-align:center;"><div style="font-size:10px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">This Year</div><div style="font-size:20px;font-weight:700;color:#4caf7d;">$'+totalYear.toLocaleString()+'</div></div>';
+      rcards+='</div>';
+    }
+    sorted.forEach(function(r){
+      var next=r.nextDate?new Date(r.nextDate):null;
+      var isOverdue=next&&next<now;
+      var isDueToday=next&&next.toDateString()===now.toDateString();
+      var sc=isOverdue?"#E07B54":isDueToday?"#57A773":"#5B8DD9";
+      var sl=isOverdue?"Overdue":isDueToday?"Due Today":next?("Next: "+next.toLocaleDateString("en-US",{month:"short",day:"numeric"})):"No date";
+      var visits=(r.visits||[]).length;
+      var collected=(r.visits||[]).reduce(function(s,v){return s+Number(v.amount||0);},0);
+      rcards+='<div class="card" style="margin-bottom:10px;">';
+      rcards+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">';
+      rcards+='<div><div style="font-size:16px;font-weight:700;">'+esc(r.clientName)+'</div>';
+      rcards+='<div style="font-size:13px;color:var(--mid);margin-top:2px;">'+esc(r.service)+'</div>';
+      rcards+='<div style="margin-top:6px;"><span style="background:'+sc+'22;color:'+sc+';padding:2px 8px;border-radius:100px;font-size:11px;font-weight:600;">'+sl+'</span></div></div>';
+      rcards+='<div style="text-align:right;"><div style="font-size:20px;font-weight:700;color:#4caf7d;">$'+Number(r.price||0).toLocaleString()+'</div>';
+      rcards+='<div style="font-size:11px;color:var(--mid);">'+esc(r.schedule)+'</div></div></div>';
+      rcards+='<div style="display:flex;gap:8px;border-top:1px solid var(--faint);padding-top:10px;">';
+      rcards+='<button data-id="'+r.id+'" onclick="markVisitDone(this.dataset.id)" style="flex:1;background:#4caf7d;color:#fff;border:none;border-radius:100px;padding:10px;font-size:13px;font-weight:600;cursor:pointer;">✓ Visit Done</button>';
+      rcards+='<button data-id="'+r.id+'" onclick="editRecurring(this.dataset.id)" style="background:var(--faint);border:none;border-radius:100px;padding:10px 14px;font-size:18px;cursor:pointer;">✏️</button>';
+      rcards+='<button data-id="'+r.id+'" onclick="delRecurring(this.dataset.id)" style="background:var(--faint);border:none;border-radius:100px;padding:10px 14px;font-size:18px;cursor:pointer;">🗑️</button>';
+      rcards+='</div>';
+      if(visits>0) rcards+='<div style="font-size:11px;color:var(--mid);margin-top:8px;">'+visits+' visits · $'+collected.toLocaleString()+' collected</div>';
+      rcards+='</div>';
+    });
+    if(!state.recurring.length) rcards='<div class="empty" style="text-align:center;">No recurring services yet.<br><br>Perfect for landscaping, housekeeping,<br>pool cleaning &amp; any repeat work.</div>';
+    var addBtn='<button onclick="addRecurring()" style="background:var(--accent);color:#000;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ Add</button>';
+    return topBar("Recurring","",addBtn)+'<div style="padding:0 0 130px;">'+tabBar+'<div style="padding:14px 16px;">'+rcards+'</div></div>';
+  }
+
+
+
+  // Banner for active clocks
+  let banner="";
+  if(activeIds.length){
+    banner='<div style="margin:14px 16px 0;background:var(--ink);border-radius:16px;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;">'
+      +'<div>'
+      +'<div style="color:var(--mid);font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;">On the clock</div>'
+      +'<div style="color:'+(dark?"#F2F2F2":"#fff")+';font-size:14px;font-weight:600;">'+activeIds.map(function(p){return proj(p)?proj(p).name:"";}).join(" + ")+'</div>'
+      +'</div>'
+      +'<div id="main-timer" style="color:#E07B54;font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;">'+fmtTimer(totalLive)+'</div>'
+      +'</div>';
+  }
+
+  // Project cards
+  let cards="";
+  state.projects.forEach(function(p){
+    const isActive=!!state.clocks[p.id];
+    const ls=liveSec(p.id);
+    const pendingN=p.notes.filter(function(n){return !n.done;}).length;
+    const pendingS=p.shopping.filter(function(s){return !s.done;}).length;
+    const cl=p.clientId?client(p.clientId):null;
+    const earned=money((p.totalSeconds+ls)/3600*(p.hourlyRate||0));
+    const pct=getProjectProgress(p);
+    const pctBadge=pct!=null?progressBadge(p):"";
+    const liveTag=isActive?'<span class="pulse badge" style="background:'+p.color+'33;color:'+p.color+';margin-left:6px;">● LIVE</span>':"";
+
+    let quickActions="";
+    if(isActive){
+      quickActions='<div style="display:flex;gap:8px;border-top:1px solid var(--faint);padding-top:14px;margin-top:14px;" onclick="event.stopPropagation()">'
+        +'<button onclick="openSheet(\"note\",\""+p.id+"\"")" class="btn-ghost" style="flex:1;font-size:13px;">📝</button>'
+        +'<button onclick="openSheet(\"shop\",\""+p.id+"\"")" class="btn-ghost" style="flex:1;font-size:13px;">🛒</button>'
+        +'<button onclick="openSheet(\"photo\",\""+p.id+"\"")" class="btn-ghost" style="flex:1;font-size:13px;">📷</button>'
+        +'<button onclick="openSheet(\"clockout\",\""+p.id+"\"")" class="btn-color" style="flex:2;background:'+p.color+';">⏹ Out</button>'
+        +'</div>';
+    }
+
+    const clockBtn=isActive
+      ?'<button onclick="openSheet(\"clockout\",\""+p.id+"\"")" style="width:50px;height:50px;border-radius:50%;border:none;background:'+p.color+';font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">⏹</button>'
+      :'<button onclick="clockIn(\""+p.id+"\")" style="width:50px;height:50px;border-radius:50%;border:none;background:var(--faint);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">▶</button>';
+
+    const timerTag=isActive?'<div style="font-size:11px;font-weight:700;color:'+p.color+';font-variant-numeric:tabular-nums;" id="timer-'+p.id+'">'+fmtTimer(ls)+'</div>':"";
+
+    cards+='<div data-pid="'+p.id+'" onclick="openProj(this.dataset.pid)" class="card" style="border-left:4px solid '+p.color+';cursor:pointer;">'
+      +'<div style="display:flex;justify-content:space-between;align-items:flex-start;">'
+      +'<div style="flex:1;padding-right:10px;min-width:0;">'
+      +'<div style="font-size:17px;font-weight:700;display:flex;align-items:center;flex-wrap:wrap;gap:4px;">'+esc(p.name)+liveTag+'</div>'
+      +'<div style="color:var(--mid);font-size:13px;margin-top:2px;">'+(cl?esc(cl.name):(p.address||""))+'</div>'
+      +(p.address?'':"")
+      +'<button onclick="event.stopPropagation();openSheet(\"progress\",\""+p.id+"\"")" style="background:none;border:none;color:var(--mid);font-size:12px;cursor:pointer;padding:4px 0;font-weight:600;display:block;">⬤ Set Progress</button>'
+      +'<div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:6px;">'
+      +'<span style="font-size:13px;color:var(--mid);">⏱ '+fmtHours(p.totalSeconds+ls)+'</span>'
+      +(p.hourlyRate?'<span style="font-size:13px;color:#4caf7d;font-weight:600;">'+earned+'</span>':"")
+      +pctBadge
+      +(pendingN>0?'<span style="font-size:13px;color:var(--mid);">📝 '+pendingN+'</span>':"")
+      +(pendingS>0?'<span style="font-size:13px;color:var(--mid);">🛒 '+pendingS+'</span>':"")
+      +'</div></div>'
+      +'<div onclick="event.stopPropagation()" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;">'
+      +'<div style="position:relative;width:68px;height:68px;">'
+      +ring(ls,p.color,68)
+      +'<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">'
+      +clockBtn
+      +'</div></div>'
+      +timerTag
+      +'</div></div>'
+      +quickActions
+      +'</div>';
+  });
+
+  if(!cards) cards='<div class="empty">No projects yet.<br/>Tap <strong>+ New</strong> to add your first project.</div>';
+
+  return topBar("JOVRO Field","","<button onclick=\"addNewProject()\" style=\"background:var(--accent);color:#000;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;\">+ New</button>")
+    +tabBar
+    +banner
+    +'<div style="padding:14px 16px 130px;">'+cards+'</div>';
+}
+
+
+// ─── PROJECT DETAIL ──────────────────────────────────────────
+function projectDetailHTML(){
+  const p=proj(state.detailId);if(!p)return "";
+  const isActive=!!state.clocks[p.id],ls=liveSec(p.id),t=state.detailTab;
+  const cl=p.clientId?client(p.clientId):null;
+  const totalEarned=(p.totalSeconds+ls)/3600*(p.hourlyRate||0);
+  const liveTag=isActive?`<span class="pulse badge" style="background:${p.color}33;color:${p.color};">● LIVE</span>`:"";
+
+  const actionBar=isActive?`<div style="padding:12px 16px;background:var(--card);border-bottom:1px solid var(--faint);display:flex;gap:8px;">
+    <button onclick="openSheet('note','${p.id}')" class="btn-ghost" style="flex:1;font-size:12px;">📝 Note</button>
+    <button onclick="openSheet('shop','${p.id}')" class="btn-ghost" style="flex:1;font-size:12px;">🛒 Buy</button>
+    <button onclick="openSheet('photo','${p.id}')" class="btn-ghost" style="flex:1;font-size:12px;">📷</button>
+    <button onclick="openSheet('clockout','${p.id}')" class="btn-color" style="flex:2;background:${p.color};">⏹ Out</button>
+  </div>`:`<div style="padding:12px 16px;background:var(--card);border-bottom:1px solid var(--faint);display:flex;gap:8px;">
+    <button onclick="clockIn('${p.id}')" class="btn-color" style="background:${p.color};width:100%;font-size:15px;">▶ Clock In to ${esc(p.name)}</button>
+  </div>`;
+
+  let content="";
+  if(t==="notes"){
+    const items=p.notes.map(n=>`<div class="card" style="display:flex;align-items:flex-start;gap:12px;opacity:${n.done?.55:1};">
+      <button onclick="toggleNote('${p.id}','${n.id}')" style="margin-top:2px;width:24px;height:24px;border-radius:7px;border:2px solid ${n.done?p.color:"var(--border)"};background:${n.done?p.color:"transparent"};cursor:pointer;flex-shrink:0;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;">${n.done?"✓":""}</button>
+      <div style="flex:1;"><div style="font-size:15px;line-height:1.5;text-decoration:${n.done?"line-through":"none"};">${n.text}</div><div style="font-size:11px;color:var(--mid);margin-top:3px;">${n.ts}</div></div>
+      <button onclick="delNote('${p.id}','${n.id}')" style="background:none;border:none;color:var(--mid);font-size:22px;cursor:pointer;padding:0;line-height:1;">×</button>
+    </div>`).join("")||`<div class="empty">No notes yet</div>`;
+    content=`<button onclick="openSheet('note','${p.id}')" class="btn-ghost" style="width:100%;margin-bottom:14px;">+ Add Note</button>${items}`;
+  }
+  else if(t==="shopping"){
+    const pending=p.shopping.filter(s=>!s.done),bought=p.shopping.filter(s=>s.done);
+    const pItems=pending.map(s=>`<div class="card" style="display:flex;align-items:center;gap:12px;">
+      <button onclick="toggleShop('${p.id}','${s.id}')" style="width:24px;height:24px;border-radius:7px;border:2px solid var(--border);background:transparent;cursor:pointer;flex-shrink:0;"></button>
+      <span style="flex:1;font-size:15px;">${s.text}</span>
+      <button onclick="delShop('${p.id}','${s.id}')" style="background:none;border:none;color:var(--mid);font-size:22px;cursor:pointer;padding:0;">×</button>
+    </div>`).join("");
+    const bItems=bought.length?`<div style="font-size:11px;color:var(--mid);letter-spacing:2px;text-transform:uppercase;margin:18px 0 10px;">Bought</div>${bought.map(s=>`
+      <div class="card" style="display:flex;align-items:center;gap:12px;opacity:.5;">
+        <button onclick="toggleShop('${p.id}','${s.id}')" style="width:24px;height:24px;border-radius:7px;border:2px solid ${p.color};background:${p.color};cursor:pointer;flex-shrink:0;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;">✓</button>
+        <span style="flex:1;font-size:15px;text-decoration:line-through;">${s.text}</span>
+        <button onclick="delShop('${p.id}','${s.id}')" style="background:none;border:none;color:var(--mid);font-size:22px;cursor:pointer;padding:0;">×</button>
+      </div>`).join("")}`:"";
+    content=`<button onclick="openSheet('shop','${p.id}')" class="btn-ghost" style="width:100%;margin-bottom:14px;">+ Add Item</button>${pItems||(!bought.length?`<div class="empty">Nothing to buy</div>`:"")}${bItems}`;
+  }
+  else if(t==="photos"){
+    const photos=p.photos||[];
+    const items=photos.map(ph=>`<div class="card" style="padding:0;overflow:hidden;">
+      <img src="${ph.src}" style="width:100%;max-height:240px;object-fit:cover;display:block;"/>
+      ${ph.note||ph.ts?`<div style="padding:12px 16px;">${ph.note?`<div style="font-size:14px;margin-bottom:3px;">${ph.note}</div>`:""}
+      <div style="font-size:11px;color:var(--mid);">${ph.ts}</div></div>`:""}
+    </div>`).join("")||`<div class="empty">No photos yet.<br/>Document your work as you go.</div>`;
+    content=`<button onclick="openSheet('photo','${p.id}')" class="btn-ghost" style="width:100%;margin-bottom:14px;">📷 Add Photo</button>${items}`;
+  }
+  else if(t==="docs"){
+    var projDocs=state.docs.filter(function(d){return d.pid===p.id;});
+    var scMap={Draft:"#D4A843",Signed:"#57A773",Sent:"#5B8DD9"};
+    var docCards="";
+    projDocs.forEach(function(d){
+      var sc=scMap[d.status]||"#aaa";
+      docCards+='<div data-id="'+d.id+'" onclick="viewDoc(this.dataset.id)" class="card" style="cursor:pointer;">';
+      docCards+='<div style="display:flex;justify-content:space-between;align-items:center;">';
+      docCards+='<div><div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;">';
+      docCards+='<span style="font-size:14px;font-weight:700;">'+esc(d.type)+'</span>';
+      docCards+='<span class="badge" style="background:'+sc+'22;color:'+sc+';">'+esc(d.status)+'</span>';
+      docCards+='</div><div style="font-size:12px;color:var(--mid);">'+(d.createdDate||"")+'</div></div>';
+      docCards+='<div style="text-align:right;">';
+      docCards+='<div style="font-size:17px;font-weight:700;color:#4caf7d;">'+money(d.total)+'</div>';
+      docCards+='<div style="font-size:11px;color:var(--mid);">dep. '+money(d.deposit)+'</div>';
+      docCards+='</div></div></div>';
+    });
+    if(!docCards) docCards='<div class="empty">No documents linked to this project yet.</div>';
+    content='<button onclick="goToNewDoc()" class="btn-ghost" style="width:100%;margin-bottom:14px;">+ New Estimate / Contract</button>'+docCards;
+  }
+  else if(t==="sessions"){
+    const sessions=[...p.sessions].reverse();
+    const totalH = p.totalSeconds + liveSec(p.id);
+    const totalEarned = (totalH/3600)*(p.hourlyRate||0);
+    const summary = `<div class="card" style="background:var(--ink);border:none;margin-bottom:16px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div><div style="font-size:10px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;">Total Hours</div>
+          <div style="font-size:22px;font-weight:700;color:${dark?"#F2F2F2":"#fff"};">${fmtHours(totalH)}</div></div>
+        ${p.hourlyRate?`<div><div style="font-size:10px;color:#4caf7d;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;">Earned</div>
+          <div style="font-size:22px;font-weight:700;color:#4caf7d;">${money(totalEarned)}</div></div>`:""}
+        <div><div style="font-size:10px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;">Sessions</div>
+          <div style="font-size:22px;font-weight:700;color:${dark?"#F2F2F2":"#fff"};">${p.sessions.length}</div></div>
+      </div>
+    </div>`;
+    const items = sessions.map(s=>{
+      const earned = (s.seconds/3600)*(p.hourlyRate||0);
+      return `<div class="card" style="border-left:4px solid ${p.color};">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:${s.note&&s.note!=="—"?10:0}px;">
+          <div>
+            <div style="font-size:16px;font-weight:700;">${fmtHours(s.seconds)}</div>
+            <div style="font-size:13px;color:var(--mid);margin-top:2px;">${s.date}</div>
+            <div style="font-size:12px;color:var(--mid);">${s.start} → ${s.end}</div>
+          </div>
+          <div style="text-align:right;">
+            ${p.hourlyRate?`<div style="font-size:14px;font-weight:600;color:#4caf7d;">${money(earned)}</div>`:""}
+          </div>
+        </div>
+        ${s.note&&s.note!=="—"?`<div style="background:var(--faint);border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.5;">${s.note}</div>`:""}
+      </div>`;
+    }).join("") || `<div class="empty">No sessions yet.<br/>Clock in to start tracking your time.</div>`;
+    content = summary + items;
+  }
+
+
+  return `<div class="top-bar">
+    <button onclick="goBack()" style="background:none;border:none;font-size:24px;cursor:pointer;color:var(--mid);padding:0;line-height:1;flex-shrink:0;">←</button>
+    <div style="flex:1;min-width:0;">
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <span style="width:10px;height:10px;border-radius:50%;background:${p.color};display:inline-block;flex-shrink:0;"></span>
+        <span style="font-weight:700;font-size:17px;">${p.name}</span>${liveTag}
+      </div>
+      <div style="color:var(--mid);font-size:12px;margin-top:1px;padding-left:18px;">${cl?cl.name:""}</div>
+    </div>
+    <div style="text-align:right;flex-shrink:0;">
+      <div style="font-size:18px;font-weight:700;color:${isActive?p.color:"var(--ink)"};" id="detail-total">${fmtHours(p.totalSeconds+ls)}</div>
+      ${p.hourlyRate?`<div style="font-size:12px;color:#4caf7d;font-weight:600;">${money(totalEarned)}</div>`:""}
+      ${isActive?`<div style="font-size:10px;color:${p.color};font-variant-numeric:tabular-nums;" id="detail-timer">${fmtTimer(ls)}</div>`:""}
+    </div>
+  </div>
+  ${actionBar}
+  ${(()=>{
+    const pct=getProjectProgress(p);
+    const bd=getBalanceDue(p);
+    const contractTotal=bd.contractTotal,collected=bd.collected,balance=bd.balance;
+    if(pct==null&&!contractTotal) return "";
+    const clr=pct>=100?"#57A773":pct>=50?"#5B8DD9":"#D4A843";
+    const balClr=balance>0?"#E07B54":"#57A773";
+    let html='<div style="padding:12px 16px;background:var(--card);border-bottom:1px solid var(--faint);">';
+    if(pct!=null){
+      html+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="font-size:13px;font-weight:600;">Progress</span><span style="font-size:13px;font-weight:700;color:'+clr+';">'+pct+'%</span></div>';
+      html+='<div style="background:var(--faint);border-radius:100px;height:8px;margin-bottom:10px;"><div style="background:'+clr+';border-radius:100px;height:8px;width:'+pct+'%;transition:width .3s;"></div></div>';
+    }
+    if(contractTotal){
+      html+='<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;"><span style="color:var(--mid);">Contract</span><span style="font-weight:600;">'+money(contractTotal)+'</span></div>';
+      html+='<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;"><span style="color:var(--mid);">Collected</span><span style="color:#4caf7d;font-weight:600;">'+money(collected)+'</span></div>';
+      html+='<div style="display:flex;justify-content:space-between;font-size:15px;font-weight:700;padding-top:8px;border-top:1px solid var(--faint);margin-bottom:10px;"><span>Balance Due</span><span style="color:'+balClr+';">'+money(balance)+'</span></div>';
+      html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">';
+      html+='<button data-id="'+p.id+'" onclick="sendBI(this.dataset.id)" style="background:#5b8dd9;color:#fff;border:none;border-radius:100px;padding:11px;font-size:12px;font-weight:600;cursor:pointer;">📧 Email Invoice</button>';
+      html+='<button data-id="'+p.id+'" onclick="printBI(this.dataset.id)" style="background:var(--faint);color:var(--ink);border:none;border-radius:100px;padding:11px;font-size:12px;font-weight:600;cursor:pointer;">🖨️ Print Invoice</button>';
+      html+='</div>';
+    }
+    html+='</div>';
+    return html;
+  })()}
+  
+  <div class="tab-bar" style="top:${isActive?108:68}px;">
+    ${buildDetailTabs(t)}
+  </div>
+  <div style="padding:14px 16px 130px;">${content}</div>`;
+}
+
+// ─── CLIENTS VIEW ────────────────────────────────────────────
+function clientsHTML(){
+  if(state.detailId&&state.detailType==="client"){
+    const c=client(state.detailId);if(!c)return "";
+    const cProjects=state.projects.filter(p=>(c.projects||[]).includes(p.id));
+    return `${topBar(c.name,"goBack()")}
+    <div style="padding:16px 16px 130px;">
+      <div class="card" style="margin-bottom:10px;">
+        ${c.phone?`<button onclick="callPhone('${c.phone}')" style="display:flex;align-items:center;gap:12px;background:none;border:none;width:100%;padding:0;cursor:pointer;margin-bottom:14px;">
+          <span style="width:38px;height:38px;border-radius:50%;background:#5b8dd922;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">📞</span>
+          <div style="text-align:left;"><div style="font-size:15px;font-weight:600;color:var(--ink);">${c.phone}</div><div style="font-size:11px;color:var(--mid);">Tap to call</div></div>
+        </button>`:""}
+        ${c.address?`<div style="padding:10px 0;border-top:1px solid var(--faint);"><div style="font-size:11px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Address</div><div style="font-size:14px;">${c.address}</div></div>`:""}
+        ${c.notes?`<div style="padding:12px 0;border-top:1px solid var(--faint);"><div style="font-size:11px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Notes</div><div style="font-size:14px;line-height:1.5;">${c.notes}</div></div>`:""}
+      </div>
+      ${cProjects.length?`<div style="font-size:11px;color:var(--mid);letter-spacing:2px;text-transform:uppercase;margin:18px 0 10px;">Projects</div>
+      ${cProjects.map(p=>`<div onclick="openDetail('${p.id}','project')" class="card" style="border-left:4px solid ${p.color};cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
+        <div><div style="font-weight:600;font-size:15px;">${p.name}</div><div style="font-size:12px;color:var(--mid);margin-top:2px;">⏱ ${fmtHours(p.totalSeconds)}</div></div>
+        <div style="font-size:20px;color:var(--mid);">›</div>
+      </div>`).join("")}`:""}
+      <div style="margin-top:20px;display:flex;gap:10px;">
+        <button onclick="openSheet('newclient',null,{editId:'${c.id}'})" class="btn-ghost" style="flex:1;">Edit</button>
+        <button onclick="delClient('${c.id}')" class="btn-ghost" style="flex:1;color:#E07B54;">Delete</button>
+      </div>
+    </div>`;
+  }
+
+  const cards=state.clients.map(c=>{
+    const cProjects=state.projects.filter(p=>(c.projects||[]).includes(p.id));
+    return `<div onclick="openDetail('${c.id}','client')" class="card" style="cursor:pointer;">
+      <div style="display:flex;align-items:center;gap:14px;">
+        <div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#5B8DD9,#9B6EC8);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff;flex-shrink:0;">${c.name[0]}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:700;font-size:16px;">${c.name}</div>
+          <div style="font-size:13px;color:var(--mid);margin-top:2px;">${c.phone||""}</div>
+          <div style="font-size:12px;color:var(--mid);margin-top:2px;">${cProjects.length} project${cProjects.length!==1?"s":""}</div>
+        </div>
+        <div style="font-size:20px;color:var(--mid);">›</div>
+      </div>
+    </div>`;
+  }).join("");
+
+  return `${topBar("Clients","",`<button onclick="openSheet('newclient',null)" style="background:var(--accent);color:#000;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ New</button>`)}
+  <div style="padding:14px 16px 130px;">
+    ${cards||`<div class="empty">No clients yet.<br/>Tap <strong>+ New</strong> to add your first client.</div>`}
+  </div>`;
+}
+
+// ─── PORTFOLIO VIEW ──────────────────────────────────────────
+function portfolioHTML(){
+  if(state.detailId&&state.detailType==="portfolio"){
+    const pf=state.portfolio.find(x=>x.id===state.detailId);if(!pf)return "";
+    return `${topBar(pf.title,"goBack()")}
+    <div style="padding:0 0 130px;">
+      ${pf.photo?`<img src="${pf.photo}" style="width:100%;max-height:280px;object-fit:cover;display:block;"/>`:`
+      <div style="background:var(--faint);height:180px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;">
+        <span style="font-size:40px;">📷</span>
+        <button onclick="addPortfolioPhoto('${pf.id}')" style="background:var(--accent);color:#000;border:none;border-radius:100px;padding:10px 22px;font-size:13px;font-weight:600;cursor:pointer;">Add Photo</button>
+      </div>`}
+      ${pf.photo?`<div style="padding:10px 16px;"><button onclick="addPortfolioPhoto('${pf.id}')" class="btn-ghost" style="width:100%;font-size:13px;">📷 Change Photo</button></div>`:""}
+      <div style="padding:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+          <div>
+            <span class="badge" style="background:var(--faint);color:var(--mid);font-size:11px;">${pf.type||""}</span>
+            <div style="font-size:10px;color:var(--mid);margin-top:4px;">${pf.date||""}</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:28px;font-weight:700;color:#4caf7d;">${money(pf.price)}</div>
+            <div style="font-size:12px;color:var(--mid);">${pf.hours?pf.hours+"h":""}</div>
+          </div>
+        </div>
+        ${pf.description?`<p style="font-size:15px;line-height:1.6;color:var(--ink);margin-top:12px;">${pf.description}</p>`:""}
+        <div style="margin-top:20px;display:flex;gap:10px;">
+          <button onclick="openSheet('newportfolio',null,{editPfId:'${pf.id}'})" class="btn-ghost" style="flex:1;">Edit</button>
+          <button onclick="delPortfolio('${pf.id}')" class="btn-ghost" style="flex:1;color:#E07B54;">Delete</button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  const cards=state.portfolio.map(pf=>`
+    <div onclick="openDetail('${pf.id}','portfolio')" style="cursor:pointer;margin-bottom:10px;border-radius:16px;overflow:hidden;border:1px solid var(--faint);background:var(--card);">
+      ${pf.photo?`<img src="${pf.photo}" style="width:100%;height:180px;object-fit:cover;display:block;"/>`:`<div style="background:var(--faint);height:140px;display:flex;align-items:center;justify-content:center;font-size:36px;">📷</div>`}
+      <div style="padding:14px 16px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <div>
+            <div style="font-weight:700;font-size:16px;margin-bottom:3px;">${pf.title}</div>
+            <div style="font-size:12px;color:var(--mid);">${pf.type||""}${pf.date?" · "+pf.date:""}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;margin-left:12px;">
+            <div style="font-size:18px;font-weight:700;color:#4caf7d;">${money(pf.price)}</div>
+            <div style="font-size:12px;color:var(--mid);">${pf.hours?pf.hours+"h":""}</div>
+          </div>
+        </div>
+        ${pf.description?`<p style="font-size:13px;color:var(--mid);margin-top:8px;line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${pf.description}</p>`:""}
+      </div>
+    </div>`).join("");
+
+  return `${topBar("Portfolio","",`<button onclick="openSheet('newportfolio',null)" style="background:var(--accent);color:#000;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ Add</button>`)}
+  <div style="padding:14px 16px 130px;">
+    ${cards||`<div class="empty">No portfolio yet.<br/>Add your best jobs to show clients<br/>what you're capable of.</div>`}
+  </div>`;
+}
+
+// ─── SUMMARY VIEW ────────────────────────────────────────────
+function summaryHTML(){
+  const totalH=state.projects.reduce((s,p)=>s+p.totalSeconds,0);
+  const totalEarned=state.projects.reduce((s,p)=>s+(p.totalSeconds/3600*(p.hourlyRate||0)),0);
+  const totalPaid=state.projects.reduce((s,p)=>s+(p.invoices||[]).filter(i=>i.status==="Paid").reduce((a,i)=>a+i.amount,0),0);
+  const totalPending=state.projects.reduce((s,p)=>s+(p.invoices||[]).filter(i=>i.status!=="Paid").reduce((a,i)=>a+i.amount,0),0);
+
+  const rows=state.projects.map(p=>{
+    const ls=liveSec(p.id);
+    const earned=(p.totalSeconds+ls)/3600*(p.hourlyRate||0);
+    const paid=(p.invoices||[]).filter(i=>i.status==="Paid").reduce((s,i)=>s+i.amount,0);
+    const pending=(p.invoices||[]).filter(i=>i.status!=="Paid").reduce((s,i)=>s+i.amount,0);
+    const isActive=!!state.clocks[p.id];
+    return `<div onclick="openDetail('${p.id}','project')" class="card" style="border-left:4px solid ${p.color};cursor:pointer;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
+        <div>
+          <div style="font-weight:700;font-size:15px;">${p.name}${isActive?`<span class="pulse badge" style="background:${p.color}33;color:${p.color};margin-left:6px;">● LIVE</span>`:""}</div>
+          <div style="font-size:12px;color:var(--mid);margin-top:2px;">${p.clientId?client(p.clientId)?.name||"":""}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:16px;font-weight:700;">${fmtHours(p.totalSeconds+ls)}</div>
+          ${p.hourlyRate?`<div style="font-size:12px;color:#4caf7d;font-weight:600;">${money(earned)}</div>`:""}
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div style="background:var(--faint);border-radius:10px;padding:10px;"><div style="font-size:10px;color:var(--mid);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Invoiced</div><div style="font-size:15px;font-weight:700;">${money(paid+pending)}</div></div>
+        <div style="background:var(--faint);border-radius:10px;padding:10px;"><div style="font-size:10px;color:#4caf7d;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Paid</div><div style="font-size:15px;font-weight:700;color:#4caf7d;">${money(paid)}</div></div>
+      </div>
+    </div>`;
+  }).join("");
+
+  return `${topBar("Summary")}
+  <div style="padding:14px 16px 130px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;">
+      <div class="card" style="text-align:center;grid-column:1/-1;background:var(--ink);border:none;">
+        <div style="font-size:11px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Total Hours</div>
+        <div style="font-size:32px;font-weight:700;color:${dark?"#F2F2F2":"#fff"};">${fmtHours(totalH)}</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:10px;color:#4caf7d;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Earned</div>
+        <div style="font-size:22px;font-weight:700;color:#4caf7d;">${money(totalEarned)}</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:10px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Collected</div>
+        <div style="font-size:22px;font-weight:700;">${money(totalPaid)}</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:10px;color:#D4A843;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Pending</div>
+        <div style="font-size:22px;font-weight:700;color:#D4A843;">${money(totalPending)}</div>
+      </div>
+      <div class="card" style="text-align:center;">
+        <div style="font-size:10px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Projects</div>
+        <div style="font-size:22px;font-weight:700;">${state.projects.length}</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--mid);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">By Project</div>
+    ${rows||`<div class="empty">No projects yet</div>`}
+    <div><div style="font-weight:600;">Dark Mode</div><div style="font-size:12px;color:var(--mid);">Better at job sites</div></div>
+      <button onclick="toggleDark()" style="width:52px;height:30px;border-radius:100px;border:none;background:${dark?"#57A773":"var(--border)"};cursor:pointer;position:relative;transition:background .2s;">
+        <div style="width:24px;height:24px;border-radius:50%;background:#fff;position:absolute;top:3px;${dark?"right:3px":"left:3px"};transition:all .2s;box-shadow:0 1px 4px rgba(0,0,0,.3);"></div>
+      </button>
+    </div>
+  </div>`;
+}
+
+// ─── MAIN RENDER ─────────────────────────────────────────────
+function render(){
+  try{
+  let main="";
+  if(state.detailId){
+    if(state.detailType==="project") main=projectDetailHTML();
+    else if(state.detailType==="client") main=clientsHTML();
+    else if(state.detailType==="portfolio") main=portfolioHTML();
+    else if(state.detailType==="docs") main=docsHTML();
+  } else {
+    if(state.nav==="field") main=fieldHTML();
+    else if(state.nav==="clients") main=clientsHTML();
+    else if(state.nav==="portfolio") main=portfolioHTML();
+    else if(state.nav==="recurring") main=recurringHTML();
+    else if(state.nav==="viewdoc") main=viewDocHTML();
+    else if(state.nav==="docs") main=docsHTML();
+    else if(state.nav==="expenses") main=expensesHTML();
+    else if(state.nav==="services") main=servicesHTML();
+    else if(state.nav==="summary") main=summaryHTML();
+  }
+  document.getElementById("app").innerHTML=main+navBarHTML()+sheetHTML();
+  } catch(e){ document.body.innerHTML="<div style='padding:20px;font-family:monospace;font-size:14px;color:red;'>RENDER ERROR:<br>"+e.message+"<br><br>"+e.stack.replace(/\n/g,"<br>")+"</div>"; }
+}
+
+// ─── LIVE TICK ───────────────────────────────────────────────
+setInterval(()=>{
+  const ids=Object.keys(state.clocks);
+  if(!ids.length)return;
+  const total=ids.reduce((s,pid)=>s+liveSec(pid),0);
+  const mt=document.getElementById("main-timer");if(mt)mt.textContent=fmtTimer(total);
+  ids.forEach(pid=>{
+    const ls=liveSec(pid);
+    const t=document.getElementById("timer-"+pid);if(t)t.textContent=fmtTimer(ls);
+    const dt=document.getElementById("detail-timer");if(dt&&state.detailId===pid)dt.textContent=fmtTimer(ls);
+    const dtt=document.getElementById("detail-total");
+    if(dtt&&state.detailId===pid){const p=proj(pid);if(p)dtt.textContent=fmtHours(p.totalSeconds+ls);}
+    const st=document.getElementById("sheet-timer");if(st&&state.sheetPid===pid)st.textContent=fmtTimer(ls);
+  });
+},1000);
+
+
+// ─── DOCUMENTS (ESTIMATES + CONTRACTS) ──────────────────────
+
+function saveDoc(){
+  const id = state.form.editDocId || uid();
+  const pid = val("doc-pid");
+  const p = proj(pid);
+  const cl = p?.clientId ? client(p.clientId) : null;
+  const items = state.form.docItems || [];
+  const laborCost = Number(val("doc-labor")) || 0;
+  const matTotal = items.reduce((s,i)=>s+Number(i.cost||0),0);
+  const total = matTotal + laborCost;
+  const deposit = Math.round(total * (Number(val("doc-deposit-pct")) || 50) / 100);
+  const doc = {
+    id, type: val("doc-type"), pid,
+    clientName: cl?.name || val("doc-client-name"),
+    clientPhone: cl?.phone || "",
+    projectName: p?.name || "",
+    projectAddress: p?.address || "",
+    scope: val("doc-scope"),
+    startDate: val("doc-start"),
+    endDate: val("doc-end"),
+    laborCost, items,
+    depositPct: Number(val("doc-deposit-pct")) || 50,
+    deposit, total,
+    cancelPolicy: val("doc-cancel"),
+    changePolicy: val("doc-change"),
+    status: "Draft",
+    createdDate: new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}),
+    signature: null,
+    signedDate: null,
+  };
+  const existing = state.form.editDocId;
+  if(existing) state.docs = state.docs.map(d=>d.id===id?doc:d);
+  else state.docs = [doc, ...state.docs];
+  localStorage.setItem("fm-docs", JSON.stringify(state.docs));
+  closeSheet();
+}
+
+function addDocItem(){
+  const name = val("di-name"), cost = val("di-cost");
+  if(!name.trim()) return;
+  state.form.docItems = [...(state.form.docItems||[]), {id:uid(), name, cost: Number(cost)||0}];
+  rerenderDocItems();
+}
+
+function removeDocItem(iid){
+  state.form.docItems = (state.form.docItems||[]).filter(i=>i.id!==iid);
+  rerenderDocItems();
+}
+
+function rerenderDocItems(){
+  const el = document.getElementById("doc-items-list");
+  if(!el) return;
+  const items = state.form.docItems || [];
+  el.innerHTML = items.map(i=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--faint);">
+    <span style="font-size:14px;flex:1;">${i.name}</span>
+    <span style="font-size:14px;font-weight:600;margin:0 12px;">${money(i.cost)}</span>
+    <button onclick="removeDocItem('${i.id}')" style="background:none;border:none;color:var(--mid);font-size:18px;cursor:pointer;">×</button>
+  </div>`).join("") || `<div style="color:var(--mid);font-size:13px;padding:8px 0;">No materials added yet</div>`;
+  // update total preview
+  const laborEl = document.getElementById("doc-labor");
+  const labor = laborEl ? Number(laborEl.value)||0 : 0;
+  const matTotal = items.reduce((s,i)=>s+Number(i.cost||0),0);
+  const totalEl = document.getElementById("doc-total-preview");
+  if(totalEl) totalEl.textContent = money(matTotal + labor);
+}
+
+function delDoc(did){
+  if(confirm("Delete this document?")) state.docs = state.docs.filter(d=>d.id!==did);
+  localStorage.setItem("fm-docs", JSON.stringify(state.docs));
+  
+function buildDetailTabs(active){
+  const tabs=["notes","shopping","sessions","photos","docs"];
+  return tabs.map(function(tab){
+    const cls="tab-btn"+(active===tab?" active":"");
+    var labels={notes:"Notes",shopping:"Shopping",sessions:"Sessions",photos:"Photos",docs:"Docs"};
+    return '<button data-tab="'+tab+'" onclick="setDetailTab(this.dataset.tab)" class="'+cls+'">'+labels[tab]+'</button>';
+  }).join("");
+}
+
+render();
+}
+
+function openSignature(did){
+  state.form.sigDocId = did;
+  state.sheet = "signature";
+  
+function buildDetailTabs(active){
+  const tabs=["notes","shopping","sessions","photos","docs"];
+  return tabs.map(function(tab){
+    const cls="tab-btn"+(active===tab?" active":"");
+    var labels={notes:"Notes",shopping:"Shopping",sessions:"Sessions",photos:"Photos",docs:"Docs"};
+    return '<button data-tab="'+tab+'" onclick="setDetailTab(this.dataset.tab)" class="'+cls+'">'+labels[tab]+'</button>';
+  }).join("");
+}
+
+render();
+  setTimeout(initSignaturePad, 100);
+}
+
+function initSignaturePad(){
+  const canvas = document.getElementById("sig-canvas");
+  if(!canvas) return;
+  const ctx = canvas.getContext("2d");
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+  ctx.strokeStyle = "#18181B";
+  ctx.lineWidth = 2.5;
+  ctx.lineCap = "round";
+  let drawing = false, lastX=0, lastY=0;
+  const getPos = e => {
+    const r = canvas.getBoundingClientRect();
+    const src = e.touches ? e.touches[0] : e;
+    return [src.clientX - r.left, src.clientY - r.top];
+  };
+  canvas.onmousedown = canvas.ontouchstart = e => { e.preventDefault(); drawing=true; [lastX,lastY]=getPos(e); };
+  canvas.onmousemove = canvas.ontouchmove = e => {
+    e.preventDefault(); if(!drawing) return;
+    const [x,y] = getPos(e);
+    ctx.beginPath(); ctx.moveTo(lastX,lastY); ctx.lineTo(x,y); ctx.stroke();
+    [lastX,lastY]=[x,y];
+  };
+  canvas.onmouseup = canvas.ontouchend = () => drawing=false;
+}
+
+function clearSignature(){
+  const canvas = document.getElementById("sig-canvas");
+  if(!canvas) return;
+  canvas.getContext("2d").clearRect(0,0,canvas.width,canvas.height);
+}
+
+function saveSignature(){
+  const canvas = document.getElementById("sig-canvas");
+  if(!canvas) return;
+  const sig = canvas.toDataURL();
+  const did = state.form.sigDocId;
+  state.docs = state.docs.map(d=>d.id===did?{...d,signature:sig,status:"Signed",signedDate:new Date().toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})}:d);
+  localStorage.setItem("fm-docs", JSON.stringify(state.docs));
+  closeSheet();
+  state.viewDocId=did;
+  state.nav="viewdoc";
+  render();
+}
+
+function printDoc(did){
+  const d = state.docs.find(x=>x.id===did);
+  if(!d) return;
+  const win = window.open("","_blank");
+  const isContract = d.type==="Contract";
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"/>
+  <title>${d.type} — ${d.projectName}</title>
+  <style>
+    body{font-family:Georgia,serif;max-width:750px;margin:40px auto;padding:0 30px;color:#111;font-size:15px;line-height:1.6;}
+    h1{font-size:28px;margin-bottom:4px;} h2{font-size:16px;font-weight:600;margin:24px 0 8px;border-bottom:1px solid #ddd;padding-bottom:4px;}
+    .meta{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:20px 0;}
+    .meta-box{background:#f9f9f9;padding:14px;border-radius:6px;border:1px solid #eee;}
+    .meta-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-bottom:4px;}
+    table{width:100%;border-collapse:collapse;margin-bottom:8px;}
+    th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#888;padding:8px 0;border-bottom:1px solid #ddd;}
+    td{padding:9px 0;border-bottom:1px solid #f0f0f0;font-size:14px;}
+    .total-row{font-weight:700;font-size:16px;border-top:2px solid #111;border-bottom:none;}
+    .deposit-box{background:#f0fff4;border:1px solid #86efac;border-radius:8px;padding:16px;margin:16px 0;}
+    .policy{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:14px;margin-bottom:12px;font-size:14px;}
+    .sig-section{margin-top:40px;display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+    .sig-box{border-top:1px solid #111;padding-top:8px;font-size:12px;color:#888;}
+    .sig-img{height:70px;margin-bottom:4px;}
+    .status{display:inline-block;padding:4px 14px;border-radius:100px;font-size:12px;font-weight:700;background:${d.status==="Signed"?"#dcfce7":"#fef9c3"};color:${d.status==="Signed"?"#16a34a":"#854d0e"};}
+    @media print{button{display:none!important;}}
+  </style></head><body>
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+    <div><h1>${d.type}</h1><div style="color:#888;font-size:13px;">${d.createdDate}</div></div>
+    <span class="status">${d.status}</span>
+  </div>
+  <div class="meta">
+    <div class="meta-box"><div class="meta-label">Client</div><div style="font-weight:600;">${d.clientName}</div>${d.clientPhone?`<div>${d.clientPhone}</div>`:""}</div>
+    <div class="meta-box"><div class="meta-label">Project</div><div style="font-weight:600;">${d.projectName}</div>${d.projectAddress?`<div style="font-size:13px;color:#666;">${d.projectAddress}</div>`:""}</div>
+    <div class="meta-box"><div class="meta-label">Start Date</div><div>${d.startDate||"TBD"}</div></div>
+    <div class="meta-box"><div class="meta-label">End Date</div><div>${d.endDate||"TBD"}</div></div>
+  </div>
+  ${d.scope?`<h2>Scope of Work</h2><p style="white-space:pre-wrap;">${d.scope}</p>`:""}
+  <h2>Cost Breakdown</h2>
+  <table>
+    <tr><th>Materials</th><th style="text-align:right;">Cost</th></tr>
+    ${d.items.map(i=>`<tr><td>${i.name}</td><td style="text-align:right;">${money(i.cost)}</td></tr>`).join("")}
+    <tr><td style="padding-top:12px;">Labor</td><td style="text-align:right;padding-top:12px;">${money(d.laborCost)}</td></tr>
+    <tr class="total-row"><td>Total</td><td style="text-align:right;">${money(d.total)}</td></tr>
+  </table>
+  <div class="deposit-box">
+    <div style="font-size:13px;color:#16a34a;font-weight:600;margin-bottom:4px;">Payment Schedule</div>
+    <div>Deposit required (${d.depositPct}%): <strong>${money(d.deposit)}</strong></div>
+    <div>Balance due on completion: <strong>${money(d.total - d.deposit)}</strong></div>
+  </div>
+  ${isContract?`
+  ${d.cancelPolicy?`<h2>Cancellation Policy</h2><div class="policy">${d.cancelPolicy}</div>`:""}
+  ${d.changePolicy?`<h2>Change Orders Policy</h2><div class="policy">${d.changePolicy}</div>`:""}
+  <h2>Agreement</h2>
+  <p style="font-size:14px;">By signing below, both parties agree to the terms outlined in this contract. Any changes to the scope of work must be agreed upon in writing.</p>
+  <div class="sig-section">
+    <div>
+      ${d.signature?`<img src="${d.signature}" class="sig-img" style="width:100%;object-fit:contain;"/>`:`<div style="height:70px;"></div>`}
+      <div class="sig-box">Client Signature${d.signedDate?" · "+d.signedDate:""}</div>
+    </div>
+    <div>
+      <div style="height:70px;"></div>
+      <div class="sig-box">Contractor Signature · Date</div>
+    </div>
+  </div>`:""}
+  <div style="margin-top:40px;text-align:center;font-size:12px;color:#aaa;">Generated by JOVRO Field</div>
+  <div style="margin-top:16px;text-align:center;"><button onclick="window.print()" style="background:#111;color:#fff;border:none;border-radius:100px;padding:12px 32px;font-size:14px;font-weight:600;cursor:pointer;">Print / Save as PDF</button></div>
+  </body></html>`);
+  win.document.close();
+}
+
+function emailDoc(did){
+  const d = state.docs.find(x=>x.id===did);
+  if(!d) return;
+  const subject = encodeURIComponent(`${d.type} — ${d.projectName}`);
+  const body = encodeURIComponent(`Hi ${d.clientName},\n\nPlease find attached your ${d.type.toLowerCase()} for ${d.projectName}.\n\nTotal: ${money(d.total)}\nDeposit Required: ${money(d.deposit)}\n\nPlease review and confirm.\n\nThank you.`);
+  window.location.href = `mailto:?subject=${subject}&body=${body}`;
+}
+
+// ─── DOCUMENTS VIEW ──────────────────────────────────────────
+
+function viewDocHTML(){
+  if(!state.docs) state.docs=JSON.parse(localStorage.getItem("fm-docs")||"[]");
+  var d=state.docs.find(function(x){return x.id===state.viewDocId;});
+  if(!d){state.nav="docs";render();return "";}
+  if(!d.items) d.items=[];
+  if(!d.total) d.total=d.items.reduce(function(s,i){return s+Number(i.cost||0);},0)+Number(d.laborCost||0);
+  if(!d.deposit) d.deposit=Math.round(d.total*(Number(d.depositPct||50)/100));
+  var sc=({Draft:"#D4A843",Signed:"#57A773",Sent:"#5B8DD9"})[d.status]||"#aaa";
+  var h=topBar(d.type,"closeDocView()");
+  h+='<div style="padding:16px 16px 130px;">';
+  h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">';
+  h+='<div><div style="font-size:18px;font-weight:700;">'+esc(d.projectName||"")+'</div>';
+  h+='<div style="font-size:13px;color:var(--mid);">'+esc(d.clientName||"")+(d.createdDate?" · "+d.createdDate:"")+'</div></div>';
+  h+='<span class="badge" style="background:'+sc+'22;color:'+sc+';">'+esc(d.status)+'</span></div>';
+  if(d.scope){h+='<div class="card"><div style="font-size:11px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Scope of Work</div><div style="font-size:14px;line-height:1.6;white-space:pre-wrap;">'+esc(d.scope)+'</div></div>';}
+  h+='<div class="card"><div style="font-size:11px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;">Cost Breakdown</div>';
+  d.items.forEach(function(i){h+='<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--faint);font-size:14px;"><span>'+esc(i.name||"")+'</span><span style="font-weight:600;">'+money(i.cost)+'</span></div>';});
+  h+='<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--faint);font-size:14px;"><span>Labor</span><span style="font-weight:600;">'+money(d.laborCost)+'</span></div>';
+  h+='<div style="display:flex;justify-content:space-between;padding:12px 0 0;font-size:17px;font-weight:700;"><span>Total</span><span style="color:#4caf7d;">'+money(d.total)+'</span></div></div>';
+  h+='<div class="card" style="background:#f0fff4;border-color:#86efac;">';
+  h+='<div style="font-size:12px;color:#16a34a;font-weight:700;margin-bottom:6px;">Payment Schedule</div>';
+  h+='<div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px;"><span>Deposit ('+Number(d.depositPct||50)+'%)</span><span style="font-weight:700;">'+money(d.deposit)+'</span></div>';
+  h+='<div style="display:flex;justify-content:space-between;font-size:14px;"><span>Balance on completion</span><span style="font-weight:700;">'+money(d.total-d.deposit)+'</span></div></div>';
+  if(d.type==="Contract"&&d.cancelPolicy){h+='<div class="card"><div style="font-size:11px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Cancellation Policy</div><div style="font-size:14px;line-height:1.5;">'+esc(d.cancelPolicy)+'</div></div>';}
+  if(d.type==="Contract"&&d.changePolicy){h+='<div class="card"><div style="font-size:11px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Change Orders</div><div style="font-size:14px;line-height:1.5;">'+esc(d.changePolicy)+'</div></div>';}
+  if(d.signature){h+='<div class="card"><div style="font-size:11px;color:#4caf7d;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">✓ Signed · '+(d.signedDate||"")+'</div><img src="'+d.signature+'" style="width:100%;max-height:100px;object-fit:contain;border:1px solid var(--faint);border-radius:10px;background:#fff;"/></div>';}
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;">';
+  if(d.type==="Contract"&&!d.signature){h+='<button data-id="'+d.id+'" onclick="openSignature(this.dataset.id)" style="background:#4caf7d;color:#fff;border:none;border-radius:100px;padding:13px;font-size:13px;font-weight:600;cursor:pointer;grid-column:1/-1;">✍️ Get Signature</button>';}
+  h+='<button data-id="'+d.id+'" onclick="printDoc(this.dataset.id)" class="btn-ghost" style="font-size:13px;">🖨️ Print / PDF</button>';
+  h+='<button data-id="'+d.id+'" onclick="emailDoc(this.dataset.id)" class="btn-ghost" style="font-size:13px;">📧 Email</button>';
+  h+=docActionButtons(d);
+  h+='<button data-id="'+d.id+'" onclick="editDoc(this.dataset.id)" class="btn-ghost" style="font-size:13px;grid-column:1/-1;">✏️ Edit Document</button>';
+  h+='<button data-id="'+d.id+'" onclick="dDoc(this.dataset.id)" class="btn-ghost" style="font-size:13px;color:#E07B54;grid-column:1/-1;">Delete</button>';
+  h+='</div></div>';
+  return h;
+}
+
+function docsHTML(){
+  if(!state.docs) state.docs = JSON.parse(localStorage.getItem("fm-docs")||"[]");
+
+
+  return docsListHTML();
+}
+
+function docsListHTML(){
+  if(!state.docs) state.docs=JSON.parse(localStorage.getItem("fm-docs")||"[]");
+  var statusColor={Draft:"#D4A843",Signed:"#57A773",Sent:"#5B8DD9"};
+  var cards="";
+  state.docs.forEach(function(d){
+    var sc=statusColor[d.status]||"#aaa";
+    var linked="";
+    if(d.pid){var lp=proj(d.pid);if(lp) linked='<div style="font-size:12px;color:#5B8DD9;margin-top:2px;">🔗 '+esc(lp.name)+'</div>';}
+    cards+='<div data-id="'+d.id+'" onclick="viewDoc(this.dataset.id)" class="card" style="cursor:pointer;">';
+    cards+='<div style="display:flex;justify-content:space-between;align-items:flex-start;">';
+    cards+='<div>';
+    cards+='<div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;">';
+    cards+='<span style="font-size:15px;font-weight:700;">'+esc(d.type)+'</span>';
+    cards+='<span class="badge" style="background:'+sc+'22;color:'+sc+';">'+esc(d.status)+'</span>';
+    cards+='</div>';
+    cards+='<div style="font-size:14px;font-weight:600;">'+esc(d.projectName||"")+'</div>';
+    cards+='<div style="font-size:12px;color:var(--mid);margin-top:2px;">'+esc(d.clientName||"")+(d.createdDate?" · "+d.createdDate:"")+'</div>';
+    cards+=linked;
+    cards+='</div>';
+    cards+='<div style="text-align:right;">';
+    cards+='<div style="font-size:18px;font-weight:700;color:#4caf7d;">'+money(d.total)+'</div>';
+    cards+='<div style="font-size:11px;color:var(--mid);">dep. '+money(d.deposit)+'</div>';
+    cards+='</div></div></div>';
+  });
+  if(!cards) cards='<div class="empty">No estimates or contracts yet.<br/>Tap <strong>+ New</strong> to create your first document.<br/><br/>Protect yourself — always have a signed contract.</div>';
+  var newBtn='<button data-sheet="newdoc" onclick="openSheet(this.dataset.sheet,null)" style="background:var(--accent);color:#000;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ New</button>';
+  return topBar("Documents","",newBtn)+'<div style="padding:14px 16px 130px;">'+cards+'</div>';
+}
+
+
+// ─── BACKUP & RESTORE ────────────────────────────────────────
+function exportData(){
+  const data = {
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    projects: state.projects,
+    clients: state.clients,
+    portfolio: state.portfolio,
+    docs: state.docs || []
+  };
+  const blob = new Blob([JSON.stringify(data,null,2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "JOVRO Field-backup-" + new Date().toISOString().slice(0,10) + ".json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importData(){
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = ".json";
+  input.onchange = e => {
+    const file = e.target.files[0]; if(!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if(!data.version || !data.projects) { alert("Invalid backup file."); return; }
+        if(!confirm("This will restore your backup and replace current data. Continue?")) return;
+        state.projects = data.projects || [];
+        state.clients = data.clients || [];
+        state.portfolio = data.portfolio || [];
+        state.docs = data.docs || [];
+        save();
+        alert("✅ Backup restored! " + data.projects.length + " projects, " + data.clients.length + " clients.");
+        
+function buildDetailTabs(active){
+  const tabs=["notes","shopping","sessions","photos","docs"];
+  return tabs.map(function(tab){
+    const cls="tab-btn"+(active===tab?" active":"");
+    var labels={notes:"Notes",shopping:"Shopping",sessions:"Sessions",photos:"Photos",docs:"Docs"};
+    return '<button data-tab="'+tab+'" onclick="setDetailTab(this.dataset.tab)" class="'+cls+'">'+labels[tab]+'</button>';
+  }).join("");
+}
+
+render();
+      } catch(err) { alert("Could not read file. Make sure it is a JOVRO Field backup."); }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+
+// ─── INVOICE & PROGRESS ──────────────────────────────────────
+
+function getProjectProgress(p){
+  // Manual progress takes priority
+  if(p.progressManual != null) return p.progressManual;
+  // Auto by hours if estimated hours set
+  if(p.estimatedHours && p.estimatedHours > 0){
+    const pct = Math.min(100, Math.round((p.totalSeconds/3600) / p.estimatedHours * 100));
+    return pct;
+  }
+  return null;
+}
+
+
+function saveProgress(pid){
+  const m=val('prog-manual'),h=val('prog-hours');
+  if(m!=='') setProgress(pid,Math.min(100,Math.max(0,Number(m))));
+  else if(h!=='') setEstimatedHours(pid,Number(h));
+  closeSheet();
+}
+
+function setProgress(pid, pct){
+  setProj(pid, p=>({...p, progressManual: Number(pct)}));
+  
+function buildDetailTabs(active){
+  const tabs=["notes","shopping","sessions","photos","docs"];
+  return tabs.map(function(tab){
+    const cls="tab-btn"+(active===tab?" active":"");
+    var labels={notes:"Notes",shopping:"Shopping",sessions:"Sessions",photos:"Photos",docs:"Docs"};
+    return '<button data-tab="'+tab+'" onclick="setDetailTab(this.dataset.tab)" class="'+cls+'">'+labels[tab]+'</button>';
+  }).join("");
+}
+
+render();
+}
+
+function setEstimatedHours(pid, hrs){
+  setProj(pid, p=>({...p, estimatedHours: Number(hrs), progressManual: null}));
+  
+function buildDetailTabs(active){
+  const tabs=["notes","shopping","sessions","photos","docs"];
+  return tabs.map(function(tab){
+    const cls="tab-btn"+(active===tab?" active":"");
+    var labels={notes:"Notes",shopping:"Shopping",sessions:"Sessions",photos:"Photos",docs:"Docs"};
+    return '<button data-tab="'+tab+'" onclick="setDetailTab(this.dataset.tab)" class="'+cls+'">'+labels[tab]+'</button>';
+  }).join("");
+}
+
+render();
+}
+
+function getBalanceDue(p){
+  // Find linked contract/estimate total
+  const linkedDoc = (state.docs||[]).find(d=>d.pid===p.id && (d.status==="Signed"||d.status==="Sent"||d.status==="Draft"));
+  const contractTotal = linkedDoc ? linkedDoc.total : 0;
+  // Total paid from invoices in project
+  const paid = (p.invoices||[]).filter(i=>i.status==="Paid").reduce((s,i)=>s+i.amount,0);
+  // Deposit from contract
+  const deposit = linkedDoc ? linkedDoc.deposit : 0;
+  const collected = Math.max(paid, deposit);
+  return { contractTotal, collected, balance: contractTotal - collected, linkedDoc };
+}
+
+function sendBalanceInvoice(pid){
+  const p = proj(pid);
+  if(!p) return;
+  const cl = p.clientId ? client(p.clientId) : null;
+  const {contractTotal, collected, balance, linkedDoc} = getBalanceDue(p);
+  const progress = getProjectProgress(p);
+  const subject = encodeURIComponent(`Balance Invoice — ${p.name}`);
+  const progressLine=progress!=null?"PROGRESS: "+progress+"%\n":"";
+  const paidMsg=balance<=0?"This project is paid in full. Thank you!":"Please send payment at your earliest convenience.";
+  const body=encodeURIComponent("Hi "+(cl?.name||"")+"\n\nPlease find your balance invoice for "+p.name+".\n\n──────────────────────\nPROJECT: "+p.name+"\nADDRESS: "+(p.address||"")+"\nDATE: "+new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"})+"\n"+progressLine+"──────────────────────\nCONTRACT TOTAL:  "+money(contractTotal)+"\nDEPOSIT PAID:   -"+money(collected)+"\n──────────────────────\nBALANCE DUE:     "+money(balance)+"\n──────────────────────\n\n"+paidMsg+"\n\nThank you for your business.");
+  window.location.href = `mailto:${cl?.email||""}?subject=${subject}&body=${body}`;
+}
+
+function printBalanceInvoice(pid){
+  const p = proj(pid);
+  if(!p) return;
+  const cl = p.clientId ? client(p.clientId) : null;
+  const {contractTotal, collected, balance} = getBalanceDue(p);
+  const progress = getProjectProgress(p);
+  const today = new Date().toLocaleDateString("en-US",{month:"long",day:"numeric",year:"numeric"});
+  const win = window.open("","_blank");
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"/>
+  <title>Balance Invoice — ${p.name}</title>
+  <style>
+    body{font-family:Georgia,serif;max-width:680px;margin:50px auto;padding:0 30px;color:#111;font-size:15px;}
+    h1{font-size:32px;margin:0;} .sub{color:#888;font-size:14px;margin-top:4px;}
+    .meta{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:28px 0;}
+    .meta-box{background:#f9f9f9;padding:14px;border-radius:8px;border:1px solid #eee;}
+    .meta-label{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#888;margin-bottom:4px;}
+    .progress-bar{background:#eee;border-radius:100px;height:12px;margin:8px 0;}
+    .progress-fill{background:#5b8dd9;border-radius:100px;height:12px;}
+    table{width:100%;border-collapse:collapse;margin:20px 0;}
+    td{padding:12px 0;border-bottom:1px solid #f0f0f0;font-size:15px;}
+    .total-row td{font-size:20px;font-weight:700;border-top:2px solid #111;border-bottom:none;padding-top:16px;}
+    .balance-box{background:#f0fff4;border:2px solid #86efac;border-radius:12px;padding:20px;text-align:center;margin:20px 0;}
+    @media print{button{display:none!important;}}
+  </style></head><body>
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+    <div><h1>Balance Invoice</h1><div class="sub">${today}</div></div>
+    <div style="text-align:right;"><div style="font-size:28px;font-weight:700;color:#16a34a;">${money(balance)}</div><div class="sub">Balance Due</div></div>
+  </div>
+  <div class="meta">
+    <div class="meta-box"><div class="meta-label">Client</div><div style="font-weight:600;">${cl?.name||""}</div>${cl?.phone?`<div>${cl.phone}</div>`:""}</div>
+    <div class="meta-box"><div class="meta-label">Project</div><div style="font-weight:600;">${p.name}</div>${p.address?`<div style="font-size:13px;color:#666;">${p.address}</div>`:""}</div>
+  </div>
+  ${progress!=null?`<div style="margin:20px 0;">
+    <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-weight:600;">Project Progress</span><span style="font-weight:700;color:#5B8DD9;">${progress}%</span></div>
+    <div class="progress-bar"><div class="progress-fill" style="width:${progress}%;"></div></div>
+  </div>`:""}
+  <table>
+    <tr><td style="color:#888;">Contract Total</td><td style="text-align:right;">${money(contractTotal)}</td></tr>
+    <tr><td style="color:#888;">Deposit / Payments Received</td><td style="text-align:right;color:#e74c3c;">- ${money(collected)}</td></tr>
+    <tr class="total-row"><td>Balance Due</td><td style="text-align:right;color:#16a34a;">${money(balance)}</td></tr>
+  </table>
+  ${balance<=0?`<div class="balance-box"><div style="font-size:20px;font-weight:700;color:#16a34a;">✓ Paid in Full</div><div style="color:#888;margin-top:4px;">Thank you for your business!</div></div>`:`<div class="balance-box"><div style="font-size:14px;color:#16a34a;font-weight:600;margin-bottom:4px;">Amount Due</div><div style="font-size:36px;font-weight:700;color:#16a34a;">${money(balance)}</div></div>`}
+  <div style="margin-top:40px;text-align:center;font-size:12px;color:#aaa;">Generated by JOVRO Field</div>
+  <div style="margin-top:16px;text-align:center;"><button onclick="window.print()" style="background:#111;color:#fff;border:none;border-radius:100px;padding:12px 32px;font-size:14px;cursor:pointer;">Print / Save as PDF</button></div>
+  </body></html>`);
+  win.document.close();
+}
+
+
+// ─── EXPENSES ────────────────────────────────────────────────
+const EXPENSE_TYPES=["Materials","Tools & Equipment","Gas & Travel"];
+
+function saveExpense(){
+  const id=state.form.editExpId||uid();
+  const exp={
+    id,
+    pid:val("exp-pid"),
+    type:val("exp-type"),
+    description:val("exp-desc"),
+    amount:Number(val("exp-amount"))||0,
+    date:val("exp-date")||nowDate(),
+    receipt:state.form.receiptPhoto||""
+  };
+  if(!exp.description.trim()||!exp.amount){alert("Add description and amount.");return;}
+  if(state.form.editExpId) state.expenses=state.expenses.map(e=>e.id===id?exp:e);
+  else state.expenses=[exp,...state.expenses];
+  save();closeSheet();
+}
+
+function delExpense(eid){
+  if(confirm("Delete this expense?")) state.expenses=state.expenses.filter(e=>e.id!==eid);
+  save();
+function buildDetailTabs(active){
+  const tabs=["notes","shopping","sessions","photos","docs"];
+  return tabs.map(function(tab){
+    const cls="tab-btn"+(active===tab?" active":"");
+    var labels={notes:"Notes",shopping:"Shopping",sessions:"Sessions",photos:"Photos",docs:"Docs"};
+    return '<button data-tab="'+tab+'" onclick="setDetailTab(this.dataset.tab)" class="'+cls+'">'+labels[tab]+'</button>';
+  }).join("");
+}
+
+render();
+}
+
+function addReceiptPhoto(){
+  const input=document.createElement("input");input.type="file";input.accept="image/*";
+  input.onchange=e=>{
+    const file=e.target.files[0];if(!file)return;
+    const reader=new FileReader();
+    reader.onload=ev=>{state.form.receiptPhoto=ev.target.result;render();};
+    reader.readAsDataURL(file);
+  };input.click();
+}
+
+// ─── SERVICES CATALOG ────────────────────────────────────────
+function saveService(){
+  const id=state.form.editSvcId||uid();
+  const svc={id,name:val("svc-name"),description:val("svc-desc"),price:Number(val("svc-price"))||0,unit:val("svc-unit")||"flat"};
+  if(!svc.name.trim()){alert("Add a service name.");return;}
+  if(state.form.editSvcId) state.services=state.services.map(s=>s.id===id?svc:s);
+  else state.services=[svc,...state.services];
+  save();closeSheet();
+}
+
+function delService(sid){
+  if(confirm("Delete this service?")) state.services=state.services.filter(s=>s.id!==sid);
+  save();
+function buildDetailTabs(active){
+  const tabs=["notes","shopping","sessions","photos","docs"];
+  return tabs.map(function(tab){
+    const cls="tab-btn"+(active===tab?" active":"");
+    var labels={notes:"Notes",shopping:"Shopping",sessions:"Sessions",photos:"Photos",docs:"Docs"};
+    return '<button data-tab="'+tab+'" onclick="setDetailTab(this.dataset.tab)" class="'+cls+'">'+labels[tab]+'</button>';
+  }).join("");
+}
+
+render();
+}
+
+function addServiceToDoc(sid){
+  const svc=state.services.find(s=>s.id===sid);
+  if(!svc)return;
+  state.form.docItems=[...(state.form.docItems||[]),{id:uid(),name:svc.name,cost:svc.price}];
+  rerenderDocItems();
+}
+
+// ─── INVOICE SEND & TRACK ────────────────────────────────────
+function markDocPaid(did){
+  state.docs=state.docs.map(d=>d.id===did?{...d,status:"Paid",paidDate:nowDate()}:d);
+  save();
+function buildDetailTabs(active){
+  const tabs=["notes","shopping","sessions","photos","docs"];
+  return tabs.map(function(tab){
+    const cls="tab-btn"+(active===tab?" active":"");
+    var labels={notes:"Notes",shopping:"Shopping",sessions:"Sessions",photos:"Photos",docs:"Docs"};
+    return '<button data-tab="'+tab+'" onclick="setDetailTab(this.dataset.tab)" class="'+cls+'">'+labels[tab]+'</button>';
+  }).join("");
+}
+
+render();
+}
+
+function sendReminder(did){
+  const d=state.docs.find(x=>x.id===did);if(!d)return;
+  const subject=encodeURIComponent("Payment Reminder — "+d.projectName);
+  const body=encodeURIComponent("Hi "+d.clientName+",\n\nThis is a friendly reminder that payment of "+money(d.total)+" is due for "+d.projectName+".\n\nPlease let me know if you have any questions.\n\nThank you.");
+  window.location.href="mailto:?subject="+subject+"&body="+body;
+}
+
+function markOpened(did){
+  state.docs=state.docs.map(d=>d.id===did?{...d,opened:true,openedDate:nowDate()}:d);
+  save();
+function buildDetailTabs(active){
+  const tabs=["notes","shopping","sessions","photos","docs"];
+  return tabs.map(function(tab){
+    const cls="tab-btn"+(active===tab?" active":"");
+    var labels={notes:"Notes",shopping:"Shopping",sessions:"Sessions",photos:"Photos",docs:"Docs"};
+    return '<button data-tab="'+tab+'" onclick="setDetailTab(this.dataset.tab)" class="'+cls+'">'+labels[tab]+'</button>';
+  }).join("");
+}
+
+render();
+}
+
+// ─── EXPENSES VIEW ───────────────────────────────────────────
+function expensesHTML(){
+  const projOpts=state.projects.map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join("");
+  const filterPid=state.form.expFilter||"";
+  const filtered=filterPid?state.expenses.filter(e=>e.pid===filterPid):state.expenses;
+
+  // Totals by type
+  const totals={};
+  EXPENSE_TYPES.forEach(t=>{totals[t]=filtered.filter(e=>e.type===t).reduce((s,e)=>s+e.amount,0);});
+  const grandTotal=filtered.reduce((s,e)=>s+e.amount,0);
+
+  const typeColors={"Materials":"#5B8DD9","Tools & Equipment":"#9B6EC8","Gas & Travel":"#D4A843"};
+
+  const cards=filtered.map(e=>{
+    const p=e.pid?proj(e.pid):null;
+    return `<div class="card" style="border-left:4px solid ${typeColors[e.type]||"var(--mid)"};">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div style="flex:1;">
+          <div style="font-size:15px;font-weight:600;">${e.description}</div>
+          <div style="font-size:12px;color:var(--mid);margin-top:2px;">${e.type}${p?" · "+p.name:""} · ${e.date}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;margin-left:10px;">
+          <div style="font-size:16px;font-weight:700;color:#E07B54;">${money(e.amount)}</div>
+          <button onclick="delExpense('${e.id}')" style="background:none;border:none;color:var(--mid);font-size:12px;cursor:pointer;">Delete</button>
+        </div>
+      </div>
+      ${e.receipt?`<img src="${e.receipt}" style="width:100%;max-height:120px;object-fit:cover;border-radius:8px;margin-top:10px;"/>`:""}
+    </div>`;
+  }).join("")||`<div class="empty">No expenses yet.<br/>Track every dollar you spend on jobs.</div>`;
+
+  return `${topBar("Expenses","",`<button onclick="openSheet('newexpense',null,{})" style="background:var(--accent);color:#000;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ Add</button>`)}
+  <div style="padding:14px 16px 130px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+      <div class="card" style="text-align:center;background:var(--ink);border:none;grid-column:1/-1;">
+        <div style="font-size:10px;color:var(--mid);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Total Spent</div>
+        <div style="font-size:28px;font-weight:700;color:#E07B54;">${money(grandTotal)}</div>
+      </div>
+      ${EXPENSE_TYPES.map(t=>`<div class="card" style="text-align:center;padding:12px;">
+        <div style="font-size:10px;color:${typeColors[t]};text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">${t}</div>
+        <div style="font-size:18px;font-weight:700;">${money(totals[t])}</div>
+      </div>`).join("")}
+    </div>
+    <div style="margin-bottom:12px;">
+      <select onchange="state.form.expFilter=this.value;render()" style="width:100%;">
+        <option value="">All projects</option>
+        ${projOpts}
+      </select>
+    </div>
+    ${cards}
+  </div>`;
+}
+
+// ─── SERVICES VIEW ───────────────────────────────────────────
+function servicesHTML(){
+  const cards=state.services.map(s=>`
+    <div class="card" style="display:flex;justify-content:space-between;align-items:center;">
+      <div style="flex:1;">
+        <div style="font-size:15px;font-weight:600;">${s.name}</div>
+        ${s.description?`<div style="font-size:12px;color:var(--mid);margin-top:2px;">${s.description}</div>`:""}
+        <div style="font-size:12px;color:var(--mid);margin-top:2px;">${s.unit==="hour"?"per hour":s.unit==="sqft"?"per sq ft":"flat rate"}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;margin-left:12px;">
+        <div style="font-size:17px;font-weight:700;color:#4caf7d;">${money(s.price)}</div>
+        <div style="display:flex;gap:6px;margin-top:4px;justify-content:flex-end;">
+          <button onclick="openSheet('newservice',null,{editSvcId:'${s.id}'})" style="background:none;border:none;color:var(--mid);font-size:12px;cursor:pointer;font-weight:600;">Edit</button>
+          <button onclick="delService('${s.id}')" style="background:none;border:none;color:#E07B54;font-size:12px;cursor:pointer;font-weight:600;">Del</button>
+        </div>
+      </div>
+    </div>`).join("")||`<div class="empty">No services yet.<br/>Add your standard services and prices.<br/>Use them to build estimates fast.</div>`;
+
+  return `${topBar("My Services","",`<button onclick="openSheet('newservice')" style="background:var(--accent);color:#000;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ Add</button>`)}
+  <div style="padding:14px 16px 130px;">${cards}</div>`;
+}
+
+
+// ─── HELPER RENDER FUNCTIONS ─────────────────────────────────
+function serviceQuickButtons(){
+  if(!state.services.length) return "";
+  let html='<div style="margin-bottom:8px;overflow-x:auto;white-space:nowrap;padding-bottom:4px;">';
+  state.services.forEach(s=>{
+    html+='<button onclick="addServiceToDoc(\"'+s.id+'\"" style="background:var(--faint);border:1px solid var(--border);border-radius:100px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;margin-right:6px;color:var(--ink);">'+esc(s.name)+' '+money(s.price)+'</button>';
+  });
+  html+='</div>';
+  return html;
+}
+
+function docActionButtons(d){
+  let html='';
+  if(d.status!=="Paid"){
+    html+='<button data-id="'+d.id+'" onclick="mPaid(this.dataset.id)" style="background:#4caf7d;color:#fff;border:none;border-radius:100px;padding:13px;font-size:13px;font-weight:600;cursor:pointer;">✓ Mark as Paid</button>';
+    html+='<button data-id="'+d.id+'" onclick="sRemind(this.dataset.id)" class="btn-ghost" style="font-size:13px;">🔔 Send Reminder</button>';
+  }
+  if(d.opened){
+    html+='<div style="font-size:11px;color:#4caf7d;text-align:center;margin-top:4px;">👁 Opened '+d.openedDate+'</div>';
+  } else {
+    html+='<button data-id="'+d.id+'" onclick="mOpened(this.dataset.id)" class="btn-ghost" style="font-size:12px;grid-column:1/-1;">👁 Mark as Opened</button>';
+  }
+  return html;
+}
+
+
+
+function addNewProject(){ openSheet('newproject',null); }
+function openProj(id){ openDetail(id,'project'); }
+function editSvc(id){ openSheet("newservice",null,{editSvcId:id}); }
+function addNewService(){ openSheet("newservice",null,{}); }
+
+function setFieldTab(idx){
+  state.form.fieldTab = idx===0 ? "projects" : "services";
+  
+function buildDetailTabs(active){
+  const tabs=["notes","shopping","sessions","photos","docs"];
+  return tabs.map(function(tab){
+    const cls="tab-btn"+(active===tab?" active":"");
+    var labels={notes:"Notes",shopping:"Shopping",sessions:"Sessions",photos:"Photos",docs:"Docs"};
+    return '<button data-tab="'+tab+'" onclick="setDetailTab(this.dataset.tab)" class="'+cls+'">'+labels[tab]+'</button>';
+  }).join("");
+}
+
+render();
+}
+
+
+function sendBI(id){sendBalanceInvoice(id);}
+function printBI(id){printBalanceInvoice(id);}
+function mPaid(id){markDocPaid(id);}
+function sRemind(id){sendReminder(id);}
+function mOpened(id){markOpened(id);}
+
+
+function buildDetailTabs(active){
+  const tabs=["notes","shopping","sessions","photos","docs"];
+  return tabs.map(function(tab){
+    const cls="tab-btn"+(active===tab?" active":"");
+    var labels={notes:"Notes",shopping:"Shopping",sessions:"Sessions",photos:"Photos",docs:"Docs"};
+    return '<button data-tab="'+tab+'" onclick="setDetailTab(this.dataset.tab)" class="'+cls+'">'+labels[tab]+'</button>';
+  }).join("");
+}
+
+render();
+</script>
+</body>
+</html>
