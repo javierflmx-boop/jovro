@@ -10,46 +10,72 @@
 <title>JOVRO Field</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap');
+
   *{box-sizing:border-box;margin:0;padding:0;}
   :root{
-    --bg:#0a0a0a;
-    --card:#161616;
-    --card2:#1e1e1e;
-    --border:#2a2a2a;
-    --faint:#222;
-    --mid:#666;
-    --sub:#444;
-    --ink:#f0f0f0;
-    --header:#0a0a0a;
-    --accent:#F0A500;
-    --accent2:#c98800;
-    --green:#4caf7d;
-    --red:#e05c5c;
-    --blue:#5b8dd9;
+    --bg:#f0ece4;
+    --surface:#e8e3d8;
+    --surface2:#ddd8cc;
+    --border:#ccc8bc;
+    --faint:#d4d0c4;
+    --mid:#8a8478;
+    --sub:#6a6560;
+    --ink:#1a1814;
+    --ink2:#3a3830;
+    --header:#f0ece4;
+    --accent:#e85d2f;
+    --accent2:#c44820;
+    --yellow:#e8a820;
+    --brown:#5a3e2e;
+    --charcoal:#2e2c28;
+    --green:#4a7a58;
+    --red:#c04840;
+    --blue:#3a5878;
+    --card-terra:#e85d2f;
+    --card-brown:#7a5840;
+    --card-dark:#2e2c28;
+    --card-warm:#d4c8a8;
   }
   body{
-    font-family:-apple-system,"SF Pro Display","Helvetica Neue",sans-serif;
+    font-family:'DM Sans',-apple-system,sans-serif;
     background:var(--bg);
     color:var(--ink);
     min-height:100vh;
     font-weight:300;
-    letter-spacing:0.01em;
+    -webkit-font-smoothing:antialiased;
   }
   #app{padding-bottom:80px;}
 
-  /* CARDS */
   .card{
-    background:var(--card);
+    background:var(--surface);
     border:1px solid var(--border);
     border-radius:16px;
     padding:16px;
-    margin-bottom:10px;
+    margin-bottom:8px;
   }
 
-  /* NAV BAR */
+  /* ── HERO JOB CARD ── */
+  .hero-card{
+    border-radius:18px;
+    padding:22px 20px;
+    margin-bottom:10px;
+    position:relative;
+    overflow:hidden;
+    min-height:110px;
+  }
+  .hero-card.terra{ background:var(--card-terra); color:#fff; }
+  .hero-card.dark{ background:var(--card-dark); color:#f0ece4; }
+  .hero-card.warm{ background:var(--card-warm); color:var(--ink); }
+  .hero-card.brown{ background:var(--card-brown); color:#f0ece4; }
+  .hero-card.yellow{ background:var(--yellow); color:var(--ink); }
+
+  /* ── NAV BAR ── */
   .nav-bar{
     position:fixed;bottom:0;left:0;right:0;
-    background:#0a0a0a;
+    background:rgba(240,236,228,0.95);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
     border-top:1px solid var(--border);
     display:flex;
     padding-bottom:env(safe-area-inset-bottom);
@@ -59,165 +85,140 @@
     flex:1;background:none;border:none;
     padding:10px 4px 8px;
     display:flex;flex-direction:column;align-items:center;gap:3px;
-    color:var(--mid);font-size:10px;font-weight:400;letter-spacing:1.5px;
+    color:var(--mid);font-size:9px;font-weight:500;letter-spacing:1.5px;
     text-transform:uppercase;cursor:pointer;
+    font-family:'DM Sans',sans-serif;
   }
   .nav-item.active{color:var(--accent);}
-  .nav-icon{font-size:20px;line-height:1;}
+  .nav-icon{font-size:19px;line-height:1;}
 
-  /* TOP BAR */
+  /* ── TOP BAR ── */
   .top-bar{
     position:sticky;top:0;z-index:50;
-    background:var(--header);
+    background:rgba(240,236,228,0.95);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
     border-bottom:1px solid var(--border);
     display:flex;align-items:center;gap:12px;
-    padding:16px;
-    min-height:56px;
+    padding:14px 16px;
+    min-height:54px;
   }
-  .top-bar div{font-size:17px;font-weight:300;letter-spacing:2px;text-transform:uppercase;}
+  .top-bar div{
+    font-family:'Bebas Neue',sans-serif;
+    font-size:22px;letter-spacing:2px;
+    color:var(--ink);font-weight:400;
+  }
 
-  /* BUTTONS */
+  /* ── BUTTONS ── */
   .btn-primary{
-    background:var(--accent);
-    color:#000;border:none;
-    border-radius:100px;
-    padding:14px 24px;
-    font-size:13px;font-weight:600;
-    letter-spacing:1px;text-transform:uppercase;
+    background:var(--accent);color:#fff;border:none;
+    border-radius:10px;padding:14px 24px;
+    font-size:13px;font-weight:600;letter-spacing:0.5px;
     cursor:pointer;width:100%;
+    font-family:'DM Sans',sans-serif;
   }
   .btn-ghost{
-    background:var(--card2);
-    color:var(--ink);
-    border:1px solid var(--border);
-    border-radius:100px;
-    padding:12px 18px;
-    font-size:13px;font-weight:300;
-    cursor:pointer;
+    background:var(--surface2);color:var(--ink);
+    border:1px solid var(--border);border-radius:10px;
+    padding:12px 16px;font-size:13px;font-weight:400;
+    cursor:pointer;font-family:'DM Sans',sans-serif;
   }
 
-  /* TABS */
+  /* ── TABS ── */
   .tab-btn{
     flex:1;background:none;border:none;
-    padding:12px 8px;
-    font-size:10px;font-weight:400;
+    padding:12px 6px;font-size:9px;font-weight:500;
     letter-spacing:2px;text-transform:uppercase;
     color:var(--mid);cursor:pointer;
     border-bottom:2px solid transparent;
+    font-family:'DM Sans',sans-serif;
   }
   .tab-btn.active{color:var(--accent);border-bottom:2px solid var(--accent);}
 
-  /* BADGE */
   .badge{
-    font-size:10px;font-weight:500;
-    letter-spacing:1px;text-transform:uppercase;
-    padding:3px 8px;border-radius:100px;
+    font-size:9px;font-weight:600;letter-spacing:1px;
+    text-transform:uppercase;padding:3px 8px;border-radius:6px;
   }
 
-  /* FORM INPUTS */
   input,textarea,select{
-    width:100%;
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:14px;
-    color:var(--ink);
-    font-size:15px;
-    font-weight:300;
-    font-family:inherit;
-    outline:none;
-    display:block;
+    width:100%;background:var(--surface);
+    border:1px solid var(--border);border-radius:10px;
+    padding:13px 14px;color:var(--ink);
+    font-size:15px;font-weight:300;
+    font-family:'DM Sans',inherit;outline:none;display:block;
+    transition:border-color 0.15s;
   }
   input:focus,textarea:focus,select:focus{border-color:var(--accent);}
-  select option{background:var(--card);}
+  select option{background:var(--surface);}
   textarea{min-height:90px;resize:none;}
   .field-label{
-    font-size:10px;font-weight:400;
-    letter-spacing:2px;text-transform:uppercase;
-    color:var(--mid);margin-bottom:8px;display:block;
+    font-size:9px;font-weight:600;letter-spacing:2px;
+    text-transform:uppercase;color:var(--mid);
+    margin-bottom:8px;display:block;font-family:'DM Sans',sans-serif;
   }
 
-  /* SHEET */
   .sheet-overlay{
     position:fixed;inset:0;z-index:200;
-    display:flex;flex-direction:column;justify-content:flex-end;
+    background:var(--bg);
+    transform:translateX(100%);
+    transition:transform 0.26s cubic-bezier(0.4,0,0.2,1);
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
   }
-  .sheet-bg{
-    position:absolute;inset:0;
-    background:rgba(0,0,0,0.7);
-    backdrop-filter:blur(4px);
+  .sheet-overlay.open{
+    transform:translateX(0);
   }
+  .sheet-bg{ display:none; }
   .sheet-body{
     position:relative;
-    background:var(--card);
-    border-radius:24px 24px 0 0;
-    border-top:1px solid var(--border);
-    padding:20px 20px calc(env(safe-area-inset-bottom)+24px);
-    max-height:90vh;overflow-y:auto;
-    z-index:1;
+    background:var(--bg);
+    padding:0 0 100px 0;
+    min-height:100%;
   }
-  .sheet-handle{
-    width:36px;height:4px;
-    background:var(--border);
-    border-radius:2px;
-    margin:0 auto 20px;
+  .sheet-handle{ display:none; }
+  .empty{
+    color:var(--mid);font-size:14px;font-weight:300;
+    text-align:center;padding:56px 20px;
+    font-family:'DM Sans',sans-serif;
   }
-
-  /* MISC */
-  .empty{color:var(--mid);font-size:14px;font-weight:300;text-align:center;padding:48px 20px;letter-spacing:0.5px;}
   .pulse{animation:pulse 1.5s infinite;}
-  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.5;}}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
   canvas{touch-action:none;}
-
-  /* CLOCK RING */
   .ring-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;}
 </style>
 </head>
 <body>
 <div id="splash" style="
   position:fixed;inset:0;
-  background:#0a0a0a;
+  background:#f0ece4;
   display:flex;flex-direction:column;
   align-items:center;justify-content:center;
   z-index:9999;
-  transition:opacity 0.8s ease;
+  transition:opacity 0.7s ease;
 ">
-  <!-- Glow -->
-  <div style="position:absolute;width:260px;height:260px;background:radial-gradient(circle,rgba(240,165,0,0.15) 0%,transparent 70%);border-radius:50%;"></div>
-  <!-- Icon -->
-  <div style="
-    width:100px;height:100px;
-    background:var(--accent, #F0A500);
-    border-radius:24px;
-    display:flex;align-items:center;justify-content:center;
-    font-size:48px;
-    margin-bottom:28px;
-    position:relative;
-    box-shadow:0 0 40px rgba(240,165,0,0.3);
-  ">🏗️</div>
-  <!-- Name -->
-  <div style="display:flex;align-items:baseline;gap:0;margin-bottom:12px;">
-    <span style="font-size:38px;font-weight:200;color:#f0f0f0;letter-spacing:6px;font-family:-apple-system,sans-serif;">JOVRO</span>
-  </div>
-  <div style="font-size:11px;font-weight:300;color:#555;letter-spacing:5px;text-transform:uppercase;">FIELD · BY CONTRACTORS</div>
-  <!-- Loading bar -->
-  <div style="position:absolute;bottom:60px;width:80px;height:1px;background:var(--border,#222);border-radius:1px;">
-    <div id="splash-bar" style="height:1px;background:var(--accent,#F0A500);border-radius:1px;width:0%;transition:width 1.8s ease;"></div>
+  <div style="position:absolute;width:320px;height:320px;background:radial-gradient(circle,rgba(232,93,47,0.15) 0%,transparent 70%);border-radius:50%;pointer-events:none;"></div>
+  <div style="width:96px;height:96px;background:#e85d2f;border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:46px;margin-bottom:28px;box-shadow:0 8px 32px rgba(232,93,47,0.35);">🏗️</div>
+  <div style="font-family:Bebas Neue,sans-serif;font-size:52px;color:#1a1814;letter-spacing:6px;line-height:1;margin-bottom:6px;">JOVRO</div>
+  <div style="font-size:11px;font-weight:500;color:#8a8478;letter-spacing:5px;text-transform:uppercase;margin-bottom:48px;">FIELD</div>
+  <div style="width:64px;height:2px;background:#ccc8bc;border-radius:2px;">
+    <div id="splash-bar" style="height:2px;background:#e85d2f;border-radius:2px;width:0%;transition:width 1.8s cubic-bezier(0.4,0,0.2,1);"></div>
   </div>
 </div>
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script>
-  window.addEventListener("load", function(){
-    setTimeout(function(){ var b=document.getElementById("splash-bar"); if(b) b.style.width="100%"; }, 50);
-    setTimeout(function(){
-      var s=document.getElementById("splash");
-      if(s){ s.style.opacity="0"; setTimeout(function(){ s.style.display="none"; },800); }
-    },2200);
+  window.addEventListener("load",function(){
+    setTimeout(function(){var b=document.getElementById("splash-bar");if(b)b.style.width="100%";},50);
+    setTimeout(function(){var s=document.getElementById("splash");if(s){s.style.opacity="0";setTimeout(function(){s.style.display="none";},700);}},2200);
   });
 </script>
 
 <div id="app"></div>
 <script>
+// VERSION: CLEAN-3
+// ─── COLORS & DARK ───────────────────────────────────────────
+const COLORS=["#E07B54","#5B8DD9","#57A773","#9B6EC8","#D4A843","#D96B8A"];
+// VERSION: CLEAN-3
 // ─── COLORS & DARK ───────────────────────────────────────────
 const COLORS=["#E07B54","#5B8DD9","#57A773","#9B6EC8","#D4A843","#D96B8A"];
 let dark=localStorage.getItem("fm-dark")==="1";
@@ -264,6 +265,217 @@ localStorage.setItem("fm-recurring",JSON.stringify(state.recurring));
 }
 
 // ─── PROJECT ACTIONS ─────────────────────────────────────────
+
+
+function pickColor(el){state.form.color=el.dataset.color;document.querySelectorAll(".cdot").forEach(function(d){d.style.outline="none";});el.style.outline="3px solid var(--accent)";}
+function editClient(id){openSheet("newclient",null,{editId:id});}
+function editPortfolio(id){openSheet("newportfolio",null,{editPfId:id});}
+function editService(id){openSheet("newservice",null,{editSvcId:id});}
+
+
+
+function fieldHeader(){
+  var now = new Date();
+  var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var monthShort = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  var activeCount = Object.keys(state.clocks).length;
+  var totalProjects = state.projects.filter(function(p){return !p.archived;}).length;
+
+  // Month earnings from sessions
+  var monthEarned = 0, monthMaterials = 0;
+  var thisMonth = now.getMonth(), thisYear = now.getFullYear();
+  state.projects.forEach(function(p){
+    (p.sessions||[]).forEach(function(s){
+      var d = new Date(s.date);
+      if(d.getMonth()===thisMonth && d.getFullYear()===thisYear){
+        monthEarned += (s.seconds/3600)*(p.hourlyRate||0);
+      }
+    });
+  });
+  // Expenses this month
+  (state.expenses||[]).forEach(function(e){
+    var d = new Date(e.date||"");
+    if(d.getMonth()===thisMonth && d.getFullYear()===thisYear){
+      monthMaterials += Number(e.amount||0);
+    }
+  });
+  var net = monthEarned - monthMaterials;
+
+  var h = '<div style="padding:18px 16px 0;">';
+
+  // Header row
+  h += '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">';
+  h += '<div>';
+  h += '<div style="font-size:11px;font-weight:500;color:var(--mid);letter-spacing:2px;text-transform:uppercase;">'+days[now.getDay()]+' · '+months[now.getMonth()]+' '+now.getFullYear()+'</div>';
+  h += '<div style="font-family:Bebas Neue,sans-serif;font-size:32px;letter-spacing:2px;line-height:1.1;color:var(--ink);margin-top:2px;">MY FIELD</div>';
+  h += '</div>';
+  h += '<button onclick="addNewProject()" style="background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer;margin-top:2px;">+ New</button>';
+  h += '</div>';
+
+  // BIG hero card - total this month
+  h += '<div style="background:var(--yellow);border-radius:18px;padding:22px 20px 18px;margin-bottom:10px;position:relative;overflow:hidden;">';
+  h += '<div style="position:absolute;right:-20px;top:-20px;width:130px;height:130px;background:rgba(255,255,255,0.15);border-radius:50%;"></div>';
+  h += '<div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(26,24,20,0.6);margin-bottom:6px;">Earned This Month</div>';
+  h += '<div style="font-family:Bebas Neue,sans-serif;font-size:46px;letter-spacing:-1px;line-height:1;color:var(--ink);">$'+Math.round(monthEarned).toLocaleString()+'</div>';
+  if(net > 0) h += '<div style="font-size:13px;font-weight:500;color:var(--green);margin-top:4px;">Net $'+Math.round(net).toLocaleString()+' after expenses</div>';
+  h += '<div style="font-size:11px;color:rgba(26,24,20,0.5);margin-top:10px;letter-spacing:1px;text-transform:uppercase;">'+totalProjects+' active jobs'+(activeCount>0?' · '+activeCount+' live now':'')+'</div>';
+  h += '</div>';
+
+  // Two cards: spending vs earning
+  if(monthEarned > 0 || monthMaterials > 0){
+    h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">';
+
+    // Earning card
+    h += '<div style="background:var(--green);border-radius:14px;padding:16px;">';
+    h += '<div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:8px;">Earning</div>';
+    h += '<div style="font-family:Bebas Neue,sans-serif;font-size:28px;letter-spacing:0px;color:#fff;line-height:1;">$'+Math.round(monthEarned).toLocaleString()+'</div>';
+    // Top 3 earning jobs
+    var topJobs = state.projects.filter(function(p){return (p.hourlyRate||0)>0 && p.totalSeconds>0;}).slice(0,3);
+    topJobs.forEach(function(p){
+      var earned = (p.totalSeconds/3600)*(p.hourlyRate||0);
+      h += '<div style="display:flex;justify-content:space-between;margin-top:8px;border-top:1px solid rgba(255,255,255,0.15);padding-top:8px;">';
+      h += '<div style="font-size:11px;color:rgba(255,255,255,0.8);font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:80px;">'+esc(p.name)+'</div>';
+      h += '<div style="font-size:11px;color:#fff;font-weight:600;">+$'+Math.round(earned).toLocaleString()+'</div>';
+      h += '</div>';
+    });
+    h += '</div>';
+
+    // Spending card
+    h += '<div style="background:var(--accent);border-radius:14px;padding:16px;">';
+    h += '<div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:8px;">Spending</div>';
+    h += '<div style="font-family:Bebas Neue,sans-serif;font-size:28px;color:#fff;line-height:1;">$'+Math.round(monthMaterials).toLocaleString()+'</div>';
+    var topExp = (state.expenses||[]).filter(function(e){var d=new Date(e.date||"");return d.getMonth()===thisMonth && d.getFullYear()===thisYear;}).slice(0,3);
+    topExp.forEach(function(e){
+      h += '<div style="display:flex;justify-content:space-between;margin-top:8px;border-top:1px solid rgba(255,255,255,0.15);padding-top:8px;">';
+      h += '<div style="font-size:11px;color:rgba(255,255,255,0.8);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+esc(e.name||e.category||"")+'</div>';
+      h += '<div style="font-size:11px;color:#fff;font-weight:600;">-$'+Math.round(Number(e.amount||0)).toLocaleString()+'</div>';
+      h += '</div>';
+    });
+    if(!topExp.length) h += '<div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:8px;">No expenses logged</div>';
+    h += '</div>';
+
+    h += '</div>';
+  }
+
+  h += '</div>';
+  return h;
+}
+
+
+function dashboardHTML(){
+  var now = new Date();
+  var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  var thisMonth = now.getMonth(), thisYear = now.getFullYear();
+  var activeCount = Object.keys(state.clocks).length;
+  var projectCount = state.projects.filter(function(p){return !p.archived;}).length;
+  var clientCount = (state.clients||[]).length;
+  var serviceCount = (state.services||[]).length;
+  var recurringCount = (state.recurring||[]).length;
+  var docCount = (state.docs||[]).length;
+  var monthEarned = 0, monthSpent = 0;
+  state.projects.forEach(function(p){
+    (p.sessions||[]).forEach(function(s){
+      var d = new Date(s.date);
+      if(d.getMonth()===thisMonth && d.getFullYear()===thisYear)
+        monthEarned += (s.seconds/3600)*(p.hourlyRate||0);
+    });
+  });
+  (state.expenses||[]).forEach(function(e){
+    var d = new Date(e.date||"");
+    if(d.getMonth()===thisMonth && d.getFullYear()===thisYear)
+      monthSpent += Number(e.amount||0);
+  });
+
+  var h = '<div style="padding:20px 16px 60px;">';
+
+  // Header
+  h += '<div style="margin-bottom:22px;">';
+  h += '<div style="font-size:10px;font-weight:600;color:var(--mid);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:4px;">'+days[now.getDay()]+' · '+months[now.getMonth()]+' '+now.getDate()+'</div>';
+  h += '<div style="font-family:Bebas Neue,sans-serif;font-size:38px;letter-spacing:3px;line-height:1;color:var(--ink);">JOVRO FIELD</div>';
+  h += '</div>';
+
+  // Golden hero card — data-action=nav, data-nav=summary
+  h += '<div data-action="nav" data-nav="summary" style="background:var(--yellow);border-radius:16px;padding:22px 20px;margin-bottom:10px;cursor:pointer;position:relative;overflow:hidden;">';
+  h += '<div style="position:absolute;right:-16px;top:-16px;width:110px;height:110px;background:rgba(255,255,255,0.18);border-radius:50%;pointer-events:none;"></div>';
+  h += '<div style="font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(26,24,20,0.5);margin-bottom:6px;">'+months[thisMonth]+' · Earned</div>';
+  h += '<div style="font-family:Bebas Neue,sans-serif;font-size:52px;letter-spacing:-1px;line-height:1;color:var(--ink);">$'+Math.round(monthEarned).toLocaleString()+'</div>';
+  h += '<div style="font-size:12px;color:rgba(26,24,20,0.5);margin-top:6px;">Net $'+Math.round(monthEarned-monthSpent).toLocaleString()+' after expenses'+(activeCount>0?' · <strong>'+activeCount+' LIVE</strong>':'')+'</div>';
+  h += '</div>';
+
+  // Section cards grid — all use data-action=section
+  var sections = [
+    {nav:"field",    label:"Projects",  count:projectCount,  bg:"#d4522a", light:false, desc:activeCount>0?activeCount+" live":"Tap to manage", full:true},
+    {nav:"clients",  label:"Clients",   count:clientCount,   bg:"#2a2824", light:false, desc:"People",       full:false},
+    {nav:"services", label:"Services",  count:serviceCount,  bg:"#e0dace", light:true,  desc:"Your rates",   full:false},
+    {nav:"recurring",label:"Recurring", count:recurringCount,bg:"#7a5840", light:false, desc:"Repeat work",  full:false},
+    {nav:"docs",     label:"Docs",      count:docCount,      bg:"#3a6b4a", light:false, desc:"Contracts",    full:false},
+    {nav:"expenses", label:"Expenses",  count:0,             bg:"#2a3848", light:false, desc:"Materials",    full:false},
+  ];
+
+  h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">';
+  sections.forEach(function(s){
+    var tc = s.light ? "var(--ink)" : "#f0ece4";
+    var mc = s.light ? "rgba(26,24,20,0.45)" : "rgba(240,236,228,0.45)";
+    var gridStyle = s.full ? "grid-column:1/-1;" : "";
+    var fontSize = s.full ? "64" : "52";
+    h += '<div data-action="section" data-nav="'+s.nav+'" style="background:'+s.bg+';border-radius:14px;padding:18px 16px;cursor:pointer;position:relative;overflow:hidden;'+gridStyle+'">';
+    h += '<div style="position:absolute;right:-10px;bottom:-10px;width:80px;height:80px;background:rgba(255,255,255,0.07);border-radius:50%;pointer-events:none;"></div>';
+    h += '<div style="font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:'+mc+';margin-bottom:8px;">'+s.label+'</div>';
+    h += '<div style="font-family:Bebas Neue,sans-serif;font-size:'+fontSize+'px;line-height:0.9;letter-spacing:-1px;color:'+tc+';">'+s.count+'</div>';
+    h += '<div style="font-size:11px;color:'+mc+';margin-top:8px;">'+s.desc+'</div>';
+    h += '</div>';
+  });
+  h += '</div>';
+
+  // Live jobs strip
+  if(activeCount > 0){
+    h += '<div style="margin-top:10px;background:var(--charcoal);border-radius:14px;padding:16px;">';
+    h += '<div style="font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(240,236,228,0.4);margin-bottom:12px;">Live Now</div>';
+    Object.keys(state.clocks).forEach(function(pid){
+      var p = proj(pid);
+      if(!p) return;
+      var ls = liveSec(pid);
+      h += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">';
+      h += '<div><div style="font-size:14px;font-weight:500;color:#f0ece4;">'+esc(p.name)+'</div>';
+      h += '<div style="font-size:11px;color:rgba(240,236,228,0.4);margin-top:1px;" id="timer-'+p.id+'">'+fmtTimer(ls)+'</div></div>';
+      h += '<button data-action="clockout" data-pid="'+p.id+'" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;">Clock Out</button>';
+      h += '</div>';
+    });
+    h += '</div>';
+  }
+
+  h += '</div>';
+  return h;
+}
+
+function openSection(nav){
+  if(nav === 'field'){
+    state.form = state.form || {};
+    state.form.fieldTab = 'projects';
+    state.nav = 'field_list';
+    render();
+  } else {
+    setNav(nav);
+  }
+}
+
+function doClockBtn(el){
+  event.stopPropagation();
+  var pid = el.dataset.pid;
+  if(state.clocks[pid]){
+    openSheet("clockout", pid);
+  } else {
+    clockIn(pid);
+  }
+}
+
+function doToggleNote(el){toggleNote(el.dataset.pid,el.dataset.nid);}
+function doDelNote(el){delNote(el.dataset.pid,el.dataset.nid);}
+function doToggleShop(el){toggleShop(el.dataset.pid,el.dataset.sid);}
+function doDelShop(el){delShop(el.dataset.pid,el.dataset.sid);}
+
 function clockIn(pid){state.clocks[pid]=Date.now();addLog(pid,`Clocked in · ${nowTime()}`);render();}
 function clockOut(pid,note=""){
   const secs=liveSec(pid),startEpoch=state.clocks[pid];
@@ -306,7 +518,7 @@ function dDoc(id){ delDoc(id); }
 
 
 function sigBtn(id){
-  return '<button data-id="'+id+'" onclick="openSignature(this.dataset.id)" style="background:#4caf7d;color:#fff;border:none;border-radius:100px;padding:13px;font-size:13px;font-weight:600;cursor:pointer;grid-column:1/-1;">✍️ Get Signature</button>';
+  return '<button data-id="'+id+'" onclick="openSignature(this.dataset.id)" style="background:var(--green);color:#fff;border:none;border-radius:100px;padding:13px;font-size:13px;font-weight:600;cursor:pointer;grid-column:1/-1;">✍️ Get Signature</button>';
 }
 
 
@@ -383,20 +595,15 @@ function openDetail(id,type){state.detailId=id;state.detailType=type;state.detai
 function goBack(){state.detailId=null;state.detailType=null;render();}
 function setDetailTab(t){state.detailTab=t;render();}
 function openSheet(name,pid,extra={}){state.sheet=name;state.sheetPid=pid;state.form=extra;render();}
-function closeSheet(){state.sheet=null;state.sheetPid=null;state.form={};render();}
-
-function toggleDark(){dark=!dark;document.body.classList.toggle("dark",dark);localStorage.setItem("fm-dark",dark?"1":"0");render();}
-function callPhone(phone){window.location.href=`tel:${phone}`;}
-
-// ─── RING SVG ────────────────────────────────────────────────
-function ring(seconds,color,size=68){
-  const r=(size-8)/2,circ=2*Math.PI*r,pct=Math.min((seconds%3600)/3600,1),offset=circ*(1-pct);
-  return `<svg width="${size}" height="${size}" style="transform:rotate(-90deg);display:block;flex-shrink:0;">
-    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--faint)" stroke-width="5"/>
-    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${color}" stroke-width="5"
-      stroke-dasharray="${circ.toFixed(1)}" stroke-dashoffset="${offset.toFixed(1)}" stroke-linecap="round"
-      style="transition:stroke-dashoffset 1s linear;"/>
-  </svg>`;
+function closeSheet(){
+  var panel = document.getElementById("sheet-panel");
+  if(panel){
+    panel.classList.remove("open");
+    setTimeout(function(){ _doCloseSheet(); }, 280);
+  } else { _doCloseSheet(); }
+}
+function _doCloseSheet(){
+  state.sheet=null;state.sheetPid=null;state.form={};render();
 }
 
 // ─── SHEET HTML ──────────────────────────────────────────────
@@ -411,31 +618,31 @@ function sheetHTML(){
     body=`<div style="background:var(--faint);border-radius:14px;padding:18px 20px;margin-bottom:20px;">
       <div style="font-size:13px;color:var(--mid);margin-bottom:4px;">${p?.name||""}</div>
       <div id="sheet-timer" style="font-size:42px;font-weight:700;font-variant-numeric:tabular-nums;">${fmtTimer(liveSec(pid))}</div>
-      ${p?.hourlyRate?`<div style="font-size:13px;color:#4caf7d;margin-top:4px;font-weight:600;">${money(liveSec(pid)/3600*(p.hourlyRate))} earned</div>`:""}
+      ${p?.hourlyRate?`<div style="font-size:13px;color:var(--green);margin-top:4px;font-weight:600;">${money(liveSec(pid)/3600*(p.hourlyRate))} earned</div>`:""}
     </div>
     <label class="field-label">What did you work on?</label>
     <textarea id="co-note" rows="3" placeholder="Tiling west wall, cabinet doors..." style="margin-bottom:18px;"></textarea>
-    <button class="btn-primary" onclick="clockOut('${pid}',val('co-note'))">Confirm Clock Out</button>`;
+    <button class="btn-primary" data-pid="${pid}" onclick="clockOut(this.dataset.pid,val('co-note'))">Confirm Clock Out</button>`;
   }
   else if(s==="note"){
     title="Add Note";
     body=`<textarea id="note-text" rows="4" placeholder="Problem found, client instruction, reminder..." style="margin-bottom:18px;"></textarea>
-    <button class="btn-primary" onclick="addNote('${pid}',val('note-text'));closeSheet();">Save Note</button>`;
+    <button class="btn-primary" data-pid="${pid}" onclick="addNote(this.dataset.pid,val('note-text'));closeSheet();">Save Note</button>`;
   }
   else if(s==="shop"){
     title="Need to Buy";
     body=`<input id="shop-text" placeholder="Tile adhesive × 4 bags, screws..." style="margin-bottom:18px;" onkeydown="if(event.key==='Enter'){addShop('${pid}',val('shop-text'));closeSheet();}"/>
-    <button class="btn-primary" onclick="addShop('${pid}',val('shop-text'));closeSheet();">Add to List</button>`;
+    <button class="btn-primary" data-pid="${pid}" onclick="addShop(this.dataset.pid,val('shop-text'));closeSheet();">Add to List</button>`;
   }
   else if(s==="photo"){
     title="Add Photo";
     body=`<input id="photo-caption" placeholder="Caption — what does this show?" style="margin-bottom:18px;"/>
-    <button class="btn-primary" onclick="addPhoto('${pid}')">📷 Open Camera / Gallery</button>`;
+    <button class="btn-primary" data-pid="${pid}" onclick="addPhoto(this.dataset.pid)">📷 Open Camera / Gallery</button>`;
   }
   else if(s==="newproject"){
     title="New Project";
     const clientOpts=state.clients.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("");
-    const dots=COLORS.map(c=>`<div onclick="state.form.color='${c}';document.querySelectorAll('.cdot').forEach(d=>d.style.outline='none');this.style.outline='3px solid var(--ink)';" class="cdot" style="width:36px;height:36px;border-radius:50%;background:${c};cursor:pointer;flex-shrink:0;outline:${(state.form.color||COLORS[0])===c?'3px solid var(--ink)':'none'};outline-offset:3px;"></div>`).join("");
+    const dots=COLORS.map(c=>`<div data-color="${c}" onclick="pickColor(this)" class="cdot" style="width:36px;height:36px;border-radius:50%;background:${c};cursor:pointer;flex-shrink:0;outline:${(state.form.color||COLORS[0])===c?'3px solid var(--ink)':'none'};outline-offset:3px;"></div>`).join("");
     body=`<input id="fp-name" placeholder="Bathroom A, Kitchen Blue..." style="margin-bottom:12px;"/>
     <select id="fp-client" style="margin-bottom:12px;"><option value="">Select client (optional)</option>${clientOpts}</select>
     <input id="fp-address" placeholder="Job site address" style="margin-bottom:12px;"/>
@@ -459,7 +666,7 @@ function sheetHTML(){
       <input id="prog-hours" type="number" placeholder="e.g. 40" value="${estH}" style="margin-bottom:6px;"/>
       <div style="font-size:12px;color:var(--mid);">App will auto-calculate % from hours clocked</div>
     </div>
-    <button class="btn-primary" onclick="saveProgress('${pid}')">Save Progress</button>`;
+    <button class="btn-primary" data-pid="${pid}" onclick="saveProgress(this.dataset.pid)">Save Progress</button>`;
   }
   else if(s==="newclient"){
     const ec=state.form.editId?client(state.form.editId):null;
@@ -496,13 +703,13 @@ function sheetHTML(){
     <div style="display:grid;grid-template-columns:1fr auto auto;gap:8px;margin-bottom:16px;">
       <input id="di-name" placeholder="Material name"/>
       <input id="di-cost" type="number" placeholder="$" style="width:80px;"/>
-      <button onclick="addDocItem()" style="background:var(--accent);color:#000;border:none;border-radius:100px;padding:0 16px;font-size:20px;cursor:pointer;">+</button>
+      <button onclick="addDocItem()" style="background:var(--accent);color:#fff;border:none;border-radius:100px;padding:0 16px;font-size:20px;cursor:pointer;">+</button>
     </div>
     <label class="field-label">Labor Cost ($)</label>
     <input id="doc-labor" type="number" placeholder="0" value="${ed?.laborCost||""}" style="margin-bottom:12px;" oninput="rerenderDocItems()"/>
     <label class="field-label">Deposit % Required</label>
     <select id="doc-deposit-pct" style="margin-bottom:12px;"><option value="50">50% deposit</option><option value="30">30% deposit</option><option value="100">100% upfront</option><option value="0">No deposit</option></select>
-    <label class="field-label">Total <span id="doc-total-preview" style="color:#4caf7d;">$0</span></label>
+    <label class="field-label">Total <span id="doc-total-preview" style="color:var(--green);">$0</span></label>
     <label class="field-label" style="margin-top:16px;">Cancellation Policy</label>
     <textarea id="doc-cancel" rows="3" style="margin-bottom:12px;">${ed?.cancelPolicy||DEFAULT_CANCEL}</textarea>
     <label class="field-label">Change Orders Policy</label>
@@ -565,7 +772,7 @@ function sheetHTML(){
     <canvas id="sig-canvas" style="width:100%;height:180px;border:2px solid var(--border);border-radius:14px;background:#fff;touch-action:none;display:block;"></canvas>
     <div style="display:flex;gap:10px;margin:16px 0;">
       <button onclick="clearSignature()" class="btn-ghost" style="flex:1;">Clear</button>
-      <button onclick="saveSignature()" style="flex:2;background:#4caf7d;color:#fff;border:none;border-radius:100px;padding:13px;font-size:14px;font-weight:600;cursor:pointer;">Save Signature ✓</button>
+      <button onclick="saveSignature()" style="flex:2;background:var(--green);color:#fff;border:none;border-radius:100px;padding:13px;font-size:14px;font-weight:600;cursor:pointer;">Save Signature ✓</button>
     </div>`;
   }
     else if(s==="newrecurring"||s==="editrecurring"){
@@ -591,12 +798,16 @@ function sheetHTML(){
     body+='<button onclick="saveRecurring()" class="btn-primary" style="width:100%;">'+(existing?"Save Changes":"Add Service")+'</button>';
   }
   
-    return `<div class="sheet-overlay" onclick="if(event.target.classList.contains('sheet-overlay')||event.target.classList.contains('sheet-bg'))closeSheet();">
-    <div class="sheet-bg" onclick="closeSheet()"></div>
+    return `<div class="sheet-overlay">
+    <div class="sheet-bg"></div>
     <div class="sheet-body">
-      <div class="sheet-handle"></div>
-      ${title?`<h3 style="font-size:20px;font-weight:700;margin-bottom:20px;">${title}</h3>`:""}
+      <div style="display:flex;align-items:center;gap:12px;padding:16px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--bg);z-index:10;">
+        <button onclick="closeSheet()" style="background:var(--surface);border:none;border-radius:8px;padding:9px 16px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink);cursor:pointer;">← Back</button>
+        ${title?`<span style="font-family:Bebas Neue,sans-serif;font-size:20px;letter-spacing:2px;color:var(--ink);">${title}</span>`:""}
+      </div>
+      <div style="padding:20px 16px;">
       ${body}
+      </div>
     </div>
   </div>`;
 }
@@ -648,11 +859,11 @@ function recurringHTML(){
     cards+='<div style="font-size:12px;margin-top:4px;"><span style="background:'+statusColor+'22;color:'+statusColor+';padding:2px 8px;border-radius:100px;font-weight:600;">'+statusLabel+'</span></div>';
     cards+='</div>';
     cards+='<div style="text-align:right;">';
-    cards+='<div style="font-size:20px;font-weight:700;color:#4caf7d;">$'+Number(r.price||0).toLocaleString()+'</div>';
+    cards+='<div style="font-size:20px;font-weight:700;color:var(--green);">$'+Number(r.price||0).toLocaleString()+'</div>';
     cards+='<div style="font-size:11px;color:var(--mid);">'+esc(r.schedule)+'</div>';
     cards+='</div></div>';
     cards+='<div style="display:flex;gap:8px;border-top:1px solid var(--faint);padding-top:10px;">';
-    cards+='<button data-id="'+r.id+'" onclick="markVisitDone(this.dataset.id)" style="flex:1;background:#4caf7d;color:#fff;border:none;border-radius:100px;padding:10px;font-size:13px;font-weight:600;cursor:pointer;">✓ Mark Visit Done</button>';
+    cards+='<button data-id="'+r.id+'" onclick="markVisitDone(this.dataset.id)" style="flex:1;background:var(--green);color:#fff;border:none;border-radius:100px;padding:10px;font-size:13px;font-weight:600;cursor:pointer;">✓ Mark Visit Done</button>';
     cards+='<button data-id="'+r.id+'" onclick="editRecurring(this.dataset.id)" style="background:var(--faint);border:none;border-radius:100px;padding:10px 14px;font-size:13px;cursor:pointer;">✏️</button>';
     cards+='<button data-id="'+r.id+'" onclick="delRecurring(this.dataset.id)" style="background:var(--faint);border:none;border-radius:100px;padding:10px 14px;font-size:13px;cursor:pointer;">🗑️</button>';
     cards+='</div>';
@@ -664,13 +875,13 @@ function recurringHTML(){
 
   if(!cards) cards='<div class="empty" style="text-align:center;padding:40px 20px;">No recurring services yet.<br><br>Perfect for landscaping, housekeeping,<br>pool cleaning, and any repeat work.</div>';
 
-  var newBtn='<button onclick="addRecurring()" style="background:var(--accent);color:#000;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ Add</button>';
+  var newBtn='<button onclick="addRecurring()" style="background:var(--accent);color:#fff;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ Add</button>';
 
   var statsBar='';
   if(state.recurring.length>0){
     statsBar='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">';
-    statsBar+='<div class="card" style="text-align:center;"><div style="font-size:10px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">This Month</div><div style="font-size:22px;font-weight:700;color:#4caf7d;">$'+totalMonth.toLocaleString()+'</div></div>';
-    statsBar+='<div class="card" style="text-align:center;"><div style="font-size:10px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">This Year</div><div style="font-size:22px;font-weight:700;color:#4caf7d;">$'+totalYear.toLocaleString()+'</div></div>';
+    statsBar+='<div class="card" style="text-align:center;"><div style="font-size:10px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">This Month</div><div style="font-size:22px;font-weight:700;color:var(--green);">$'+totalMonth.toLocaleString()+'</div></div>';
+    statsBar+='<div class="card" style="text-align:center;"><div style="font-size:10px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">This Year</div><div style="font-size:22px;font-weight:700;color:var(--green);">$'+totalYear.toLocaleString()+'</div></div>';
     statsBar+='</div>';
   }
 
@@ -729,19 +940,16 @@ function saveRecurring(){
 
 // ─── NAV BAR ─────────────────────────────────────────────────
 function navBarHTML(){
-  const n=state.nav;
-  const dot=Object.keys(state.clocks).length?`<span style="width:7px;height:7px;border-radius:50%;background:#E07B54;display:inline-block;margin-left:2px;vertical-align:middle;"></span>`:"";
-  const items=[
-    {id:"field",icon:"🏗️",label:"Field"},
-    {id:"clients",icon:"👥",label:"Clients"},
-    {id:"recurring",icon:"🔄",label:"Recurring"},
-    {id:"docs",icon:"📄",label:"Docs"},
-    {id:"summary",icon:"📊",label:"Summary"},
-  ];
-  return `<div class="nav-bar">${items.map(i=>`
-    <button onclick="setNav('${i.id}')" class="nav-item ${n===i.id?'active':''}">
-      <span class="nav-icon">${i.icon}</span>${i.label}${i.id==="field"?dot:""}
-    </button>`).join("")}</div>`;
+  // If we are on a sub-section, show a back bar instead
+  var backSections = ['clients','docs','recurring','services','portfolio','expenses','summary','viewdoc','field_list'];
+  var n = state.nav;
+  if(backSections.indexOf(n) >= 0){
+    return '<div class="nav-bar" style="justify-content:center;padding:10px 20px;">'
+      +'<button data-action="nav" data-nav="field" style="background:var(--charcoal);color:#f0ece4;border:none;border-radius:10px;padding:12px 32px;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;width:100%;">← Dashboard</button>'
+      +'</div>';
+  }
+  // On field/home — no bottom nav needed, dashboard handles navigation
+  return '<div style="height:env(safe-area-inset-bottom);background:var(--bg);position:fixed;bottom:0;left:0;right:0;z-index:100;"></div>';
 }
 
 // ─── TOP BAR ─────────────────────────────────────────────────
@@ -779,14 +987,14 @@ function fieldHTML(){
           +(s.description?'<div style="font-size:12px;color:var(--mid);margin-top:2px;">'+esc(s.description)+'</div>':"")
           +'</div>'
           +'<div style="text-align:right;flex-shrink:0;margin-left:12px;">'
-          +'<div style="font-size:18px;font-weight:700;color:#4caf7d;">'+money(s.price)+'</div>'
+          +'<div style="font-size:18px;font-weight:700;color:var(--green);">'+money(s.price)+'</div>'
           +'<div style="font-size:11px;color:var(--mid);">'+unitLabel+'</div>'
           +'</div></div>';
       });
     } else {
       svcList='<div class="empty">No services yet.<br/>Tap <strong>+ Add</strong> to save your standard prices.</div>';
     }
-    return topBar("My Services","","<button onclick=\"addNewService()\" style=\"background:var(--accent);color:#000;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;\">+ Add</button>")
+    return topBar("My Services","","<button onclick=\"addNewService()\" style=\"background:var(--accent);color:#fff;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;\">+ Add</button>")
       +tabBar
       +'<div style="padding:14px 16px 130px;">'+svcList+'</div>';
   }
@@ -810,8 +1018,8 @@ function fieldHTML(){
     var rcards="";
     if(state.recurring.length>0){
       rcards+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">';
-      rcards+='<div class="card" style="text-align:center;"><div style="font-size:10px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">This Month</div><div style="font-size:20px;font-weight:700;color:#4caf7d;">$'+totalMonth.toLocaleString()+'</div></div>';
-      rcards+='<div class="card" style="text-align:center;"><div style="font-size:10px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">This Year</div><div style="font-size:20px;font-weight:700;color:#4caf7d;">$'+totalYear.toLocaleString()+'</div></div>';
+      rcards+='<div class="card" style="text-align:center;"><div style="font-size:10px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">This Month</div><div style="font-size:20px;font-weight:700;color:var(--green);">$'+totalMonth.toLocaleString()+'</div></div>';
+      rcards+='<div class="card" style="text-align:center;"><div style="font-size:10px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">This Year</div><div style="font-size:20px;font-weight:700;color:var(--green);">$'+totalYear.toLocaleString()+'</div></div>';
       rcards+='</div>';
     }
     sorted.forEach(function(r){
@@ -827,10 +1035,10 @@ function fieldHTML(){
       rcards+='<div><div style="font-size:16px;font-weight:700;">'+esc(r.clientName)+'</div>';
       rcards+='<div style="font-size:13px;color:var(--mid);margin-top:2px;">'+esc(r.service)+'</div>';
       rcards+='<div style="margin-top:6px;"><span style="background:'+sc+'22;color:'+sc+';padding:2px 8px;border-radius:100px;font-size:11px;font-weight:600;">'+sl+'</span></div></div>';
-      rcards+='<div style="text-align:right;"><div style="font-size:20px;font-weight:700;color:#4caf7d;">$'+Number(r.price||0).toLocaleString()+'</div>';
+      rcards+='<div style="text-align:right;"><div style="font-size:20px;font-weight:700;color:var(--green);">$'+Number(r.price||0).toLocaleString()+'</div>';
       rcards+='<div style="font-size:11px;color:var(--mid);">'+esc(r.schedule)+'</div></div></div>';
       rcards+='<div style="display:flex;gap:8px;border-top:1px solid var(--faint);padding-top:10px;">';
-      rcards+='<button data-id="'+r.id+'" onclick="markVisitDone(this.dataset.id)" style="flex:1;background:#4caf7d;color:#fff;border:none;border-radius:100px;padding:10px;font-size:13px;font-weight:600;cursor:pointer;">✓ Visit Done</button>';
+      rcards+='<button data-id="'+r.id+'" onclick="markVisitDone(this.dataset.id)" style="flex:1;background:var(--green);color:#fff;border:none;border-radius:100px;padding:10px;font-size:13px;font-weight:600;cursor:pointer;">✓ Visit Done</button>';
       rcards+='<button data-id="'+r.id+'" onclick="editRecurring(this.dataset.id)" style="background:var(--faint);border:none;border-radius:100px;padding:10px 14px;font-size:18px;cursor:pointer;">✏️</button>';
       rcards+='<button data-id="'+r.id+'" onclick="delRecurring(this.dataset.id)" style="background:var(--faint);border:none;border-radius:100px;padding:10px 14px;font-size:18px;cursor:pointer;">🗑️</button>';
       rcards+='</div>';
@@ -838,7 +1046,7 @@ function fieldHTML(){
       rcards+='</div>';
     });
     if(!state.recurring.length) rcards='<div class="empty" style="text-align:center;">No recurring services yet.<br><br>Perfect for landscaping, housekeeping,<br>pool cleaning &amp; any repeat work.</div>';
-    var addBtn='<button onclick="addRecurring()" style="background:var(--accent);color:#000;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ Add</button>';
+    var addBtn='<button onclick="addRecurring()" style="background:var(--accent);color:#fff;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ Add</button>';
     return topBar("Recurring","",addBtn)+'<div style="padding:0 0 130px;">'+tabBar+'<div style="padding:14px 16px;">'+rcards+'</div></div>';
   }
 
@@ -852,7 +1060,7 @@ function fieldHTML(){
       +'<div style="color:var(--mid);font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;">On the clock</div>'
       +'<div style="color:'+(dark?"#F2F2F2":"#fff")+';font-size:14px;font-weight:600;">'+activeIds.map(function(p){return proj(p)?proj(p).name:"";}).join(" + ")+'</div>'
       +'</div>'
-      +'<div id="main-timer" style="color:#E07B54;font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;">'+fmtTimer(totalLive)+'</div>'
+      +'<div id="main-timer" style="color:var(--red);font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;">'+fmtTimer(totalLive)+'</div>'
       +'</div>';
   }
 
@@ -869,54 +1077,58 @@ function fieldHTML(){
     const pctBadge=pct!=null?progressBadge(p):"";
     const liveTag=isActive?'<span class="pulse badge" style="background:'+p.color+'33;color:'+p.color+';margin-left:6px;">● LIVE</span>':"";
 
-    let quickActions="";
-    if(isActive){
-      quickActions='<div style="display:flex;gap:8px;border-top:1px solid var(--faint);padding-top:14px;margin-top:14px;" onclick="event.stopPropagation()">'
-        +'<button onclick="openSheet(\"note\",\""+p.id+"\"")" class="btn-ghost" style="flex:1;font-size:13px;">📝</button>'
-        +'<button onclick="openSheet(\"shop\",\""+p.id+"\"")" class="btn-ghost" style="flex:1;font-size:13px;">🛒</button>'
-        +'<button onclick="openSheet(\"photo\",\""+p.id+"\"")" class="btn-ghost" style="flex:1;font-size:13px;">📷</button>'
-        +'<button onclick="openSheet(\"clockout\",\""+p.id+"\"")" class="btn-color" style="flex:2;background:'+p.color+';">⏹ Out</button>'
-        +'</div>';
-    }
+    // Build hero card
+    var heroStyles = ['terra','dark','warm','brown','yellow'];
+    var hStyle = heroStyles[state.projects.indexOf(p) % heroStyles.length];
+    var isLight = hStyle === 'warm' || hStyle === 'yellow';
+    var textColor = isLight ? 'var(--ink)' : '#f0ece4';
+    var mutedColor = isLight ? 'rgba(26,24,20,0.5)' : 'rgba(240,236,228,0.55)';
+    var btnBg = isLight ? 'rgba(26,24,20,0.12)' : 'rgba(255,255,255,0.15)';
+    var clkBg = isActive
+      ? (isLight ? 'rgba(26,24,20,0.2)' : 'rgba(255,255,255,0.2)')
+      : (isLight ? '#1a1814' : '#f0ece4');
+    var clkColor = isActive
+      ? textColor
+      : (isLight ? '#f0ece4' : 'var(--ink)');
 
-    const clockBtn=isActive
-      ?'<button onclick="openSheet(\"clockout\",\""+p.id+"\"")" style="width:50px;height:50px;border-radius:50%;border:none;background:'+p.color+';font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">⏹</button>'
-      :'<button onclick="clockIn(\""+p.id+"\")" style="width:50px;height:50px;border-radius:50%;border:none;background:var(--faint);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">▶</button>';
+    var timerStr = isActive
+      ? '<div style="font-family:Bebas Neue,sans-serif;font-size:18px;color:'+textColor+';letter-spacing:2px;margin-top:4px;text-align:center;" id="timer-'+p.id+'">'+fmtTimer(ls)+'</div>'
+      : '';
 
-    const timerTag=isActive?'<div style="font-size:11px;font-weight:700;color:'+p.color+';font-variant-numeric:tabular-nums;" id="timer-'+p.id+'">'+fmtTimer(ls)+'</div>':"";
+    var quickBtns = isActive
+      ? '<div style="display:flex;gap:8px;margin-top:14px;" onclick="event.stopPropagation()">'
+        + '<button data-pid="'+p.id+'" onclick="openSheet(\"note\",this.dataset.pid)" style="flex:1;background:'+btnBg+';border:none;border-radius:8px;padding:10px;font-size:12px;font-weight:500;cursor:pointer;color:'+textColor+';">📝 Note</button>'
+        + '<button data-pid="'+p.id+'" onclick="openSheet(\"shop\",this.dataset.pid)" style="flex:1;background:'+btnBg+';border:none;border-radius:8px;padding:10px;font-size:12px;font-weight:500;cursor:pointer;color:'+textColor+';">🛒 Buy</button>'
+        + '<button data-pid="'+p.id+'" onclick="openSheet(\"clockout\",this.dataset.pid)" style="flex:2;background:'+btnBg+';border:none;border-radius:8px;padding:10px;font-size:12px;font-weight:700;cursor:pointer;color:'+textColor+';">⏹ Out</button>'
+        + '</div>'
+      : '';
 
-    cards+='<div data-pid="'+p.id+'" onclick="openProj(this.dataset.pid)" class="card" style="border-left:4px solid '+p.color+';cursor:pointer;">'
-      +'<div style="display:flex;justify-content:space-between;align-items:flex-start;">'
-      +'<div style="flex:1;padding-right:10px;min-width:0;">'
-      +'<div style="font-size:17px;font-weight:700;display:flex;align-items:center;flex-wrap:wrap;gap:4px;">'+esc(p.name)+liveTag+'</div>'
-      +'<div style="color:var(--mid);font-size:13px;margin-top:2px;">'+(cl?esc(cl.name):(p.address||""))+'</div>'
-      +(p.address?'':"")
-      +'<button onclick="event.stopPropagation();openSheet(\"progress\",\""+p.id+"\"")" style="background:none;border:none;color:var(--mid);font-size:12px;cursor:pointer;padding:4px 0;font-weight:600;display:block;">⬤ Set Progress</button>'
-      +'<div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:6px;">'
-      +'<span style="font-size:13px;color:var(--mid);">⏱ '+fmtHours(p.totalSeconds+ls)+'</span>'
-      +(p.hourlyRate?'<span style="font-size:13px;color:#4caf7d;font-weight:600;">'+earned+'</span>':"")
-      +pctBadge
-      +(pendingN>0?'<span style="font-size:13px;color:var(--mid);">📝 '+pendingN+'</span>':"")
-      +(pendingS>0?'<span style="font-size:13px;color:var(--mid);">🛒 '+pendingS+'</span>':"")
-      +'</div></div>'
-      +'<div onclick="event.stopPropagation()" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:4px;">'
-      +'<div style="position:relative;width:68px;height:68px;">'
-      +ring(ls,p.color,68)
-      +'<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">'
-      +clockBtn
-      +'</div></div>'
-      +timerTag
-      +'</div></div>'
-      +quickActions
-      +'</div>';
+    cards += '<div data-pid="'+p.id+'" onclick="openProj(this.dataset.pid)" class="hero-card '+hStyle+'" style="cursor:pointer;">';
+    // Big job name
+    cards += '<div style="display:flex;justify-content:space-between;align-items:flex-start;">';
+    cards += '<div style="flex:1;padding-right:12px;">';
+    cards += '<div style="font-family:Bebas Neue,sans-serif;font-size:28px;letter-spacing:1px;line-height:1;color:'+textColor+';margin-bottom:4px;">'+esc(p.name)+'</div>';
+    cards += '<div style="font-size:12px;font-weight:400;color:'+mutedColor+';letter-spacing:0.3px;">'+(cl?esc(cl.name):(p.address||""))+'</div>';
+    // Status row
+    cards += '<div style="display:flex;align-items:center;gap:8px;margin-top:10px;">';
+    cards += '<div style="width:7px;height:7px;border-radius:50%;background:'+(isActive?'rgba(255,255,255,0.9)':mutedColor)+';'+(isActive?'animation:pulse 1.5s infinite;':'')+'"></div>';
+    cards += '<span style="font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:'+(isActive?textColor:mutedColor)+'">'+(isActive?"LIVE · "+fmtHours(p.totalSeconds+ls):"⏱ "+fmtHours(p.totalSeconds))+'</span>';
+    cards += (p.hourlyRate?'<span style="font-size:11px;font-weight:600;color:'+textColor+';margin-left:4px;">'+earned+'</span>':"");
+    cards += pctBadge;
+    cards += '</div></div>';
+    // Clock button
+    cards += '<div onclick="event.stopPropagation()" style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:2px;">';
+    cards += '<button data-pid="'+p.id+'" onclick="doClockBtn(this)" style="width:60px;height:60px;border-radius:50%;border:none;background:'+clkBg+';font-size:24px;cursor:pointer;color:'+clkColor+';'+(isActive?'':'box-shadow:0 4px 12px rgba(0,0,0,0.2);')+'">'+(isActive?'⏹':'▶')+'</button>';
+    cards += timerStr;
+    cards += '</div></div>';
+    cards += quickBtns;
+    cards += '</div>';
   });
 
   if(!cards) cards='<div class="empty">No projects yet.<br/>Tap <strong>+ New</strong> to add your first project.</div>';
 
-  return topBar("JOVRO Field","","<button onclick=\"addNewProject()\" style=\"background:var(--accent);color:#000;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;\">+ New</button>")
-    +tabBar
-    +banner
-    +'<div style="padding:14px 16px 130px;">'+cards+'</div>';
+  var newBtn = '<button onclick=\"addNewProject()\" style=\"background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;cursor:pointer;\">+ New</button>';
+  return topBar("JOVRO Field","",newBtn)+tabBar+banner+'<div style="padding:10px 16px 130px;">'+cards+'</div>';
 }
 
 
@@ -929,37 +1141,37 @@ function projectDetailHTML(){
   const liveTag=isActive?`<span class="pulse badge" style="background:${p.color}33;color:${p.color};">● LIVE</span>`:"";
 
   const actionBar=isActive?`<div style="padding:12px 16px;background:var(--card);border-bottom:1px solid var(--faint);display:flex;gap:8px;">
-    <button onclick="openSheet('note','${p.id}')" class="btn-ghost" style="flex:1;font-size:12px;">📝 Note</button>
-    <button onclick="openSheet('shop','${p.id}')" class="btn-ghost" style="flex:1;font-size:12px;">🛒 Buy</button>
-    <button onclick="openSheet('photo','${p.id}')" class="btn-ghost" style="flex:1;font-size:12px;">📷</button>
-    <button onclick="openSheet('clockout','${p.id}')" class="btn-color" style="flex:2;background:${p.color};">⏹ Out</button>
+    <button data-id="${p.id}" onclick="openSheet('note',this.dataset.id)" class="btn-ghost" style="flex:1;font-size:12px;">📝 Note</button>
+    <button data-id="${p.id}" onclick="openSheet('shop',this.dataset.id)" class="btn-ghost" style="flex:1;font-size:12px;">🛒 Buy</button>
+    <button data-id="${p.id}" onclick="openSheet('photo',this.dataset.id)" class="btn-ghost" style="flex:1;font-size:12px;">📷</button>
+    <button data-id="${p.id}" onclick="openSheet('clockout',this.dataset.id)" class="btn-color" style="flex:2;background:${p.color};">⏹ Out</button>
   </div>`:`<div style="padding:12px 16px;background:var(--card);border-bottom:1px solid var(--faint);display:flex;gap:8px;">
-    <button onclick="clockIn('${p.id}')" class="btn-color" style="background:${p.color};width:100%;font-size:15px;">▶ Clock In to ${esc(p.name)}</button>
+    <button data-id="${p.id}" onclick="clockIn(this.dataset.id)" class="btn-color" style="background:${p.color};width:100%;font-size:15px;">▶ Clock In to ${esc(p.name)}</button>
   </div>`;
 
   let content="";
   if(t==="notes"){
     const items=p.notes.map(n=>`<div class="card" style="display:flex;align-items:flex-start;gap:12px;opacity:${n.done?.55:1};">
-      <button onclick="toggleNote('${p.id}','${n.id}')" style="margin-top:2px;width:24px;height:24px;border-radius:7px;border:2px solid ${n.done?p.color:"var(--border)"};background:${n.done?p.color:"transparent"};cursor:pointer;flex-shrink:0;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;">${n.done?"✓":""}</button>
+      <button data-pid="${p.id}" data-nid="${n.id}" onclick="doToggleNote(this)" style="margin-top:2px;width:24px;height:24px;border-radius:7px;border:2px solid ${n.done?p.color:"var(--border)"};background:${n.done?p.color:"transparent"};cursor:pointer;flex-shrink:0;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;">${n.done?"✓":""}</button>
       <div style="flex:1;"><div style="font-size:15px;line-height:1.5;text-decoration:${n.done?"line-through":"none"};">${n.text}</div><div style="font-size:11px;color:var(--mid);margin-top:3px;">${n.ts}</div></div>
-      <button onclick="delNote('${p.id}','${n.id}')" style="background:none;border:none;color:var(--mid);font-size:22px;cursor:pointer;padding:0;line-height:1;">×</button>
+      <button data-pid="${p.id}" data-nid="${n.id}" onclick="doDelNote(this)" style="background:none;border:none;color:var(--mid);font-size:22px;cursor:pointer;padding:0;line-height:1;">×</button>
     </div>`).join("")||`<div class="empty">No notes yet</div>`;
-    content=`<button onclick="openSheet('note','${p.id}')" class="btn-ghost" style="width:100%;margin-bottom:14px;">+ Add Note</button>${items}`;
+    content=`<button data-id="${p.id}" onclick="openSheet('note',this.dataset.id)" class="btn-ghost" style="width:100%;margin-bottom:14px;">+ Add Note</button>${items}`;
   }
   else if(t==="shopping"){
     const pending=p.shopping.filter(s=>!s.done),bought=p.shopping.filter(s=>s.done);
     const pItems=pending.map(s=>`<div class="card" style="display:flex;align-items:center;gap:12px;">
-      <button onclick="toggleShop('${p.id}','${s.id}')" style="width:24px;height:24px;border-radius:7px;border:2px solid var(--border);background:transparent;cursor:pointer;flex-shrink:0;"></button>
+      <button data-pid="${p.id}" data-sid="${s.id}" onclick="doToggleShop(this)" style="width:24px;height:24px;border-radius:7px;border:2px solid var(--border);background:transparent;cursor:pointer;flex-shrink:0;"></button>
       <span style="flex:1;font-size:15px;">${s.text}</span>
-      <button onclick="delShop('${p.id}','${s.id}')" style="background:none;border:none;color:var(--mid);font-size:22px;cursor:pointer;padding:0;">×</button>
+      <button data-pid="${p.id}" data-sid="${s.id}" onclick="doDelShop(this)" style="background:none;border:none;color:var(--mid);font-size:22px;cursor:pointer;padding:0;">×</button>
     </div>`).join("");
     const bItems=bought.length?`<div style="font-size:11px;color:var(--mid);letter-spacing:2px;text-transform:uppercase;margin:18px 0 10px;">Bought</div>${bought.map(s=>`
       <div class="card" style="display:flex;align-items:center;gap:12px;opacity:.5;">
-        <button onclick="toggleShop('${p.id}','${s.id}')" style="width:24px;height:24px;border-radius:7px;border:2px solid ${p.color};background:${p.color};cursor:pointer;flex-shrink:0;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;">✓</button>
+        <button data-pid="${p.id}" data-sid="${s.id}" onclick="doToggleShop(this)" style="width:24px;height:24px;border-radius:7px;border:2px solid ${p.color};background:${p.color};cursor:pointer;flex-shrink:0;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;">✓</button>
         <span style="flex:1;font-size:15px;text-decoration:line-through;">${s.text}</span>
-        <button onclick="delShop('${p.id}','${s.id}')" style="background:none;border:none;color:var(--mid);font-size:22px;cursor:pointer;padding:0;">×</button>
+        <button data-pid="${p.id}" data-sid="${s.id}" onclick="doDelShop(this)" style="background:none;border:none;color:var(--mid);font-size:22px;cursor:pointer;padding:0;">×</button>
       </div>`).join("")}`:"";
-    content=`<button onclick="openSheet('shop','${p.id}')" class="btn-ghost" style="width:100%;margin-bottom:14px;">+ Add Item</button>${pItems||(!bought.length?`<div class="empty">Nothing to buy</div>`:"")}${bItems}`;
+    content=`<button data-id="${p.id}" onclick="openSheet('shop',this.dataset.id)" class="btn-ghost" style="width:100%;margin-bottom:14px;">+ Add Item</button>${pItems||(!bought.length?`<div class="empty">Nothing to buy</div>`:"")}${bItems}`;
   }
   else if(t==="photos"){
     const photos=p.photos||[];
@@ -968,7 +1180,7 @@ function projectDetailHTML(){
       ${ph.note||ph.ts?`<div style="padding:12px 16px;">${ph.note?`<div style="font-size:14px;margin-bottom:3px;">${ph.note}</div>`:""}
       <div style="font-size:11px;color:var(--mid);">${ph.ts}</div></div>`:""}
     </div>`).join("")||`<div class="empty">No photos yet.<br/>Document your work as you go.</div>`;
-    content=`<button onclick="openSheet('photo','${p.id}')" class="btn-ghost" style="width:100%;margin-bottom:14px;">📷 Add Photo</button>${items}`;
+    content=`<button data-id="${p.id}" onclick="openSheet('photo',this.dataset.id)" class="btn-ghost" style="width:100%;margin-bottom:14px;">📷 Add Photo</button>${items}`;
   }
   else if(t==="docs"){
     var projDocs=state.docs.filter(function(d){return d.pid===p.id;});
@@ -983,7 +1195,7 @@ function projectDetailHTML(){
       docCards+='<span class="badge" style="background:'+sc+'22;color:'+sc+';">'+esc(d.status)+'</span>';
       docCards+='</div><div style="font-size:12px;color:var(--mid);">'+(d.createdDate||"")+'</div></div>';
       docCards+='<div style="text-align:right;">';
-      docCards+='<div style="font-size:17px;font-weight:700;color:#4caf7d;">'+money(d.total)+'</div>';
+      docCards+='<div style="font-size:17px;font-weight:700;color:var(--green);">'+money(d.total)+'</div>';
       docCards+='<div style="font-size:11px;color:var(--mid);">dep. '+money(d.deposit)+'</div>';
       docCards+='</div></div></div>';
     });
@@ -998,8 +1210,8 @@ function projectDetailHTML(){
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
         <div><div style="font-size:10px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;">Total Hours</div>
           <div style="font-size:22px;font-weight:700;color:${dark?"#F2F2F2":"#fff"};">${fmtHours(totalH)}</div></div>
-        ${p.hourlyRate?`<div><div style="font-size:10px;color:#4caf7d;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;">Earned</div>
-          <div style="font-size:22px;font-weight:700;color:#4caf7d;">${money(totalEarned)}</div></div>`:""}
+        ${p.hourlyRate?`<div><div style="font-size:10px;color:var(--green);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;">Earned</div>
+          <div style="font-size:22px;font-weight:700;color:var(--green);">${money(totalEarned)}</div></div>`:""}
         <div><div style="font-size:10px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;">Sessions</div>
           <div style="font-size:22px;font-weight:700;color:${dark?"#F2F2F2":"#fff"};">${p.sessions.length}</div></div>
       </div>
@@ -1014,7 +1226,7 @@ function projectDetailHTML(){
             <div style="font-size:12px;color:var(--mid);">${s.start} → ${s.end}</div>
           </div>
           <div style="text-align:right;">
-            ${p.hourlyRate?`<div style="font-size:14px;font-weight:600;color:#4caf7d;">${money(earned)}</div>`:""}
+            ${p.hourlyRate?`<div style="font-size:14px;font-weight:600;color:var(--green);">${money(earned)}</div>`:""}
           </div>
         </div>
         ${s.note&&s.note!=="—"?`<div style="background:var(--faint);border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.5;">${s.note}</div>`:""}
@@ -1035,7 +1247,7 @@ function projectDetailHTML(){
     </div>
     <div style="text-align:right;flex-shrink:0;">
       <div style="font-size:18px;font-weight:700;color:${isActive?p.color:"var(--ink)"};" id="detail-total">${fmtHours(p.totalSeconds+ls)}</div>
-      ${p.hourlyRate?`<div style="font-size:12px;color:#4caf7d;font-weight:600;">${money(totalEarned)}</div>`:""}
+      ${p.hourlyRate?`<div style="font-size:12px;color:var(--green);font-weight:600;">${money(totalEarned)}</div>`:""}
       ${isActive?`<div style="font-size:10px;color:${p.color};font-variant-numeric:tabular-nums;" id="detail-timer">${fmtTimer(ls)}</div>`:""}
     </div>
   </div>
@@ -1054,7 +1266,7 @@ function projectDetailHTML(){
     }
     if(contractTotal){
       html+='<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;"><span style="color:var(--mid);">Contract</span><span style="font-weight:600;">'+money(contractTotal)+'</span></div>';
-      html+='<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;"><span style="color:var(--mid);">Collected</span><span style="color:#4caf7d;font-weight:600;">'+money(collected)+'</span></div>';
+      html+='<div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;"><span style="color:var(--mid);">Collected</span><span style="color:var(--green);font-weight:600;">'+money(collected)+'</span></div>';
       html+='<div style="display:flex;justify-content:space-between;font-size:15px;font-weight:700;padding-top:8px;border-top:1px solid var(--faint);margin-bottom:10px;"><span>Balance Due</span><span style="color:'+balClr+';">'+money(balance)+'</span></div>';
       html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">';
       html+='<button data-id="'+p.id+'" onclick="sendBI(this.dataset.id)" style="background:#5b8dd9;color:#fff;border:none;border-radius:100px;padding:11px;font-size:12px;font-weight:600;cursor:pointer;">📧 Email Invoice</button>';
@@ -1079,7 +1291,7 @@ function clientsHTML(){
     return `${topBar(c.name,"goBack()")}
     <div style="padding:16px 16px 130px;">
       <div class="card" style="margin-bottom:10px;">
-        ${c.phone?`<button onclick="callPhone('${c.phone}')" style="display:flex;align-items:center;gap:12px;background:none;border:none;width:100%;padding:0;cursor:pointer;margin-bottom:14px;">
+        ${c.phone?`<button data-phone="${c.phone}" onclick="callPhone(this.dataset.phone)" style="display:flex;align-items:center;gap:12px;background:none;border:none;width:100%;padding:0;cursor:pointer;margin-bottom:14px;">
           <span style="width:38px;height:38px;border-radius:50%;background:#5b8dd922;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">📞</span>
           <div style="text-align:left;"><div style="font-size:15px;font-weight:600;color:var(--ink);">${c.phone}</div><div style="font-size:11px;color:var(--mid);">Tap to call</div></div>
         </button>`:""}
@@ -1087,20 +1299,20 @@ function clientsHTML(){
         ${c.notes?`<div style="padding:12px 0;border-top:1px solid var(--faint);"><div style="font-size:11px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Notes</div><div style="font-size:14px;line-height:1.5;">${c.notes}</div></div>`:""}
       </div>
       ${cProjects.length?`<div style="font-size:11px;color:var(--mid);letter-spacing:2px;text-transform:uppercase;margin:18px 0 10px;">Projects</div>
-      ${cProjects.map(p=>`<div onclick="openDetail('${p.id}','project')" class="card" style="border-left:4px solid ${p.color};cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
+      ${cProjects.map(p=>`<div data-id="${p.id}" data-type="project" onclick="openDetail(this.dataset.id,this.dataset.type)" class="card" style="border-left:4px solid ${p.color};cursor:pointer;display:flex;justify-content:space-between;align-items:center;">
         <div><div style="font-weight:600;font-size:15px;">${p.name}</div><div style="font-size:12px;color:var(--mid);margin-top:2px;">⏱ ${fmtHours(p.totalSeconds)}</div></div>
         <div style="font-size:20px;color:var(--mid);">›</div>
       </div>`).join("")}`:""}
       <div style="margin-top:20px;display:flex;gap:10px;">
-        <button onclick="openSheet('newclient',null,{editId:'${c.id}'})" class="btn-ghost" style="flex:1;">Edit</button>
-        <button onclick="delClient('${c.id}')" class="btn-ghost" style="flex:1;color:#E07B54;">Delete</button>
+        <button data-cid="${c.id}" onclick="editClient(this.dataset.cid)" class="btn-ghost" style="flex:1;">Edit</button>
+        <button data-id="${c.id}" onclick="delClient(this.dataset.id)" class="btn-ghost" style="flex:1;color:var(--red);">Delete</button>
       </div>
     </div>`;
   }
 
   const cards=state.clients.map(c=>{
     const cProjects=state.projects.filter(p=>(c.projects||[]).includes(p.id));
-    return `<div onclick="openDetail('${c.id}','client')" class="card" style="cursor:pointer;">
+    return `<div data-id="${c.id}" data-type="client" onclick="openDetail(this.dataset.id,this.dataset.type)" class="card" style="cursor:pointer;">
       <div style="display:flex;align-items:center;gap:14px;">
         <div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#5B8DD9,#9B6EC8);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#fff;flex-shrink:0;">${c.name[0]}</div>
         <div style="flex:1;min-width:0;">
@@ -1113,7 +1325,7 @@ function clientsHTML(){
     </div>`;
   }).join("");
 
-  return `${topBar("Clients","",`<button onclick="openSheet('newclient',null)" style="background:var(--accent);color:#000;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ New</button>`)}
+  return `${topBar("Clients","",`<button onclick="openSheet('newclient',null)" style="background:var(--accent);color:#fff;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ New</button>`)}
   <div style="padding:14px 16px 130px;">
     ${cards||`<div class="empty">No clients yet.<br/>Tap <strong>+ New</strong> to add your first client.</div>`}
   </div>`;
@@ -1128,9 +1340,9 @@ function portfolioHTML(){
       ${pf.photo?`<img src="${pf.photo}" style="width:100%;max-height:280px;object-fit:cover;display:block;"/>`:`
       <div style="background:var(--faint);height:180px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;">
         <span style="font-size:40px;">📷</span>
-        <button onclick="addPortfolioPhoto('${pf.id}')" style="background:var(--accent);color:#000;border:none;border-radius:100px;padding:10px 22px;font-size:13px;font-weight:600;cursor:pointer;">Add Photo</button>
+        <button data-id="${pf.id}" onclick="addPortfolioPhoto(this.dataset.id)" style="background:var(--accent);color:#fff;border:none;border-radius:100px;padding:10px 22px;font-size:13px;font-weight:600;cursor:pointer;">Add Photo</button>
       </div>`}
-      ${pf.photo?`<div style="padding:10px 16px;"><button onclick="addPortfolioPhoto('${pf.id}')" class="btn-ghost" style="width:100%;font-size:13px;">📷 Change Photo</button></div>`:""}
+      ${pf.photo?`<div style="padding:10px 16px;"><button data-id="${pf.id}" onclick="addPortfolioPhoto(this.dataset.id)" class="btn-ghost" style="width:100%;font-size:13px;">📷 Change Photo</button></div>`:""}
       <div style="padding:16px;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
           <div>
@@ -1138,21 +1350,21 @@ function portfolioHTML(){
             <div style="font-size:10px;color:var(--mid);margin-top:4px;">${pf.date||""}</div>
           </div>
           <div style="text-align:right;">
-            <div style="font-size:28px;font-weight:700;color:#4caf7d;">${money(pf.price)}</div>
+            <div style="font-size:28px;font-weight:700;color:var(--green);">${money(pf.price)}</div>
             <div style="font-size:12px;color:var(--mid);">${pf.hours?pf.hours+"h":""}</div>
           </div>
         </div>
         ${pf.description?`<p style="font-size:15px;line-height:1.6;color:var(--ink);margin-top:12px;">${pf.description}</p>`:""}
         <div style="margin-top:20px;display:flex;gap:10px;">
-          <button onclick="openSheet('newportfolio',null,{editPfId:'${pf.id}'})" class="btn-ghost" style="flex:1;">Edit</button>
-          <button onclick="delPortfolio('${pf.id}')" class="btn-ghost" style="flex:1;color:#E07B54;">Delete</button>
+          <button data-id="${pf.id}" onclick="editPortfolio(this.dataset.id)" class="btn-ghost" style="flex:1;">Edit</button>
+          <button data-id="${pf.id}" onclick="delPortfolio(this.dataset.id)" class="btn-ghost" style="flex:1;color:var(--red);">Delete</button>
         </div>
       </div>
     </div>`;
   }
 
   const cards=state.portfolio.map(pf=>`
-    <div onclick="openDetail('${pf.id}','portfolio')" style="cursor:pointer;margin-bottom:10px;border-radius:16px;overflow:hidden;border:1px solid var(--faint);background:var(--card);">
+    <div data-id="${pf.id}" data-type="portfolio" onclick="openDetail(this.dataset.id,this.dataset.type)" style="cursor:pointer;margin-bottom:10px;border-radius:16px;overflow:hidden;border:1px solid var(--faint);background:var(--card);">
       ${pf.photo?`<img src="${pf.photo}" style="width:100%;height:180px;object-fit:cover;display:block;"/>`:`<div style="background:var(--faint);height:140px;display:flex;align-items:center;justify-content:center;font-size:36px;">📷</div>`}
       <div style="padding:14px 16px;">
         <div style="display:flex;justify-content:space-between;align-items:flex-start;">
@@ -1161,7 +1373,7 @@ function portfolioHTML(){
             <div style="font-size:12px;color:var(--mid);">${pf.type||""}${pf.date?" · "+pf.date:""}</div>
           </div>
           <div style="text-align:right;flex-shrink:0;margin-left:12px;">
-            <div style="font-size:18px;font-weight:700;color:#4caf7d;">${money(pf.price)}</div>
+            <div style="font-size:18px;font-weight:700;color:var(--green);">${money(pf.price)}</div>
             <div style="font-size:12px;color:var(--mid);">${pf.hours?pf.hours+"h":""}</div>
           </div>
         </div>
@@ -1169,7 +1381,7 @@ function portfolioHTML(){
       </div>
     </div>`).join("");
 
-  return `${topBar("Portfolio","",`<button onclick="openSheet('newportfolio',null)" style="background:var(--accent);color:#000;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ Add</button>`)}
+  return `${topBar("Portfolio","",`<button onclick="openSheet('newportfolio',null)" style="background:var(--accent);color:#fff;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ Add</button>`)}
   <div style="padding:14px 16px 130px;">
     ${cards||`<div class="empty">No portfolio yet.<br/>Add your best jobs to show clients<br/>what you're capable of.</div>`}
   </div>`;
@@ -1177,70 +1389,100 @@ function portfolioHTML(){
 
 // ─── SUMMARY VIEW ────────────────────────────────────────────
 function summaryHTML(){
-  const totalH=state.projects.reduce((s,p)=>s+p.totalSeconds,0);
-  const totalEarned=state.projects.reduce((s,p)=>s+(p.totalSeconds/3600*(p.hourlyRate||0)),0);
-  const totalPaid=state.projects.reduce((s,p)=>s+(p.invoices||[]).filter(i=>i.status==="Paid").reduce((a,i)=>a+i.amount,0),0);
-  const totalPending=state.projects.reduce((s,p)=>s+(p.invoices||[]).filter(i=>i.status!=="Paid").reduce((a,i)=>a+i.amount,0),0);
+  var now = new Date();
+  var months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var thisMonth = now.getMonth(), thisYear = now.getFullYear();
 
-  const rows=state.projects.map(p=>{
-    const ls=liveSec(p.id);
-    const earned=(p.totalSeconds+ls)/3600*(p.hourlyRate||0);
-    const paid=(p.invoices||[]).filter(i=>i.status==="Paid").reduce((s,i)=>s+i.amount,0);
-    const pending=(p.invoices||[]).filter(i=>i.status!=="Paid").reduce((s,i)=>s+i.amount,0);
-    const isActive=!!state.clocks[p.id];
-    return `<div onclick="openDetail('${p.id}','project')" class="card" style="border-left:4px solid ${p.color};cursor:pointer;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
-        <div>
-          <div style="font-weight:700;font-size:15px;">${p.name}${isActive?`<span class="pulse badge" style="background:${p.color}33;color:${p.color};margin-left:6px;">● LIVE</span>`:""}</div>
-          <div style="font-size:12px;color:var(--mid);margin-top:2px;">${p.clientId?client(p.clientId)?.name||"":""}</div>
-        </div>
-        <div style="text-align:right;">
-          <div style="font-size:16px;font-weight:700;">${fmtHours(p.totalSeconds+ls)}</div>
-          ${p.hourlyRate?`<div style="font-size:12px;color:#4caf7d;font-weight:600;">${money(earned)}</div>`:""}
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <div style="background:var(--faint);border-radius:10px;padding:10px;"><div style="font-size:10px;color:var(--mid);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Invoiced</div><div style="font-size:15px;font-weight:700;">${money(paid+pending)}</div></div>
-        <div style="background:var(--faint);border-radius:10px;padding:10px;"><div style="font-size:10px;color:#4caf7d;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Paid</div><div style="font-size:15px;font-weight:700;color:#4caf7d;">${money(paid)}</div></div>
-      </div>
-    </div>`;
-  }).join("");
+  var totalEarned = state.projects.reduce(function(s,p){return s+(p.totalSeconds/3600*(p.hourlyRate||0));},0);
+  var totalHours = state.projects.reduce(function(s,p){return s+p.totalSeconds;},0);
+  var monthEarned = 0, monthHours = 0;
 
-  return `${topBar("Summary")}
-  <div style="padding:14px 16px 130px;">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;">
-      <div class="card" style="text-align:center;grid-column:1/-1;background:var(--ink);border:none;">
-        <div style="font-size:11px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Total Hours</div>
-        <div style="font-size:32px;font-weight:700;color:${dark?"#F2F2F2":"#fff"};">${fmtHours(totalH)}</div>
-      </div>
-      <div class="card" style="text-align:center;">
-        <div style="font-size:10px;color:#4caf7d;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Earned</div>
-        <div style="font-size:22px;font-weight:700;color:#4caf7d;">${money(totalEarned)}</div>
-      </div>
-      <div class="card" style="text-align:center;">
-        <div style="font-size:10px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Collected</div>
-        <div style="font-size:22px;font-weight:700;">${money(totalPaid)}</div>
-      </div>
-      <div class="card" style="text-align:center;">
-        <div style="font-size:10px;color:#D4A843;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Pending</div>
-        <div style="font-size:22px;font-weight:700;color:#D4A843;">${money(totalPending)}</div>
-      </div>
-      <div class="card" style="text-align:center;">
-        <div style="font-size:10px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;">Projects</div>
-        <div style="font-size:22px;font-weight:700;">${state.projects.length}</div>
-      </div>
-    </div>
-    <div style="font-size:11px;color:var(--mid);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">By Project</div>
-    ${rows||`<div class="empty">No projects yet</div>`}
-    <div><div style="font-weight:600;">Dark Mode</div><div style="font-size:12px;color:var(--mid);">Better at job sites</div></div>
-      <button onclick="toggleDark()" style="width:52px;height:30px;border-radius:100px;border:none;background:${dark?"#57A773":"var(--border)"};cursor:pointer;position:relative;transition:background .2s;">
-        <div style="width:24px;height:24px;border-radius:50%;background:#fff;position:absolute;top:3px;${dark?"right:3px":"left:3px"};transition:all .2s;box-shadow:0 1px 4px rgba(0,0,0,.3);"></div>
-      </button>
-    </div>
-  </div>`;
+  state.projects.forEach(function(p){
+    (p.sessions||[]).forEach(function(s){
+      var d = new Date(s.date);
+      if(d.getMonth()===thisMonth && d.getFullYear()===thisYear){
+        monthEarned += (s.seconds/3600)*(p.hourlyRate||0);
+        monthHours += s.seconds;
+      }
+    });
+  });
+
+  var monthMaterials = 0;
+  (state.expenses||[]).forEach(function(e){
+    var d = new Date(e.date||"");
+    if(d.getMonth()===thisMonth && d.getFullYear()===thisYear) monthMaterials += Number(e.amount||0);
+  });
+
+  var net = monthEarned - monthMaterials;
+
+  var h = topBar("Summary","","");
+  h += '<div style="padding:16px 16px 130px;">';
+
+  // Big hero total card
+  h += '<div style="background:var(--yellow);border-radius:18px;padding:22px 20px;margin-bottom:10px;position:relative;overflow:hidden;">';
+  h += '<div style="position:absolute;right:-20px;top:-20px;width:120px;height:120px;background:rgba(255,255,255,0.15);border-radius:50%;"></div>';
+  h += '<div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(26,24,20,0.55);margin-bottom:4px;">'+months[thisMonth]+' '+thisYear+'</div>';
+  h += '<div style="font-family:Bebas Neue,sans-serif;font-size:50px;letter-spacing:-1px;line-height:1;color:var(--ink);">$'+Math.round(monthEarned).toLocaleString()+'</div>';
+  h += '<div style="font-size:13px;color:rgba(26,24,20,0.6);margin-top:4px;">'+fmtHours(monthHours)+' tracked this month</div>';
+  h += '</div>';
+
+  // This month overview - 3 stats
+  h += '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;">';
+  h += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 12px;">';
+  h += '<div style="font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:6px;">Earned</div>';
+  h += '<div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--green);letter-spacing:0;">$'+Math.round(monthEarned).toLocaleString()+'</div>';
+  h += '</div>';
+  h += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 12px;">';
+  h += '<div style="font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:6px;">Spent</div>';
+  h += '<div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--accent);letter-spacing:0;">$'+Math.round(monthMaterials).toLocaleString()+'</div>';
+  h += '</div>';
+  h += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 12px;">';
+  h += '<div style="font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--mid);margin-bottom:6px;">Net</div>';
+  h += '<div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:'+(net>=0?"var(--green)":"var(--accent)")+';letter-spacing:0;">$'+Math.round(Math.abs(net)).toLocaleString()+'</div>';
+  h += '</div>';
+  h += '</div>';
+
+  // Jobs list - clean rows like money app
+  if(state.projects.length > 0){
+    h += '<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:10px;">';
+    h += '<div style="padding:14px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">';
+    h += '<div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--mid);">This Month Overview</div>';
+    h += '</div>';
+    state.projects.forEach(function(p,i){
+      var ls = liveSec(p.id);
+      var earned = (p.totalSeconds+ls)/3600*(p.hourlyRate||0);
+      var isLast = i === state.projects.length-1;
+      h += '<div style="display:flex;align-items:center;gap:12px;padding:14px 16px;'+(isLast?"":"border-bottom:1px solid var(--border);")+'">';
+      h += '<div style="width:36px;height:36px;border-radius:10px;background:'+p.color+';display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;"></div>';
+      h += '<div style="flex:1;min-width:0;">';
+      h += '<div style="font-size:14px;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+esc(p.name)+'</div>';
+      h += '<div style="font-size:11px;color:var(--mid);margin-top:1px;">'+fmtHours(p.totalSeconds+ls)+(p.hourlyRate?" · $"+p.hourlyRate+"/hr":"")+'</div>';
+      h += '</div>';
+      h += '<div style="text-align:right;flex-shrink:0;">';
+      h += (earned>0?'<div style="font-size:15px;font-weight:600;color:var(--green);">+$'+Math.round(earned).toLocaleString()+'</div>':'<div style="font-size:13px;color:var(--mid);">No rate set</div>');
+      h += '</div>';
+      h += '</div>';
+    });
+    h += '</div>';
+  }
+
+  // All time stats
+  h += '<div style="background:var(--charcoal);border-radius:14px;padding:18px 16px;">';
+  h += '<div style="font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(240,236,228,0.4);margin-bottom:14px;">All Time</div>';
+  h += '<div style="display:flex;justify-content:space-between;margin-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:12px;">';
+  h += '<div style="font-size:13px;color:rgba(240,236,228,0.6);">Total Earned</div>';
+  h += '<div style="font-size:15px;font-weight:600;color:#f0ece4;">$'+Math.round(totalEarned).toLocaleString()+'</div>';
+  h += '</div>';
+  h += '<div style="display:flex;justify-content:space-between;">';
+  h += '<div style="font-size:13px;color:rgba(240,236,228,0.6);">Total Hours</div>';
+  h += '<div style="font-size:15px;font-weight:600;color:#f0ece4;">'+fmtHours(totalHours)+'</div>';
+  h += '</div>';
+  h += '</div>';
+
+  h += '</div>';
+  return h;
 }
 
-// ─── MAIN RENDER ─────────────────────────────────────────────
 function render(){
   try{
   let main="";
@@ -1250,7 +1492,8 @@ function render(){
     else if(state.detailType==="portfolio") main=portfolioHTML();
     else if(state.detailType==="docs") main=docsHTML();
   } else {
-    if(state.nav==="field") main=fieldHTML();
+    if(state.nav==="field") main=dashboardHTML();
+    else if(state.nav==="field_list") main=fieldHTML();
     else if(state.nav==="clients") main=clientsHTML();
     else if(state.nav==="portfolio") main=portfolioHTML();
     else if(state.nav==="recurring") main=recurringHTML();
@@ -1260,7 +1503,22 @@ function render(){
     else if(state.nav==="services") main=servicesHTML();
     else if(state.nav==="summary") main=summaryHTML();
   }
-  document.getElementById("app").innerHTML=main+navBarHTML()+sheetHTML();
+  var sheetContent = sheetHTML();
+  document.getElementById("app").innerHTML=main+navBarHTML();
+  var existingSheet = document.getElementById("sheet-panel");
+  if(existingSheet) existingSheet.remove();
+  if(sheetContent){
+    var tmp = document.createElement("div");
+    tmp.innerHTML = sheetContent;
+    var panel = tmp.firstElementChild;
+    panel.id = "sheet-panel";
+    document.body.appendChild(panel);
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        panel.classList.add("open");
+      });
+    });
+  }
   } catch(e){ document.body.innerHTML="<div style='padding:20px;font-family:monospace;font-size:14px;color:red;'>RENDER ERROR:<br>"+e.message+"<br><br>"+e.stack.replace(/\n/g,"<br>")+"</div>"; }
 }
 
@@ -1338,7 +1596,7 @@ function rerenderDocItems(){
   el.innerHTML = items.map(i=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--faint);">
     <span style="font-size:14px;flex:1;">${i.name}</span>
     <span style="font-size:14px;font-weight:600;margin:0 12px;">${money(i.cost)}</span>
-    <button onclick="removeDocItem('${i.id}')" style="background:none;border:none;color:var(--mid);font-size:18px;cursor:pointer;">×</button>
+    <button data-id="${i.id}" onclick="removeDocItem(this.dataset.id)" style="background:none;border:none;color:var(--mid);font-size:18px;cursor:pointer;">×</button>
   </div>`).join("") || `<div style="color:var(--mid);font-size:13px;padding:8px 0;">No materials added yet</div>`;
   // update total preview
   const laborEl = document.getElementById("doc-labor");
@@ -1361,6 +1619,27 @@ function buildDetailTabs(active){
   }).join("");
 }
 
+// ─── GLOBAL TAP HANDLER ──────────────────────────────────────
+document.addEventListener("click", function(e){
+  var el = e.target;
+  // Walk up to find data-action element
+  while(el && el !== document.body){
+    var action = el.getAttribute("data-action");
+    if(action){
+      e.stopPropagation();
+      if(action === "nav"){
+        setNav(el.getAttribute("data-nav"));
+      } else if(action === "section"){
+        openSection(el.getAttribute("data-nav"));
+      } else if(action === "clockout"){
+        openSheet("clockout", el.getAttribute("data-pid"));
+      }
+      return;
+    }
+    el = el.parentElement;
+  }
+});
+
 render();
 }
 
@@ -1376,6 +1655,27 @@ function buildDetailTabs(active){
     return '<button data-tab="'+tab+'" onclick="setDetailTab(this.dataset.tab)" class="'+cls+'">'+labels[tab]+'</button>';
   }).join("");
 }
+
+// ─── GLOBAL TAP HANDLER ──────────────────────────────────────
+document.addEventListener("click", function(e){
+  var el = e.target;
+  // Walk up to find data-action element
+  while(el && el !== document.body){
+    var action = el.getAttribute("data-action");
+    if(action){
+      e.stopPropagation();
+      if(action === "nav"){
+        setNav(el.getAttribute("data-nav"));
+      } else if(action === "section"){
+        openSection(el.getAttribute("data-nav"));
+      } else if(action === "clockout"){
+        openSheet("clockout", el.getAttribute("data-pid"));
+      }
+      return;
+    }
+    el = el.parentElement;
+  }
+});
 
 render();
   setTimeout(initSignaturePad, 100);
@@ -1469,7 +1769,7 @@ function printDoc(did){
     <tr class="total-row"><td>Total</td><td style="text-align:right;">${money(d.total)}</td></tr>
   </table>
   <div class="deposit-box">
-    <div style="font-size:13px;color:#16a34a;font-weight:600;margin-bottom:4px;">Payment Schedule</div>
+    <div style="font-size:13px;color:var(--green);font-weight:600;margin-bottom:4px;">Payment Schedule</div>
     <div>Deposit required (${d.depositPct}%): <strong>${money(d.deposit)}</strong></div>
     <div>Balance due on completion: <strong>${money(d.total - d.deposit)}</strong></div>
   </div>
@@ -1489,7 +1789,7 @@ function printDoc(did){
     </div>
   </div>`:""}
   <div style="margin-top:40px;text-align:center;font-size:12px;color:#aaa;">Generated by JOVRO Field</div>
-  <div style="margin-top:16px;text-align:center;"><button onclick="window.print()" style="background:#111;color:#fff;border:none;border-radius:100px;padding:12px 32px;font-size:14px;font-weight:600;cursor:pointer;">Print / Save as PDF</button></div>
+  <div style="margin-top:16px;text-align:center;"><button onclick="window.print()" style="background:var(--bg);color:#fff;border:none;border-radius:100px;padding:12px 32px;font-size:14px;font-weight:600;cursor:pointer;">Print / Save as PDF</button></div>
   </body></html>`);
   win.document.close();
 }
@@ -1522,21 +1822,21 @@ function viewDocHTML(){
   h+='<div class="card"><div style="font-size:11px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;">Cost Breakdown</div>';
   d.items.forEach(function(i){h+='<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--faint);font-size:14px;"><span>'+esc(i.name||"")+'</span><span style="font-weight:600;">'+money(i.cost)+'</span></div>';});
   h+='<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--faint);font-size:14px;"><span>Labor</span><span style="font-weight:600;">'+money(d.laborCost)+'</span></div>';
-  h+='<div style="display:flex;justify-content:space-between;padding:12px 0 0;font-size:17px;font-weight:700;"><span>Total</span><span style="color:#4caf7d;">'+money(d.total)+'</span></div></div>';
-  h+='<div class="card" style="background:#f0fff4;border-color:#86efac;">';
-  h+='<div style="font-size:12px;color:#16a34a;font-weight:700;margin-bottom:6px;">Payment Schedule</div>';
+  h+='<div style="display:flex;justify-content:space-between;padding:12px 0 0;font-size:17px;font-weight:700;"><span>Total</span><span style="color:var(--green);">'+money(d.total)+'</span></div></div>';
+  h+='<div class="card" style="background:#f0fff4;border-color:var(--green);">';
+  h+='<div style="font-size:12px;color:var(--green);font-weight:700;margin-bottom:6px;">Payment Schedule</div>';
   h+='<div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px;"><span>Deposit ('+Number(d.depositPct||50)+'%)</span><span style="font-weight:700;">'+money(d.deposit)+'</span></div>';
   h+='<div style="display:flex;justify-content:space-between;font-size:14px;"><span>Balance on completion</span><span style="font-weight:700;">'+money(d.total-d.deposit)+'</span></div></div>';
   if(d.type==="Contract"&&d.cancelPolicy){h+='<div class="card"><div style="font-size:11px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Cancellation Policy</div><div style="font-size:14px;line-height:1.5;">'+esc(d.cancelPolicy)+'</div></div>';}
   if(d.type==="Contract"&&d.changePolicy){h+='<div class="card"><div style="font-size:11px;color:var(--mid);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Change Orders</div><div style="font-size:14px;line-height:1.5;">'+esc(d.changePolicy)+'</div></div>';}
-  if(d.signature){h+='<div class="card"><div style="font-size:11px;color:#4caf7d;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">✓ Signed · '+(d.signedDate||"")+'</div><img src="'+d.signature+'" style="width:100%;max-height:100px;object-fit:contain;border:1px solid var(--faint);border-radius:10px;background:#fff;"/></div>';}
+  if(d.signature){h+='<div class="card"><div style="font-size:11px;color:var(--green);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">✓ Signed · '+(d.signedDate||"")+'</div><img src="'+d.signature+'" style="width:100%;max-height:100px;object-fit:contain;border:1px solid var(--faint);border-radius:10px;background:#fff;"/></div>';}
   h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;">';
-  if(d.type==="Contract"&&!d.signature){h+='<button data-id="'+d.id+'" onclick="openSignature(this.dataset.id)" style="background:#4caf7d;color:#fff;border:none;border-radius:100px;padding:13px;font-size:13px;font-weight:600;cursor:pointer;grid-column:1/-1;">✍️ Get Signature</button>';}
+  if(d.type==="Contract"&&!d.signature){h+='<button data-id="'+d.id+'" onclick="openSignature(this.dataset.id)" style="background:var(--green);color:#fff;border:none;border-radius:100px;padding:13px;font-size:13px;font-weight:600;cursor:pointer;grid-column:1/-1;">✍️ Get Signature</button>';}
   h+='<button data-id="'+d.id+'" onclick="printDoc(this.dataset.id)" class="btn-ghost" style="font-size:13px;">🖨️ Print / PDF</button>';
   h+='<button data-id="'+d.id+'" onclick="emailDoc(this.dataset.id)" class="btn-ghost" style="font-size:13px;">📧 Email</button>';
   h+=docActionButtons(d);
   h+='<button data-id="'+d.id+'" onclick="editDoc(this.dataset.id)" class="btn-ghost" style="font-size:13px;grid-column:1/-1;">✏️ Edit Document</button>';
-  h+='<button data-id="'+d.id+'" onclick="dDoc(this.dataset.id)" class="btn-ghost" style="font-size:13px;color:#E07B54;grid-column:1/-1;">Delete</button>';
+  h+='<button data-id="'+d.id+'" onclick="dDoc(this.dataset.id)" class="btn-ghost" style="font-size:13px;color:var(--red);grid-column:1/-1;">Delete</button>';
   h+='</div></div>';
   return h;
 }
@@ -1555,7 +1855,7 @@ function docsListHTML(){
   state.docs.forEach(function(d){
     var sc=statusColor[d.status]||"#aaa";
     var linked="";
-    if(d.pid){var lp=proj(d.pid);if(lp) linked='<div style="font-size:12px;color:#5B8DD9;margin-top:2px;">🔗 '+esc(lp.name)+'</div>';}
+    if(d.pid){var lp=proj(d.pid);if(lp) linked='<div style="font-size:12px;color:var(--blue);margin-top:2px;">🔗 '+esc(lp.name)+'</div>';}
     cards+='<div data-id="'+d.id+'" onclick="viewDoc(this.dataset.id)" class="card" style="cursor:pointer;">';
     cards+='<div style="display:flex;justify-content:space-between;align-items:flex-start;">';
     cards+='<div>';
@@ -1568,12 +1868,12 @@ function docsListHTML(){
     cards+=linked;
     cards+='</div>';
     cards+='<div style="text-align:right;">';
-    cards+='<div style="font-size:18px;font-weight:700;color:#4caf7d;">'+money(d.total)+'</div>';
+    cards+='<div style="font-size:18px;font-weight:700;color:var(--green);">'+money(d.total)+'</div>';
     cards+='<div style="font-size:11px;color:var(--mid);">dep. '+money(d.deposit)+'</div>';
     cards+='</div></div></div>';
   });
   if(!cards) cards='<div class="empty">No estimates or contracts yet.<br/>Tap <strong>+ New</strong> to create your first document.<br/><br/>Protect yourself — always have a signed contract.</div>';
-  var newBtn='<button data-sheet="newdoc" onclick="openSheet(this.dataset.sheet,null)" style="background:var(--accent);color:#000;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ New</button>';
+  var newBtn='<button data-sheet="newdoc" onclick="openSheet(this.dataset.sheet,null)" style="background:var(--accent);color:#fff;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ New</button>';
   return topBar("Documents","",newBtn)+'<div style="padding:14px 16px 130px;">'+cards+'</div>';
 }
 
@@ -1625,6 +1925,27 @@ function buildDetailTabs(active){
   }).join("");
 }
 
+// ─── GLOBAL TAP HANDLER ──────────────────────────────────────
+document.addEventListener("click", function(e){
+  var el = e.target;
+  // Walk up to find data-action element
+  while(el && el !== document.body){
+    var action = el.getAttribute("data-action");
+    if(action){
+      e.stopPropagation();
+      if(action === "nav"){
+        setNav(el.getAttribute("data-nav"));
+      } else if(action === "section"){
+        openSection(el.getAttribute("data-nav"));
+      } else if(action === "clockout"){
+        openSheet("clockout", el.getAttribute("data-pid"));
+      }
+      return;
+    }
+    el = el.parentElement;
+  }
+});
+
 render();
       } catch(err) { alert("Could not read file. Make sure it is a JOVRO Field backup."); }
     };
@@ -1667,6 +1988,27 @@ function buildDetailTabs(active){
   }).join("");
 }
 
+// ─── GLOBAL TAP HANDLER ──────────────────────────────────────
+document.addEventListener("click", function(e){
+  var el = e.target;
+  // Walk up to find data-action element
+  while(el && el !== document.body){
+    var action = el.getAttribute("data-action");
+    if(action){
+      e.stopPropagation();
+      if(action === "nav"){
+        setNav(el.getAttribute("data-nav"));
+      } else if(action === "section"){
+        openSection(el.getAttribute("data-nav"));
+      } else if(action === "clockout"){
+        openSheet("clockout", el.getAttribute("data-pid"));
+      }
+      return;
+    }
+    el = el.parentElement;
+  }
+});
+
 render();
 }
 
@@ -1681,6 +2023,27 @@ function buildDetailTabs(active){
     return '<button data-tab="'+tab+'" onclick="setDetailTab(this.dataset.tab)" class="'+cls+'">'+labels[tab]+'</button>';
   }).join("");
 }
+
+// ─── GLOBAL TAP HANDLER ──────────────────────────────────────
+document.addEventListener("click", function(e){
+  var el = e.target;
+  // Walk up to find data-action element
+  while(el && el !== document.body){
+    var action = el.getAttribute("data-action");
+    if(action){
+      e.stopPropagation();
+      if(action === "nav"){
+        setNav(el.getAttribute("data-nav"));
+      } else if(action === "section"){
+        openSection(el.getAttribute("data-nav"));
+      } else if(action === "clockout"){
+        openSheet("clockout", el.getAttribute("data-pid"));
+      }
+      return;
+    }
+    el = el.parentElement;
+  }
+});
 
 render();
 }
@@ -1736,24 +2099,24 @@ function printBalanceInvoice(pid){
   </style></head><body>
   <div style="display:flex;justify-content:space-between;align-items:flex-start;">
     <div><h1>Balance Invoice</h1><div class="sub">${today}</div></div>
-    <div style="text-align:right;"><div style="font-size:28px;font-weight:700;color:#16a34a;">${money(balance)}</div><div class="sub">Balance Due</div></div>
+    <div style="text-align:right;"><div style="font-size:28px;font-weight:700;color:var(--green);">${money(balance)}</div><div class="sub">Balance Due</div></div>
   </div>
   <div class="meta">
     <div class="meta-box"><div class="meta-label">Client</div><div style="font-weight:600;">${cl?.name||""}</div>${cl?.phone?`<div>${cl.phone}</div>`:""}</div>
     <div class="meta-box"><div class="meta-label">Project</div><div style="font-weight:600;">${p.name}</div>${p.address?`<div style="font-size:13px;color:#666;">${p.address}</div>`:""}</div>
   </div>
   ${progress!=null?`<div style="margin:20px 0;">
-    <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-weight:600;">Project Progress</span><span style="font-weight:700;color:#5B8DD9;">${progress}%</span></div>
+    <div style="display:flex;justify-content:space-between;margin-bottom:6px;"><span style="font-weight:600;">Project Progress</span><span style="font-weight:700;color:var(--blue);">${progress}%</span></div>
     <div class="progress-bar"><div class="progress-fill" style="width:${progress}%;"></div></div>
   </div>`:""}
   <table>
     <tr><td style="color:#888;">Contract Total</td><td style="text-align:right;">${money(contractTotal)}</td></tr>
     <tr><td style="color:#888;">Deposit / Payments Received</td><td style="text-align:right;color:#e74c3c;">- ${money(collected)}</td></tr>
-    <tr class="total-row"><td>Balance Due</td><td style="text-align:right;color:#16a34a;">${money(balance)}</td></tr>
+    <tr class="total-row"><td>Balance Due</td><td style="text-align:right;color:var(--green);">${money(balance)}</td></tr>
   </table>
-  ${balance<=0?`<div class="balance-box"><div style="font-size:20px;font-weight:700;color:#16a34a;">✓ Paid in Full</div><div style="color:#888;margin-top:4px;">Thank you for your business!</div></div>`:`<div class="balance-box"><div style="font-size:14px;color:#16a34a;font-weight:600;margin-bottom:4px;">Amount Due</div><div style="font-size:36px;font-weight:700;color:#16a34a;">${money(balance)}</div></div>`}
+  ${balance<=0?`<div class="balance-box"><div style="font-size:20px;font-weight:700;color:var(--green);">✓ Paid in Full</div><div style="color:#888;margin-top:4px;">Thank you for your business!</div></div>`:`<div class="balance-box"><div style="font-size:14px;color:var(--green);font-weight:600;margin-bottom:4px;">Amount Due</div><div style="font-size:36px;font-weight:700;color:var(--green);">${money(balance)}</div></div>`}
   <div style="margin-top:40px;text-align:center;font-size:12px;color:#aaa;">Generated by JOVRO Field</div>
-  <div style="margin-top:16px;text-align:center;"><button onclick="window.print()" style="background:#111;color:#fff;border:none;border-radius:100px;padding:12px 32px;font-size:14px;cursor:pointer;">Print / Save as PDF</button></div>
+  <div style="margin-top:16px;text-align:center;"><button onclick="window.print()" style="background:var(--bg);color:#fff;border:none;border-radius:100px;padding:12px 32px;font-size:14px;cursor:pointer;">Print / Save as PDF</button></div>
   </body></html>`);
   win.document.close();
 }
@@ -1791,6 +2154,27 @@ function buildDetailTabs(active){
   }).join("");
 }
 
+// ─── GLOBAL TAP HANDLER ──────────────────────────────────────
+document.addEventListener("click", function(e){
+  var el = e.target;
+  // Walk up to find data-action element
+  while(el && el !== document.body){
+    var action = el.getAttribute("data-action");
+    if(action){
+      e.stopPropagation();
+      if(action === "nav"){
+        setNav(el.getAttribute("data-nav"));
+      } else if(action === "section"){
+        openSection(el.getAttribute("data-nav"));
+      } else if(action === "clockout"){
+        openSheet("clockout", el.getAttribute("data-pid"));
+      }
+      return;
+    }
+    el = el.parentElement;
+  }
+});
+
 render();
 }
 
@@ -1826,6 +2210,27 @@ function buildDetailTabs(active){
   }).join("");
 }
 
+// ─── GLOBAL TAP HANDLER ──────────────────────────────────────
+document.addEventListener("click", function(e){
+  var el = e.target;
+  // Walk up to find data-action element
+  while(el && el !== document.body){
+    var action = el.getAttribute("data-action");
+    if(action){
+      e.stopPropagation();
+      if(action === "nav"){
+        setNav(el.getAttribute("data-nav"));
+      } else if(action === "section"){
+        openSection(el.getAttribute("data-nav"));
+      } else if(action === "clockout"){
+        openSheet("clockout", el.getAttribute("data-pid"));
+      }
+      return;
+    }
+    el = el.parentElement;
+  }
+});
+
 render();
 }
 
@@ -1849,6 +2254,27 @@ function buildDetailTabs(active){
   }).join("");
 }
 
+// ─── GLOBAL TAP HANDLER ──────────────────────────────────────
+document.addEventListener("click", function(e){
+  var el = e.target;
+  // Walk up to find data-action element
+  while(el && el !== document.body){
+    var action = el.getAttribute("data-action");
+    if(action){
+      e.stopPropagation();
+      if(action === "nav"){
+        setNav(el.getAttribute("data-nav"));
+      } else if(action === "section"){
+        openSection(el.getAttribute("data-nav"));
+      } else if(action === "clockout"){
+        openSheet("clockout", el.getAttribute("data-pid"));
+      }
+      return;
+    }
+    el = el.parentElement;
+  }
+});
+
 render();
 }
 
@@ -1870,6 +2296,27 @@ function buildDetailTabs(active){
     return '<button data-tab="'+tab+'" onclick="setDetailTab(this.dataset.tab)" class="'+cls+'">'+labels[tab]+'</button>';
   }).join("");
 }
+
+// ─── GLOBAL TAP HANDLER ──────────────────────────────────────
+document.addEventListener("click", function(e){
+  var el = e.target;
+  // Walk up to find data-action element
+  while(el && el !== document.body){
+    var action = el.getAttribute("data-action");
+    if(action){
+      e.stopPropagation();
+      if(action === "nav"){
+        setNav(el.getAttribute("data-nav"));
+      } else if(action === "section"){
+        openSection(el.getAttribute("data-nav"));
+      } else if(action === "clockout"){
+        openSheet("clockout", el.getAttribute("data-pid"));
+      }
+      return;
+    }
+    el = el.parentElement;
+  }
+});
 
 render();
 }
@@ -1896,20 +2343,20 @@ function expensesHTML(){
           <div style="font-size:12px;color:var(--mid);margin-top:2px;">${e.type}${p?" · "+p.name:""} · ${e.date}</div>
         </div>
         <div style="text-align:right;flex-shrink:0;margin-left:10px;">
-          <div style="font-size:16px;font-weight:700;color:#E07B54;">${money(e.amount)}</div>
-          <button onclick="delExpense('${e.id}')" style="background:none;border:none;color:var(--mid);font-size:12px;cursor:pointer;">Delete</button>
+          <div style="font-size:16px;font-weight:700;color:var(--red);">${money(e.amount)}</div>
+          <button data-id="${e.id}" onclick="delExpense(this.dataset.id)" style="background:none;border:none;color:var(--mid);font-size:12px;cursor:pointer;">Delete</button>
         </div>
       </div>
       ${e.receipt?`<img src="${e.receipt}" style="width:100%;max-height:120px;object-fit:cover;border-radius:8px;margin-top:10px;"/>`:""}
     </div>`;
   }).join("")||`<div class="empty">No expenses yet.<br/>Track every dollar you spend on jobs.</div>`;
 
-  return `${topBar("Expenses","",`<button onclick="openSheet('newexpense',null,{})" style="background:var(--accent);color:#000;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ Add</button>`)}
+  return `${topBar("Expenses","",`<button onclick="openSheet('newexpense',null,{})" style="background:var(--accent);color:#fff;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ Add</button>`)}
   <div style="padding:14px 16px 130px;">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
       <div class="card" style="text-align:center;background:var(--ink);border:none;grid-column:1/-1;">
         <div style="font-size:10px;color:var(--mid);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Total Spent</div>
-        <div style="font-size:28px;font-weight:700;color:#E07B54;">${money(grandTotal)}</div>
+        <div style="font-size:28px;font-weight:700;color:var(--red);">${money(grandTotal)}</div>
       </div>
       ${EXPENSE_TYPES.map(t=>`<div class="card" style="text-align:center;padding:12px;">
         <div style="font-size:10px;color:${typeColors[t]};text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">${t}</div>
@@ -1936,15 +2383,15 @@ function servicesHTML(){
         <div style="font-size:12px;color:var(--mid);margin-top:2px;">${s.unit==="hour"?"per hour":s.unit==="sqft"?"per sq ft":"flat rate"}</div>
       </div>
       <div style="text-align:right;flex-shrink:0;margin-left:12px;">
-        <div style="font-size:17px;font-weight:700;color:#4caf7d;">${money(s.price)}</div>
+        <div style="font-size:17px;font-weight:700;color:var(--green);">${money(s.price)}</div>
         <div style="display:flex;gap:6px;margin-top:4px;justify-content:flex-end;">
-          <button onclick="openSheet('newservice',null,{editSvcId:'${s.id}'})" style="background:none;border:none;color:var(--mid);font-size:12px;cursor:pointer;font-weight:600;">Edit</button>
-          <button onclick="delService('${s.id}')" style="background:none;border:none;color:#E07B54;font-size:12px;cursor:pointer;font-weight:600;">Del</button>
+          <button data-id="${s.id}" onclick="editService(this.dataset.id)" style="background:none;border:none;color:var(--mid);font-size:12px;cursor:pointer;font-weight:600;">Edit</button>
+          <button data-id="${s.id}" onclick="delService(this.dataset.id)" style="background:none;border:none;color:var(--red);font-size:12px;cursor:pointer;font-weight:600;">Del</button>
         </div>
       </div>
     </div>`).join("")||`<div class="empty">No services yet.<br/>Add your standard services and prices.<br/>Use them to build estimates fast.</div>`;
 
-  return `${topBar("My Services","",`<button onclick="openSheet('newservice')" style="background:var(--accent);color:#000;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ Add</button>`)}
+  return `${topBar("My Services","",`<button onclick="openSheet('newservice')" style="background:var(--accent);color:#fff;border:none;border-radius:100px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;">+ Add</button>`)}
   <div style="padding:14px 16px 130px;">${cards}</div>`;
 }
 
@@ -1963,11 +2410,11 @@ function serviceQuickButtons(){
 function docActionButtons(d){
   let html='';
   if(d.status!=="Paid"){
-    html+='<button data-id="'+d.id+'" onclick="mPaid(this.dataset.id)" style="background:#4caf7d;color:#fff;border:none;border-radius:100px;padding:13px;font-size:13px;font-weight:600;cursor:pointer;">✓ Mark as Paid</button>';
+    html+='<button data-id="'+d.id+'" onclick="mPaid(this.dataset.id)" style="background:var(--green);color:#fff;border:none;border-radius:100px;padding:13px;font-size:13px;font-weight:600;cursor:pointer;">✓ Mark as Paid</button>';
     html+='<button data-id="'+d.id+'" onclick="sRemind(this.dataset.id)" class="btn-ghost" style="font-size:13px;">🔔 Send Reminder</button>';
   }
   if(d.opened){
-    html+='<div style="font-size:11px;color:#4caf7d;text-align:center;margin-top:4px;">👁 Opened '+d.openedDate+'</div>';
+    html+='<div style="font-size:11px;color:var(--green);text-align:center;margin-top:4px;">👁 Opened '+d.openedDate+'</div>';
   } else {
     html+='<button data-id="'+d.id+'" onclick="mOpened(this.dataset.id)" class="btn-ghost" style="font-size:12px;grid-column:1/-1;">👁 Mark as Opened</button>';
   }
@@ -1993,6 +2440,27 @@ function buildDetailTabs(active){
   }).join("");
 }
 
+// ─── GLOBAL TAP HANDLER ──────────────────────────────────────
+document.addEventListener("click", function(e){
+  var el = e.target;
+  // Walk up to find data-action element
+  while(el && el !== document.body){
+    var action = el.getAttribute("data-action");
+    if(action){
+      e.stopPropagation();
+      if(action === "nav"){
+        setNav(el.getAttribute("data-nav"));
+      } else if(action === "section"){
+        openSection(el.getAttribute("data-nav"));
+      } else if(action === "clockout"){
+        openSheet("clockout", el.getAttribute("data-pid"));
+      }
+      return;
+    }
+    el = el.parentElement;
+  }
+});
+
 render();
 }
 
@@ -2013,7 +2481,25 @@ function buildDetailTabs(active){
   }).join("");
 }
 
+// ─── GLOBAL TAP HANDLER ──────────────────────────────────────
+document.addEventListener("click", function(e){
+  var el = e.target;
+  // Walk up to find data-action element
+  while(el && el !== document.body){
+    var action = el.getAttribute("data-action");
+    if(action){
+      e.stopPropagation();
+      if(action === "nav"){
+        setNav(el.getAttribute("data-nav"));
+      } else if(action === "section"){
+        openSection(el.getAttribute("data-nav"));
+      } else if(action === "clockout"){
+        openSheet("clockout", el.getAttribute("data-pid"));
+      }
+      return;
+    }
+    el = el.parentElement;
+  }
+});
+
 render();
-</script>
-</body>
-</html>
