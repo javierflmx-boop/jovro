@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -207,10 +208,25 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script>
-  window.addEventListener("load",function(){
-    setTimeout(function(){var b=document.getElementById("splash-bar");if(b)b.style.width="100%";},50);
-    setTimeout(function(){var s=document.getElementById("splash");if(s){s.style.opacity="0";setTimeout(function(){s.style.display="none";},700);}},2200);
-  });
+  function hideSplash(){
+    var b=document.getElementById("splash-bar");
+    if(b) b.style.width="100%";
+    setTimeout(function(){
+      var s=document.getElementById("splash");
+      if(s){
+        s.style.opacity="0";
+        s.style.pointerEvents="none";
+        setTimeout(function(){s.style.display="none";},700);
+      }
+    },1500);
+  }
+  if(document.readyState==="complete"){
+    hideSplash();
+  } else {
+    window.addEventListener("load", hideSplash);
+    // Fallback: always hide after 3 seconds no matter what
+    setTimeout(hideSplash, 3000);
+  }
 </script>
 
 <div id="app"></div>
@@ -596,13 +612,6 @@ function goBack(){state.detailId=null;state.detailType=null;render();}
 function setDetailTab(t){state.detailTab=t;render();}
 function openSheet(name,pid,extra={}){state.sheet=name;state.sheetPid=pid;state.form=extra;render();}
 function closeSheet(){
-  var panel = document.getElementById("sheet-panel");
-  if(panel){
-    panel.classList.remove("open");
-    setTimeout(function(){ _doCloseSheet(); }, 280);
-  } else { _doCloseSheet(); }
-}
-function _doCloseSheet(){
   state.sheet=null;state.sheetPid=null;state.form={};render();
 }
 
