@@ -241,15 +241,9 @@ const COLORS=["#E07B54","#5B8DD9","#57A773","#9B6EC8","#D4A843","#D96B8A"];
 let dark=localStorage.getItem("fm-dark")==="1";
 if(dark)document.body.classList.add("dark");
 
-// ─── VERSION & DATA RESET ────────────────────────────────────
+// ─── VERSION ─────────────────────────────────────────────────
 const APP_VERSION = "1.0.0";
-const storedVersion = localStorage.getItem("jovro-version");
-if(storedVersion !== APP_VERSION){
-  // New version — clear all old data
-  const keysToReset = ["fm-projects","fm-clients","fm-portfolio","fm-docs","fm-expenses","fm-services","fm-recurring","fm-dark"];
-  keysToReset.forEach(function(k){ localStorage.removeItem(k); });
-  localStorage.setItem("jovro-version", APP_VERSION);
-}
+// Data is stored on device - updates never delete user data
 
 // ─── STATE ───────────────────────────────────────────────────
 let state={
